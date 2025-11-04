@@ -1,0 +1,7 @@
+{
+  "title": "Git",
+  "description": "Version control system",
+  "icon": "GitIcon",
+  "root": true,
+  "pages": ["index"]
+}

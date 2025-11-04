@@ -4,6 +4,9 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/mdx-components';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { getDirname, isIndexPage } from '@/lib/utils';
+import { indexMetaMap } from '@/lib/consts';
+import { createElement } from 'react';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -12,16 +15,30 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   const MDX = page.data.body;
 
+  const isIndex = isIndexPage(page.path);
+  const dirName = getDirname(page.slugs, isIndex);
+  const indexMeta = indexMetaMap[dirName as keyof typeof indexMetaMap];
+
   return (
     <DocsPage
-      toc={page.data.toc}
+      toc={isIndex ? undefined : page.data.toc}
       tableOfContent={{
         style: 'clerk',
       }}
       full={page.data.full}
     >
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+      {isIndex && indexMeta ? (
+        <div className="flex flex-col items-center gap-4 border-b text-center">
+          {createElement(indexMeta.icon, { className: 'size-16' })}
+          <DocsTitle>{indexMeta.title}</DocsTitle>
+          <DocsDescription className="max-w-2xl text-base">{indexMeta.desc}</DocsDescription>
+        </div>
+      ) : (
+        <>
+          <DocsTitle>{page.data.title}</DocsTitle>
+          <DocsDescription>{page.data.description}</DocsDescription>
+        </>
+      )}
       <DocsBody>
         <MDX
           components={getMDXComponents({
