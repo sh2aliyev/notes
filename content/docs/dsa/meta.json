@@ -1,0 +1,7 @@
+{
+  "title": "DSA",
+  "description": "Data Structures & Algorithms",
+  "icon": "Network",
+  "root": true,
+  "pages": ["index"]
+}
