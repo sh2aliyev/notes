@@ -6,7 +6,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ...defaultMdxComponents,
     blockquote: ({ children, ...props }) => (
       <blockquote
-        className="text-fd-muted-foreground text-sm font-normal not-italic *:before:content-none *:after:content-none"
+        className="dark:text-fd-muted-foreground text-fd-foreground/75 text-sm font-normal not-italic *:before:content-none *:after:content-none"
         {...props}
       >
         {children}
