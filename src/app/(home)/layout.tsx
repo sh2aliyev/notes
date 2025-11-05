@@ -5,10 +5,10 @@ import { Logo } from '@/components/logo';
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
     <HomeLayout
+      {...baseOptions()}
       nav={{
         title: <Logo variant="app" />,
       }}
-      {...baseOptions()}
     >
       {children}
     </HomeLayout>

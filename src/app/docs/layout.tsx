@@ -6,11 +6,11 @@ import { Logo } from '@/components/logo';
 export default function Layout({ children }: LayoutProps<'/docs'>) {
   return (
     <DocsLayout
+      {...baseOptions()}
       tree={source.pageTree}
       nav={{
         title: <Logo variant="docs" />,
       }}
-      {...baseOptions()}
     >
       {children}
     </DocsLayout>
