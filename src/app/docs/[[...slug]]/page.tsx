@@ -18,16 +18,17 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const isIndex = isIndexPage(page.path);
   const dirName = getDirname(page.slugs, isIndex);
   const indexMeta = indexMetaMap[dirName as keyof typeof indexMetaMap];
+  const isCustomIndexPage = isIndex && !!indexMeta;
 
   return (
     <DocsPage
-      toc={isIndex ? undefined : page.data.toc}
+      toc={isCustomIndexPage ? undefined : page.data.toc}
       tableOfContent={{
         style: 'clerk',
       }}
       full={page.data.full}
     >
-      {isIndex && indexMeta ? (
+      {isCustomIndexPage ? (
         <div className="flex flex-col items-center gap-4 border-b text-center">
           {createElement(indexMeta.icon, { className: 'size-16' })}
           <DocsTitle>{indexMeta.title}</DocsTitle>
