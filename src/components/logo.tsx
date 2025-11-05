@@ -1,7 +1,9 @@
 export function Logo({ variant }: { variant: 'app' | 'docs' }) {
   return (
     <div className="text-fd-foreground/75 group flex">
-      <span className="border-fd-foreground/75 group-hover:border-fd-foreground group-hover:text-fd-foreground rounded-tl-md border px-1 font-medium tracking-wide">
+      <span
+        className={`border-fd-foreground/75 group-hover:border-fd-foreground group-hover:text-fd-foreground rounded-tl-md border px-1 font-medium tracking-wide ${variant === 'app' ? 'text-sm lg:text-base' : 'text-sm'}`}
+      >
         Notes
       </span>
       <span
