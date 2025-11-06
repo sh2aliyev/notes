@@ -1,7 +1,7 @@
 import { GitIcon } from '@/components/icons/git';
 import { Network } from 'lucide-react';
 
-export const REPO_URL = 'https://github.com/sh2aliyev/tech-stack';
+export const REPO_URL = 'https://github.com/sh2aliyev/notes';
 
 export const customIcons = {
   GitIcon,
