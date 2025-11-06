@@ -1,6 +1,7 @@
 import { GitIcon } from '@/components/icons/git';
 import { Network } from 'lucide-react';
 
+export const WEB_URL = 'https://notes.sh2a.org';
 export const REPO_URL = 'https://github.com/sh2aliyev/notes';
 
 export const customIcons = {
