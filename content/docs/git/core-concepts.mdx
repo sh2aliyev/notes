@@ -1,0 +1,46 @@
+---
+title: Core Concepts
+---
+
+## Git Areas
+
+Git has three main areas/stages where your files can exist:
+
+1. **Working Directory (Untracked Area)** - 1️⃣
+   > This is where you create and modify files. Git can detect changes here, but these changes are not yet tracked or part of version control.
+2. **Staging Area** - 2️⃣
+   > This is where you prepare files to be committed. It lets you review and group related updates together before saving them to the repository.
+3. **Repository (Committed Area)** - 3️⃣
+   > This is where Git permanently stores your committed changes. Each commit has a unique identifier and represents a snapshot of your project at a specific point in time.
+
+## Core Commands
+
+- `git status`: Show working tree status.
+
+  > Shows current branch, staged changes, unstaged changes, and untracked files.
+
+- `git add <file>...`: Add selected file changes to the staging area. 1️⃣ -> 2️⃣
+
+  > - `.` - To select all changes.
+
+- `git commit`: Commit staged changes to the repository. 2️⃣ -> 3️⃣
+
+  > Opens the default text editor to enter a multi-line commit message.
+
+  > - `-m "<message>"` - To provide a single-line commit message directly without opening the editor.
+  >   > Can be used multiple times for multi-line messages without opening the editor.
+  > - `--amend` - Modify the most recent commit.
+  >   > Opens the default text editor to change the commit message of the last commit. If you have items in the staging area, they will be added to the commit that is being amended.
+
+- `git rm <file>...`: Remove files from repository and add the removal to the staging area. 3️⃣ -> ❌ -> 2️⃣
+
+  > - `--cached` - Remove files from the staging area (unstage). 2️⃣ -> 1️⃣
+
+- `git log`: Show commit history.
+
+  > Shows a list of commits in reverse order including commit ID, author, date, and message.
+
+  > - `--oneline` - Show each commit on a single line (minimized view).
+  > - `-<number>` - Limit the number of commits shown.
+
+- `git ls-files`: Show all tracked files in the repository.

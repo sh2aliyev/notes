@@ -3,5 +3,5 @@
   "description": "Version control system",
   "icon": "GitIcon",
   "root": true,
-  "pages": ["index"]
+  "pages": ["index", "---Getting Started---", "configuration", "core-concepts"]
 }

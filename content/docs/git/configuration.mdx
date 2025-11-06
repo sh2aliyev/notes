@@ -1,0 +1,26 @@
+---
+title: Configuration
+---
+
+- `git init`: Initialize a new Git repository in the current folder.
+
+  > This sets up a `.git` directory that stores all version control data and enables Git to start tracking changes in your project.
+
+- Configure your Git identity.
+
+  > ```sh
+  > git config --global user.name "<Name>"
+  > ```
+  >
+  > ```sh
+  > git config --global user.email "<Email>"
+  > ```
+  >
+  > Without `--global`, the configuration applies only to the current repository.
+
+  > If you want to keep your email private, you can use GitHub's no-reply email (found in your GitHub email settings), e.g., `123456789+username@users.noreply.github.com`.
+
+- `git config --list`: View your current Git configuration settings.
+
+  > - `--global` - View global settings (saved in your machine).
+  > - `--edit` - Open the configuration file in your default text editor for manual editing.
