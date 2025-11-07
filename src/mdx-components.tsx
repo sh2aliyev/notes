@@ -1,3 +1,4 @@
+import { ImageZoom } from 'fumadocs-ui/components/image-zoom';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
@@ -12,6 +13,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         {children}
       </blockquote>
     ),
+    img: (props) => <ImageZoom className="border-fd-border m-auto border-2" {...(props as any)} />,
     ...components,
   };
 }
