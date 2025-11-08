@@ -6,12 +6,15 @@ title: Understanding Git
 
 Git has three main areas/stages where your files can exist:
 
-1. **Working Directory (Untracked Area)** - 1️⃣
-   > This is where you create and modify files. Git can detect changes here, but these changes are not yet tracked or part of version control.
+1. **Working Directory (Untracked / Modified Area)** - 1️⃣
+   > This is where you create or edit files.
+   >
+   > - Untracked files are completely new files that Git doesn't know about yet and aren't part of version control.
+   > - Modified files are tracked files with changes that haven't been recorded in version control yet.
 2. **Staging Area** - 2️⃣
-   > This is where you prepare files to be committed. It lets you review and group related updates together before saving them to the repository.
+   > This is where you plan which changes will become part of version control, reviewing and grouping related updates before committing them.
 3. **Repository (Committed Area)** - 3️⃣
-   > This is where Git permanently stores your committed changes. Each commit has a unique identifier and represents a snapshot of your project at a specific point in time.
+   > This is where Git permanently stores your committed changes, with each commit representing a snapshot of your project at a specific point in time.
 
 ## Core Commands
 
