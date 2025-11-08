@@ -1,0 +1,27 @@
+---
+title: Stashing
+---
+
+Stashing is a feature that allows you to temporarily save changes in your working directory without committing them.
+
+> It's useful when you need to switch to a different branch to work on something else but don't want to commit or lose your current changes.
+>
+> When you stash, Git removes the modified files and changes from your working directory and saves them in a separate store.
+>
+> The stash works like a stack (first in, last out), so you can save multiple sets of changes.
+
+- `git stash`: Save current staged and unstaged changes (excluding untracked files).
+  > - `-u` - Include untracked files too.
+  > - `push -m "<message>"` - Save changes with a custom message.
+  > - `list` - List all saved stashes.
+  >
+  >   > Each entry includes its index, the branch where it was created, and an optional message.
+  >
+  > - `pop` - Apply (bring back) the most recent stash and remove it from the stash store.
+  >
+  >   > Use `apply` to apply a stash without removing it from the store.
+  >
+  >   > - `<index_no>` - Apply a specific stash.
+  >
+  > - `drop <index_no>` - Delete a specific stash from the list.
+  > - `clear` - Remove all stashed entries.
