@@ -3,5 +3,5 @@
   "description": "Version control system",
   "icon": "GitIcon",
   "root": true,
-  "pages": ["index", "---Getting Started---", "configuration", "understanding-git"]
+  "pages": ["index", "---Getting Started---", "configuration", "understanding-git", "branches"]
 }
