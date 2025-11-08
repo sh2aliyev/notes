@@ -44,3 +44,14 @@ Git has three main areas/stages where your files can exist:
   > - `-<number>` - Limit the number of commits shown.
 
 - `git ls-files`: Show all tracked files in the repository.
+
+- `git diff`: Compare working directory (1️⃣) with the staging area (2️⃣).
+
+  > It displays changes to files line by line, providing a clear view of what has been added, modified, or deleted.
+
+  > - `HEAD` - Compare the working directory (1️⃣) + staging area (2️⃣) with the last commit (3️⃣).
+  > - `--staged` - Compare staged (2️⃣) changes with the last commit (3️⃣).
+  > - `<commit_hash1> <commit_hash2>` - Compare two commits.
+  > - `<branch_a> <branch_b>` - Compare two branches.
+
+  > You can view changes only within specific files by providing the file names after any of these options.
