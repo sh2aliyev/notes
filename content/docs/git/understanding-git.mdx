@@ -6,11 +6,13 @@ title: Understanding Git
 
 Git has three main areas/stages where your files can exist:
 
-1. **Working Directory (Untracked / Modified Area)** - 1️⃣
+1. **Working Directory (Unstaged Area)** - 1️⃣
    > This is where you create or edit files.
    >
-   > - Untracked files are completely new files that Git doesn't know about yet and aren't part of version control.
-   > - Modified files are tracked files with changes that haven't been recorded in version control yet.
+   > The unstaged area can contain two types of files: **untracked** and **modified**.
+   >
+   > - Untracked files are new files that Git doesn't know about yet. They've never been part of the version control.
+   > - Modified files are tracked (known by version control) files with changes that haven't been recorded in version control yet.
 2. **Staging Area** - 2️⃣
    > This is where you plan which changes will become part of version control, reviewing and grouping related updates before committing them.
 3. **Repository (Committed Area)** - 3️⃣
@@ -37,7 +39,7 @@ Git has three main areas/stages where your files can exist:
 
 - `git rm <file>...`: Remove files from repository and add the removal to the staging area. 3️⃣ -> ❌ -> 2️⃣
 
-  > - `--cached` - Remove files from the staging area (unstage). 2️⃣ -> 1️⃣
+  > - `--cached` - Unstage files (move them from the staging area back to unstaged). 2️⃣ -> 1️⃣
 
 - `git log`: Show commit history.
 
@@ -58,3 +60,11 @@ Git has three main areas/stages where your files can exist:
   > - `<branch_a> <branch_b>` - Compare two branches.
 
   > You can view changes only within specific files by providing the file names after any of these options.
+
+## General Definitions
+
+- `.` (dot): Refers to the current directory.
+  > Using `.` instead of `<file>...` applies the action to all files in the current working directory.
+- `HEAD`: The current commit that your working directory is based on.
+- `HEAD~<number>`: The commit `n` steps before `HEAD`.
+  > E.g., `HEAD~2` refers to two commits before the latest.

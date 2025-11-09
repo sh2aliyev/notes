@@ -11,6 +11,31 @@ fix bugs, test ideas, or work on updates without affecting the main codebase.
 
 ![git-flow](./git-flow.png)
 
+What is a branch reference?
+
+> A branch reference is a pointer in Git that refers to a specific commit.
+>
+> - It's a file named after the branch and stored in `.git/refs/heads/`.
+> - The file contains the hash of the latest commit on that branch.
+> - When you make a new commit, Git updates this file with the new commit hash.
+> - Creating a new branch simply means creating a new file in `.git/refs/heads/`.
+>   > You can even do this manually by creating a file and writing a commit hash inside it.
+>   > The file name becomes the branch name, and it starts from the commit you specified.
+
+What is `HEAD`?
+
+> `HEAD` is a pointer in Git that represents your current position in the repository.
+>
+> - It's a file named `HEAD` in `.git/` that usually points to the branch reference of the current branch.
+> - When you switch branches, Git updates `HEAD` to point to the new branch reference.
+
+> - Attached HEAD:
+>   > This is the normal state where `HEAD` points to a branch reference.
+>   > Any new commits you make are added to that branch, and `HEAD` moves forward along with it.
+> - Detached HEAD:
+>   > This occurs when `HEAD` points directly to a specific commit hash instead of a branch reference.
+>   > In this state, new commits aren't associated with any branch, and you might need to create a new branch to save your work.
+
 ## Core Branching Commands
 
 - `git branch`: List all existing branches.
@@ -34,9 +59,11 @@ fix bugs, test ideas, or work on updates without affecting the main codebase.
   > - `-c` - Create and switch to a new branch.
   >   > Use `-C` to recreate a branch if it already exists.
 
+  > Use `-` instead of a branch name to switch back to the previous branch.
+
   <Callout>
 
-  When you switch branches, Git updates your working directory to match the state of that branch.
+  When you switch branches, Git updates your project's file tree to match the state of that branch.
 
   **If you try to switch while having uncommitted changes:**
   - **Without conflicts**:
@@ -55,7 +82,7 @@ Merging in Git is the process of combining changes from one branch into another.
   > - `--squash` - Combine all commits from the merged branch into the staging area of the current branch.
   >   > Allows committing all changes as a single commit to keep history clean.
 
-  > If you encounter conflicts or issues during a merge, use `git merge --abort` to cancel the process.
+  > If you encounter conflicts or issues during a merge, you can use `git merge --abort` to cancel the process or resolve them.
 
 ### Fast-forward Merge
 
