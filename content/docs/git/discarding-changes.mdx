@@ -1,0 +1,43 @@
+---
+title: Discarding Changes
+---
+
+- `git clean -f`: Remove untracked files from the working directory. 1️⃣ -> ❌
+
+  > - `-d` - Remove untracked directories too.
+  > - `-n` - Preview what would be removed without actually deleting anything.
+
+- `git restore <file>...`: Discard unstaged changes in modified files. 1️⃣ -> ❌
+
+  > - `--staged` - Unstage files (move them from the staging area back to unstaged). 2️⃣ -> 1️⃣
+  > - `--source <commit_hash>` - Restore files to their state right after the specified commit. 3️⃣ -> ❌ -> 1️⃣
+  >   > It doesn't matter if the given commit was related to the targeted files, it restores them exactly as they were at that point.
+
+- `git revert <commit_hash>`: Create a new commit that reverses the changes introduced by the specified commit.
+
+  > You may be asked to resolve conflicts. In such cases, you can use `git revert --abort` to cancel the process or resolve them.
+
+- `git reset <commit_hash>`: Rewind the repository to the specified commit state.
+
+  > Updates the branch reference to point to the given commit.
+
+  > What happens to subsequent changes depends on the option used:
+  >
+  > - `--mixed` (default) - Keep changes in the working directory as unstaged modifications. -> 1️⃣
+  > - `--soft` - Keep changes staged. -> 2️⃣
+  > - `--hard` - Discard everything completely. -> ❌
+
+  <Callout type="warn">This command rewrites/deletes repository history.</Callout>
+
+- `git checkout HEAD <file>...`: Discard uncommitted changes. 2️⃣, 1️⃣ -> ❌
+- `git checkout <commit_hash>`: Travel to a specific commit in the history (to the state just after the commit).
+
+  > - This puts your repository in a `detached HEAD` state.
+  > - Git updates your project's file tree to match the state of `HEAD`.
+
+  > What you can do here:
+  >
+  > - Explore the repository.
+  > - Create a new branch from here (`git switch -c <new_name>`).
+  >   > This reattaches HEAD and sets the new branch's starting point to the checked-out commit. It's like starting a new line of work from an earlier point in history.
+  > - End the process (travel back) by switching to a branch.
