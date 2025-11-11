@@ -11,6 +11,7 @@
     "branches",
     "---Advanced---",
     "stashing",
-    "discarding-changes"
+    "discarding-changes",
+    "rebasing"
   ]
 }
