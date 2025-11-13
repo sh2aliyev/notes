@@ -9,10 +9,6 @@ title: Rebasing
 
 ## Integrating Changes
 
-- `git rebase <branch_name>`: Reapply your current branch's commits on top of the specified branch (integrate its latest changes).
-  > If conflicts appear, you can either resolve them or cancel the process with `git rebase --abort`.
-  > When resolving conflicts, don't commit as usual. Instead, use `git rebase --continue` to move forward.
-
 What is it?
 
 > Let's say you start working on a new feature by creating a `feature` branch.
@@ -29,7 +25,11 @@ What is the problem?
 
 ![merge-fix](./merge-fix.png)
 
-How to solve?
+The solution:
+
+- `git rebase <branch_name>`: Reapply your current branch's commits on top of the specified branch (integrate its latest changes).
+  > If conflicts appear, you can either resolve them or cancel the process with `git rebase --abort`.
+  > When resolving conflicts, don't commit as usual. Instead, use `git rebase --continue` to move forward.
 
 > Git rebasing solves the problem by reapplying your changes on top of another branch.
 >
