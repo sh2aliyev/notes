@@ -1,0 +1,19 @@
+---
+title: Reflogs (Accident Recovery)
+---
+
+Reflogs (reference logs) are Git's local history of performed actions.
+
+> Reflogs track actions such as commits, checkouts, merges, rebases, resets, and other operations that change the position of a branch or `HEAD`.
+>
+> Reflogs are helpful when you have accidentally deleted or lost commits, branches, or other references after destructive actions.
+
+- `git reflog`: List all reflog entries.
+
+  > Each entry includes a hash, reference syntax, a description of the action, and additional information about that action.
+
+  > - `show <branch_name>` - List only the reflogs associated with the specified branch.
+  > - `--date=iso`- Display reflog entries with `ISO 8601` formatted timestamps.
+
+  > After identifying the desired action in the reflog, you can use the appropriate method described in [Discarding Changes](./discarding-changes.mdx)
+  > together with the reflog hash to perform recovery.

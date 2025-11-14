@@ -12,6 +12,7 @@
     "---Advanced---",
     "stashing",
     "discarding-changes",
-    "rebasing"
+    "rebasing",
+    "reflogs"
   ]
 }
