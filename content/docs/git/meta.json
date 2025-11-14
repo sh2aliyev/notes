@@ -13,6 +13,7 @@
     "stashing",
     "discarding-changes",
     "rebasing",
-    "reflogs"
+    "reflogs",
+    "aliases"
   ]
 }
