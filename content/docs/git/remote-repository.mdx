@@ -1,0 +1,87 @@
+---
+title: Remote Repository
+---
+
+A remote repository is a copy of your project that lives on a server accessible over a network.
+It acts as a shared location where team members can push their work and pull updates from others.
+
+## Getting From
+
+Bringing a remote repository to your local machine.
+
+- `git clone <remote_url>`: Create a local copy of a remote repository.
+  > - `.` - Clone directly into the current directory instead of creating a new folder.
+
+## Setting Up
+
+Connecting your local repository to a remote.
+
+<Callout>
+  If you cloned a repository, the remote setup is already done. The cloning operation automatically sets the default
+  remote as `origin`.
+</Callout>
+
+- `git remote`: List all available remotes.
+  > - `-v` - Show remotes with their URLs.
+  > - `add <remote_name> <remote_url>` - Add a new remote connection.
+  > - `rename <remote_name> <new_remote_name>` - Rename a remote.
+  > - `remove <remote_name>` - Remove a remote.
+
+## Applying To
+
+Sending your local work to the remote repository.
+
+- `git push`: Upload commits from your current branch to the matching branch on the remote repository.
+
+  > If it is the first time you are pushing the branch you need to set upstream.
+  >
+  > - `-u <remote_name> <branch_name>` - Push and set the upstream for the current branch.
+  >   > What is an upstream?
+  >   >
+  >   > > An upstream is the remote branch that your local branch tracks.
+  >   > > When it is set, Git knows where to push and pull by default.
+
+  > Situations when pushing:
+  >
+  > 1. Remote has no changes.
+  >    > If no one has updated the remote branch since your last fetch or pull, your push will succeed without issues.
+  > 2. Remote has changes.
+  >
+  >    > If the remote branch has updates, Git will reject your push indicating the branch has diverged.
+  >    >
+  >    > In this case you need to update your local branch using `git pull` or you can force push if you intend to overwrite.
+
+  > - `-f` - Forcefully push overwriting any changes on the remote branch.
+  > - `--force-with-lease` - Forcefully push in a safer way.
+  >   > Checks the remote branch to be exactly the same as when you last saw it.
+  >   >
+  >   > - If someone else pushed meanwhile, the operation is rejected.
+  >   > - If the changes belong to you, Git allows the overwrite.
+  >   >
+  >   > This is useful when you pushed something incorrect and want to immediately push a corrected version completely overwriting/removing the incorrect one.
+
+- `git fetch`: Download updates from the remote.
+
+  > This updates your remote tracking branches, adds new ones if there are, and downloads any other data your local repository is missing.
+  > Your working directory stays unchanged while your local view of the remote becomes up to date.
+
+  > - `--prune` - Remove any local references to remote branches that no longer exist on the remote repository.
+
+<Callout title="What is Remote Tracking Branch?">
+
+A remote tracking branch is a local reference that represents the state of a branch on the remote.
+
+It is not the remote repository itself. It only represents what the remote looked like the last time you fetched or pulled.
+
+- Commands like `git status` and `git log` do not contact the remote. They compare your local branch with its remote tracking branch.
+- A remote tracking branch can fall behind the actual remote repository. Keeping it updated makes your comparisons accurate.
+- These branches are stored locally under names such as `origin/main` and they are read only which means you can compare them with your work,
+  merge changes from them, or create new branches based on them but you cannot modify them directly.
+
+</Callout>
+
+- `git pull`: Download and integrate updates from the remote.
+
+  > This command combines `git fetch` and `git merge`.
+  >
+  > - `--rebase` - Apply your local changes on top of the latest remote changes instead of merging (the same logic as [Rebasing / Integrating Changes](./rebasing.mdx#integrating-changes)).

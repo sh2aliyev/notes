@@ -14,6 +14,7 @@
     "discarding-changes",
     "rebasing",
     "reflogs",
+    "remote-repository",
     "aliases"
   ]
 }
