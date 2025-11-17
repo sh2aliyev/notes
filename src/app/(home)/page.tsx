@@ -1,7 +1,7 @@
 import { Bookmark } from '@/components/bookmark';
 import { Folder } from '@/components/folder';
 import { MountainIcon } from '@/components/icons/mountain';
-import { indexMetaMap } from '@/lib/consts';
+import { APP_DESC, indexMetaMap } from '@/lib/consts';
 import Link from 'next/link';
 
 export default function HomePage() {
@@ -13,7 +13,7 @@ export default function HomePage() {
           <div className="flex h-full flex-col items-center justify-between gap-12 px-3 pt-10 pb-5 lg:gap-28 lg:pt-24">
             <div className="text-fd-primary/85 flex flex-col items-center gap-3 lg:gap-4">
               <h1 className="text-2xl font-semibold lg:text-3xl">Notes</h1>
-              <p className="text-sm lg:text-base">My Beloved Tech Notes</p>
+              <p className="text-sm lg:text-base">{APP_DESC}</p>
             </div>
             <MountainIcon className="text-fd-primary/75 dark:text-fd-primary/55 max-w-56" />
             <p suppressHydrationWarning className="text-fd-primary/75 text-xs">
