@@ -30,6 +30,17 @@ export default function HomePage() {
           })}
         </div>
       </div>
+      <div className="text-fd-muted-foreground mt-2 text-center text-xs">
+        Work is still in progress. For full documentation, see the{' '}
+        <Link
+          href={'https://github.com/sh2aliyev/notes/tree/legacy'}
+          target="_blank"
+          className="hover:text-fd-primary/75 underline"
+        >
+          legacy branch
+        </Link>
+        .
+      </div>
     </div>
   );
 }
