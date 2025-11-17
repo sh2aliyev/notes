@@ -1,11 +1,12 @@
+import { DsaIcon } from '@/components/icons/dsa';
 import { GitIcon } from '@/components/icons/git';
-import { Network } from 'lucide-react';
 
 export const WEB_URL = 'https://notes.sh2a.org';
 export const REPO_URL = 'https://github.com/sh2aliyev/notes';
 
 export const customIcons = {
   GitIcon,
+  DsaIcon,
 };
 
 export const indexMetaMap = {
@@ -17,6 +18,6 @@ export const indexMetaMap = {
   dsa: {
     title: 'Data Structures & Algorithms',
     desc: 'Data Structures and Algorithms (DSA) is a fundamental concept in computer science that involves organizing and manipulating data efficiently to solve problems and perform tasks effectively.',
-    icon: Network,
+    icon: DsaIcon,
   },
 };
