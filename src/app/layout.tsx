@@ -2,7 +2,7 @@ import { RootProvider } from 'fumadocs-ui/provider/next';
 import './global.css';
 import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
-import { WEB_URL } from '@/lib/consts';
+import { APP_NAME, WEB_URL } from '@/lib/consts';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(WEB_URL),
-  title: 'Notes | sh2a',
+  title: APP_NAME,
   description: 'My Notes.',
   keywords: ['notes', 'handbook', 'docs', 'sh2a'],
 };
