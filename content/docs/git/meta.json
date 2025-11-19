@@ -15,6 +15,8 @@
     "rebasing",
     "reflogs",
     "remote-repository",
-    "aliases"
+    "aliases",
+    "---Extra---",
+    "worktrees"
   ]
 }
