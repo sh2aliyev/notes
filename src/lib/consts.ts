@@ -19,7 +19,7 @@ export const indexMetaMap = {
   },
   dsa: {
     title: 'Data Structures & Algorithms',
-    desc: 'Data Structures and Algorithms (DSA) is a fundamental concept in computer science that involves organizing and manipulating data efficiently to solve problems and perform tasks effectively.',
+    desc: 'Data Structures and Algorithms (DSA) is a fundamental concept in computer science that involves organizing and manipulating data to solve problems and perform tasks effectively.',
     icon: DsaIcon,
   },
 };
