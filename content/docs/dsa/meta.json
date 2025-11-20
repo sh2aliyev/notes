@@ -3,5 +3,5 @@
   "description": "Data Structures & Algorithms",
   "icon": "DsaIcon",
   "root": true,
-  "pages": ["index"]
+  "pages": ["index", "---Getting Started---", "complexity"]
 }
