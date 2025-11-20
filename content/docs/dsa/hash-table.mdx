@@ -1,0 +1,73 @@
+---
+title: Hash Table
+---
+
+## Overview
+
+A hash table is a data structure that stores data as key value pairs.
+It uses a hashing function to map each key to a position in memory which gives fast access when storing or retrieving values by that key.
+
+| Operations  | Complexity |
+| ----------- | ---------- |
+| Access/Edit | O(1)       |
+| Insert      | O(1)       |
+| Remove      | O(1)       |
+
+JavaScript provides objects and Maps as hash table based collections.
+
+- Using a plain object:
+  > ```js
+  > const user = {};
+  >
+  > user['age'] = 25;
+  > user['name'] = 'John';
+  >
+  > console.log(user); // {age: 25, name: 'John'}
+  > console.log(user['age']); // 25
+  > ```
+- Using Map:
+  > ```js
+  > const user = new Map();
+  >
+  > user.set('age', 25);
+  > user.set('name', 'John');
+  >
+  > console.log(user); // Map(2) {'age' => 25, 'name' => 'John'}
+  > console.log(user.get('age')); // 25
+  > ```
+
+### Background
+
+A hash table is built on three core components:
+
+> 1. Key: The identifier used to access stored data.
+> 2. Hash Function: A process that turns the key into a numeric hash code.
+> 3. Buckets: An array in memory that holds the entries.
+
+How it works:
+
+> 1. Input:
+>    > You insert the value `John` using the key `name`.
+> 2. Hashing:
+>    > The hash function converts `name` into a number such as `417`.
+>    > This example uses character code sums. Real systems may use stronger functions for better distribution.
+> 3. Indexing:
+>    > The table reduces that number to a valid index with a modulo step such as `417 % 10` which becomes `7`.
+>    > Again, real systems may use different indexing methods.
+> 4. Storage:
+>    > The pair is stored in bucket `7`.
+>
+> When you request `name`, the table repeats the hash and index calculations and retrieves the entry from bucket `7` immediately `O(1)`.
+
+Handling collisions:
+
+> A collision happens when two different keys map to the same bucket.
+>
+> Solution:
+>
+> - Chaining:
+>   > Each bucket holds a small list of entries. If two keys map to bucket `7`, both are stored in that list.
+>   >
+>   > Lookups check bucket `7` in `O(1)` time then scan the small list in `O(n)` time to find the matching key.
+>   >
+>   > Keeping entries well distributed across buckets is important for performance because it keeps these lists short which reduces how often lookups fall back to `O(n)` work.
