@@ -6,7 +6,7 @@ title: Branches
 
 A Git branch is an independent line of development within a repository. Branches allow you to isolate changes and work on them independently.
 
-In a Git repository, there is a default branch (usually called **main** or **master**). Beyond that, you can create other branches to develop new features,
+In a Git repository, there is a default branch (usually called `main` or `master`). Beyond that, you can create other branches to develop new features,
 fix bugs, test ideas, or work on updates without affecting the main codebase.
 
 ![git-flow](./git-flow.png)
@@ -70,10 +70,10 @@ What is `HEAD`?
 
   When you switch branches, Git updates your project's file tree to match the state of that branch.
 
-  **If you try to switch while having uncommitted changes:**
-  - **Without conflicts**:
+  If you try to switch while having uncommitted changes:
+  - Without conflicts:
     Git will carry your changes to the new branch with you.
-  - **With conflicts**:
+  - With conflicts:
     Git will block the branch switch. You'll need to commit, stash, or discard your changes before switching.
 
   </Callout>
@@ -105,7 +105,7 @@ This type of merge occurs when both branches have new commits.
 
 > In such cases, Git compares the changes made in both branches relative to their common ancestor and tries to combine them automatically.
 >
-> If both branches modify the same lines, Git can't decide which version to keep. This is called a **merge conflict**. When conflicts occur, Git waits you to resolve them manually.
+> If both branches modify the same lines, Git can't decide which version to keep. This is called a merge conflict. When conflicts occur, Git waits you to resolve them manually.
 
 ![fast-forward](./three-way.png)
 
