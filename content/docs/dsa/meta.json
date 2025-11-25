@@ -11,6 +11,7 @@
     "array",
     "hash-table",
     "linked-list",
-    "stack"
+    "stack",
+    "queue"
   ]
 }
