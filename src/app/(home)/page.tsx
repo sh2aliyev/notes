@@ -10,12 +10,18 @@ export default function HomePage() {
       <div className="flex flex-col gap-6 rounded-2xl border p-3 lg:flex-row lg:items-start">
         <div className="bg-fd-primary-foreground relative rounded-xl border shadow-xs lg:flex-3 xl:flex-2">
           <Bookmark className="right-10 -mt-px h-8 lg:right-14 lg:h-14" />
-          <div className="flex h-full flex-col items-center justify-between gap-12 px-3 pt-10 pb-5 lg:gap-28 lg:pt-24">
+          <div className="flex h-full flex-col items-center justify-between gap-12 px-3 pt-10 pb-5 lg:gap-24 lg:pt-24">
             <div className="text-fd-primary/85 flex flex-col items-center gap-3 lg:gap-4">
               <h1 className="text-2xl font-semibold lg:text-3xl">Notes</h1>
-              <p className="text-sm lg:text-base">{APP_DESC}</p>
+              <p className="text-center text-sm lg:text-base">{APP_DESC}</p>
             </div>
-            <MountainIcon className="text-fd-primary/75 dark:text-fd-primary/55 max-w-56" />
+            <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
+              <MountainIcon className="text-fd-primary/75 dark:text-fd-primary/55 max-w-56" />
+              <p className="text-fd-primary/75 max-w-2xs text-center text-sm">
+                A collection of knowledge filtered from dozens of hours of watched tutorials, read docs, blogs, and
+                searches.
+              </p>
+            </div>
             <p suppressHydrationWarning className="text-fd-primary/75 text-xs">
               {`© ${new Date().getFullYear()} `}
               <Link href="https://sh2a.org" target="_blank" className="hover:text-fd-primary hover:underline">
