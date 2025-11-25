@@ -1,0 +1,124 @@
+---
+title: Stack
+---
+
+## Overview
+
+A stack is a data structure that stores items according to the Last In First Out (LIFO) principle. The most recently added item is the first one to be removed.
+
+| Operations        | Complexity |
+| ----------------- | ---------- |
+| Push (insert end) | O(1)       |
+| Pop (delete last) | O(1)       |
+| Peek (view last)  | O(1)       |
+
+## Implementation
+
+Stacks can be implemented using different underlying structures. The most common versions are based on arrays or linked lists.
+
+### Array Based Stack
+
+```js title="Array Based Stack" lineNumbers
+class Stack {
+  constructor() {
+    this.items = [];
+  }
+
+  push(element) {
+    this.items.push(element);
+  }
+
+  pop() {
+    if (this.items.length == 0) {
+      throw new Error('stack is empty');
+    }
+
+    return this.items.pop();
+  }
+
+  peek() {
+    return this.items.at(-1);
+  }
+}
+```
+
+> Usage:
+>
+> ```js
+> const myStack = new Stack();
+>
+> myStack.push('One');
+> myStack.push('Two');
+> myStack.push('Three');
+>
+> console.log(myStack.peek()); // Three
+>
+> console.log(myStack.pop()); // Three
+> console.log(myStack.pop()); // Two
+> console.log(myStack.pop()); // One
+>
+> console.log(myStack.peek()); // undefined
+> ```
+
+### Linked List Based Stack
+
+```js title="Linked List Based Stack" lineNumbers
+class StackNode {
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class Stack {
+  constructor() {
+    this.top = null;
+    this.size = 0;
+  }
+
+  push(value) {
+    const newNode = new StackNode(value);
+    newNode.next = this.top;
+    this.top = newNode;
+    this.size++;
+  }
+
+  pop() {
+    if (this.top === null) {
+      throw new Error('stack is empty');
+    }
+
+    const value = this.top.value;
+    this.top = this.top.next;
+    this.size--;
+
+    return value;
+  }
+
+  peek() {
+    if (this.top === null) {
+      throw new Error('stack is empty');
+    }
+
+    return this.top.value;
+  }
+}
+```
+
+> Usage:
+>
+> ```js
+> const myStack = new Stack();
+>
+> myStack.push('One');
+> myStack.push('Two');
+> myStack.push('Three');
+>
+> console.log(myStack.peek()); // Three
+>
+> console.log(myStack.pop()); // Three
+> console.log(myStack.pop()); // Two
+> console.log(myStack.pop()); // One
+>
+> console.log(myStack.peek()); // Error: stack is empty
+> ```

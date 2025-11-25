@@ -10,6 +10,7 @@
     "---Data Structures---",
     "array",
     "hash-table",
-    "linked-list"
+    "linked-list",
+    "stack"
   ]
 }
