@@ -29,7 +29,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
       full={page.data.full}
     >
       {isCustomIndexPage ? (
-        <div className="flex flex-col items-center gap-4 border-b text-center">
+        <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
           {createElement(indexMeta.icon, { className: 'size-14 lg:size-16' })}
           <DocsTitle>{indexMeta.title}</DocsTitle>
           <DocsDescription className="max-w-2xl text-base">{indexMeta.desc}</DocsDescription>
