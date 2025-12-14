@@ -1,0 +1,185 @@
+---
+title: Binary Search Tree
+---
+
+## Overview
+
+A Binary Search Tree (BST) is a type of binary tree that stores elements in a specific order. This order makes searching, inserting, and deleting efficient.
+
+| Operations | Complexity | Description                                                         |
+| ---------- | ---------- | ------------------------------------------------------------------- |
+| Search     | O(log n)   | The value is found by moving left or right.                         |
+| Insert     | O(log n)   | Need to move through the tree to find where the new item should go. |
+| Remove     | O(log n)   | Need to move through the tree to find the item you want to remove.  |
+
+> - Nodes in the left subtree are smaller than the current node.
+> - Nodes in the right subtree are greater than or equal to the current node.
+
+![binary-search-tree](./binary-search-tree.png)
+
+## Implementation
+
+```js title="Binray Search Tree" lineNumbers
+class TreeNode {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class BinarySearchTree {
+  constructor() {
+    this.root = null;
+  }
+
+  search(value) { ... } // [!code highlight]
+  insert(value) { ... } // [!code highlight]
+  remove(value) { ... } // [!code highlight]
+}
+```
+
+> Usage:
+>
+> ```js
+> const tree = new BinarySearchTree();
+>
+> tree.insert(60);
+> tree.insert(59);
+> tree.insert(28);
+> tree.insert(23);
+> tree.insert(28);
+> tree.insert(35);
+> tree.insert(77);
+> tree.insert(60);
+> tree.insert(125);
+> tree.insert(76);
+>
+> console.log(tree.search(59)); // TreeNode {value: 59, left: TreeNode, right: null}
+>
+> tree.remove(77);
+> ```
+
+- Search:
+
+  > The search starts at the root, compares the target value with the current node, moves left when the value is smaller,
+  > moves right when it is greater, and repeats this process until the value is found or there are no more nodes to visit.
+
+  ```js
+  search(value) {
+    let current = this.root;
+
+    while (current) {
+      if (value < current.value) {
+        current = current.left;
+      } else if (value > current.value) {
+        current = current.right;
+      } else {
+        return current;
+      }
+    }
+
+    return null;
+  }
+  ```
+
+- Insert:
+
+  > The insert starts by creating a new node, sets it as the root if the tree is empty, otherwise walks down from the root, compares values,
+  > moves left when the value is smaller, moves right when it is greater or equal, and inserts the new node at the first empty child found.
+
+  ```js
+  insert(value) {
+    const newNode = new TreeNode(value);
+
+    if (this.root === null) {
+      this.root = newNode;
+      return;
+    }
+
+    let current = this.root;
+    while (current) {
+      // left:
+      if (value < current.value) {
+        if (current.left === null) {
+          current.left = newNode;
+          return;
+        }
+        current = current.left;
+      }
+      // right:
+      else {
+        if (current.right === null) {
+          current.right = newNode;
+          return;
+        }
+        current = current.right;
+      }
+    }
+  }
+  ```
+
+- Remove:
+
+  > The remove method first searches down the tree to find the node with the target value while also keeping track of its parent. If the value is not found, it stops.
+  >
+  > If the node has zero or one child, it removes the node by linking its parent directly to that child (or updating the root if the node is the root).
+  >
+  > If the node has two children, it finds the inorder successor (the smallest value in the right subtree), copies that successor value into the node being removed,
+  > and then deletes the successor node. That successor is guaranteed to have no left child (because it is the leftmost node of the right subtree),
+  > so removing it becomes the simple zero or one child case: you reconnect the successor's parent to the successor's right child.
+
+  ```js
+  remove(value) {
+    let parent = null;
+    let current = this.root;
+
+    // move to the point:
+    while (current !== null && current.value !== value) {
+      parent = current;
+
+      if (value < current.value) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
+
+    // not found:
+    if (current === null) {
+      return;
+    }
+
+    // case 1: node has 0 or 1 child
+    if (current.left === null || current.right === null) {
+      const child = current.left !== null ? current.left : current.right;
+
+      if (parent === null) {
+        this.root = child;
+      } else if (parent.left === current) {
+        parent.left = child;
+      } else {
+        parent.right = child;
+      }
+
+      return;
+    }
+
+    // case 2: node has 2 children
+    let successorParent = current;
+    let successor = current.right;
+
+    while (successor.left !== null) {
+      successorParent = successor;
+      successor = successor.left;
+    }
+
+    current.value = successor.value;
+
+    if (successorParent.left === successor) {
+      successorParent.left = successor.right;
+    } else {
+      successorParent.right = successor.right;
+    }
+  }
+  ```

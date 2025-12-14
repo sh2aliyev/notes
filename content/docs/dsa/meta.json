@@ -12,6 +12,7 @@
     "hash-table",
     "linked-list",
     "stack",
-    "queue"
+    "queue",
+    "trees"
   ]
 }
