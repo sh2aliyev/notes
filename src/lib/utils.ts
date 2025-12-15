@@ -7,3 +7,8 @@ export function getDirname(slugs: string[], isIndex: boolean) {
   if (isIndex) return slugs.at(-1);
   return slugs.at(-2);
 }
+
+export function getFallbackDirname(slugs: string[], isIndex: boolean) {
+  if (isIndex) return slugs.at(-2);
+  return slugs.at(-3);
+}
