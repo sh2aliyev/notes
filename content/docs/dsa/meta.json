@@ -13,6 +13,7 @@
     "linked-list",
     "stack",
     "queue",
-    "trees"
+    "trees",
+    "graphs"
   ]
 }
