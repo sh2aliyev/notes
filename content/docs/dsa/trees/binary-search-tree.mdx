@@ -62,8 +62,7 @@ class BinarySearchTree {
 
 - Search:
 
-  > The search starts at the root, compares the target value with the current node, moves left when the value is smaller,
-  > moves right when it is greater, and repeats this process until the value is found or there are no more nodes to visit.
+  > The search starts at the root, compares the target value with the current node, moves left when the value is smaller, moves right when it is greater, and repeats this process until the value is found or there are no more nodes to visit.
 
   ```js
   search(value) {
@@ -85,8 +84,7 @@ class BinarySearchTree {
 
 - Insert:
 
-  > The insert starts by creating a new node, sets it as the root if the tree is empty, otherwise walks down from the root, compares values,
-  > moves left when the value is smaller, moves right when it is greater or equal, and inserts the new node at the first empty child found.
+  > The insert starts by creating a new node, sets it as the root if the tree is empty, otherwise walks down from the root, compares values, moves left when the value is smaller, moves right when it is greater or equal, and inserts the new node at the first empty child found.
 
   ```js
   insert(value) {
@@ -125,9 +123,7 @@ class BinarySearchTree {
   >
   > If the node has zero or one child, it removes the node by linking its parent directly to that child (or updating the root if the node is the root).
   >
-  > If the node has two children, it finds the inorder successor (the smallest value in the right subtree), copies that successor value into the node being removed,
-  > and then deletes the successor node. That successor is guaranteed to have no left child (because it is the leftmost node of the right subtree),
-  > so removing it becomes the simple zero or one child case: you reconnect the successor's parent to the successor's right child.
+  > If the node has two children, it finds the inorder successor (the smallest value in the right subtree), copies that successor value into the node being removed, and then deletes the successor node. That successor is guaranteed to have no left child (because it is the leftmost node of the right subtree), so removing it becomes the simple zero or one child case: you reconnect the successor's parent to the successor's right child.
 
   ```js
   remove(value) {

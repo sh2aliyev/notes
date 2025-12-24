@@ -176,8 +176,7 @@ class PriorityQueue {
   >
   > > Percolating down:
   > >
-  > > Repeatedly compare the current node with its children. Choose the child with higher priority according to `compare` (the one that should be closer to the top),
-  > > and swap if that child should come before the current node. When done, return the stored top value.
+  > > Repeatedly compare the current node with its children. Choose the child with higher priority according to `compare` (the one that should be closer to the top), and swap if that child should come before the current node. When done, return the stored top value.
 
   ```js
   remove() {
@@ -202,8 +201,7 @@ class PriorityQueue {
 
 - Heapify (Optional): Turn a random array into a Binary Heap.
 
-  > It copies the array into the internal heap, then works bottom-up from the last parent to the root. At each parent index,
-  > it percolates down to fix that subtree. Once it reaches index 0, the whole array satisfies the heap structure.
+  > It copies the array into the internal heap, then works bottom-up from the last parent to the root. At each parent index, it percolates down to fix that subtree. Once it reaches index 0, the whole array satisfies the heap structure.
   >
   > Inserting items one by one takes `O(n log n)`, but heapify builds the heap in `O(n)`.
 

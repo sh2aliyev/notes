@@ -4,8 +4,7 @@ title: Trie (Prefix Tree)
 
 ## Overview
 
-A trie (prefix tree) is a tree-based data structure for storing and searching strings efficiently.
-It organizes words by their characters so that strings with the same starting letters share the same path from the root.
+A trie (prefix tree) is a tree-based data structure for storing and searching strings efficiently. It organizes words by their characters so that strings with the same starting letters share the same path from the root.
 
 > Use cases: Autocomplete, spell checking, dictionary or word lookup, IP routing, search suggestions.
 
@@ -76,8 +75,7 @@ class Trie {
 
   > The insert method starts at the root, then loops through the characters of the word.
   >
-  > For each character, it checks if the current node already has that character in its `children`.
-  > If it does not, it creates a new `TrieNode` and saves it under that character. Then it moves node to that child and keeps going.
+  > For each character, it checks if the current node already has that character in its `children`. If it does not, it creates a new `TrieNode` and saves it under that character. Then it moves node to that child and keeps going.
   >
   > Once it has processed all characters of the word, it marks the last node with `isWord = true` so the trie knows a complete word ends there.
 
@@ -99,11 +97,9 @@ class Trie {
 
 - Search:
 
-  > The search method starts from the root and follows the trie through the word's characters.
-  > If at any point a character is missing, the search fails right away and returns `false`.
+  > The search method starts from the root and follows the trie through the word's characters. If at any point a character is missing, the search fails right away and returns `false`.
   >
-  > If it successfully reaches the node for the last character, it still needs one more check: `isWord` must be `true`,
-  > because the trie might contain the same path as a prefix without the full word being inserted.
+  > If it successfully reaches the node for the last character, it still needs one more check: `isWord` must be `true`, because the trie might contain the same path as a prefix without the full word being inserted.
 
   ```js
   search(word) {

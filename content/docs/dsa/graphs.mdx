@@ -4,8 +4,7 @@ title: Graphs
 
 ## Overview
 
-A graph is a data structure used to represent relationships between things. It is made up of `nodes` (vertices) that represent the objects you care about
-and `edges` that represent the connections between them.
+A graph is a data structure used to represent relationships between things. It is made up of `nodes` (vertices) that represent the objects you care about and `edges` that represent the connections between them.
 
 ![graph](./graph.png)
 
@@ -56,8 +55,7 @@ There are three common ways to represent a graph in code.
 
 - Adjacency matrices.
 
-  > A graph is stored as a 2D grid of values. The cell at (`i`, `j`) indicates whether there is an edge from node `i` to node `j` (often `0`/`1`), or stores the
-  > edge weight in weighted graphs.
+  > A graph is stored as a 2D grid of values. The cell at (`i`, `j`) indicates whether there is an edge from node `i` to node `j` (often `0`/`1`), or stores the edge weight in weighted graphs.
 
   ```js
   const adjMatrix = {
@@ -72,8 +70,7 @@ There are three common ways to represent a graph in code.
 
 - Adjacency lists.
 
-  > A graph is stored as a mapping from each node to its neighbors. Each key is a node, and its value is a list of directly connected (outgoing) nodes
-  > (or pairs like (`neighbor`, `weight`) for weighted graphs).
+  > A graph is stored as a mapping from each node to its neighbors. Each key is a node, and its value is a list of directly connected (outgoing) nodes (or pairs like (`neighbor`, `weight`) for weighted graphs).
 
   ```js
   const adjList = {

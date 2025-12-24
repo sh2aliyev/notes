@@ -4,8 +4,7 @@ title: Array
 
 ## Overview
 
-Array is a data structure that lets you store multiple values in one variable. Each value in the array is called an element,
-and elements are accessed using their index, which starts at `0` for the first element.
+Array is a data structure that lets you store multiple values in one variable. Each value in the array is called an element, and elements are accessed using their index, which starts at `0` for the first element.
 
 | Operations               | Complexity | Description                                                                                                          |
 | ------------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -17,9 +16,7 @@ and elements are accessed using their index, which starts at `0` for the first e
 
 Arrays are usually stored as contiguous memory blocks. This means all elements sit next to each other in memory with no gaps in between.
 
-> When an array is created, the system allocates a block of memory large enough to hold all elements.
-> The memory address of each element is based on the starting address of the array.
-> The first element sits at the starting address, and each following element is placed at the next available address.
+> When an array is created, the system allocates a block of memory large enough to hold all elements. The memory address of each element is based on the starting address of the array. The first element sits at the starting address, and each following element is placed at the next available address.
 >
 > ```c++
 > int arr[5] = {3, 7, 1, 2, 3};
@@ -35,8 +32,7 @@ Arrays are usually stored as contiguous memory blocks. This means all elements s
 > Address of arr[4] = starting address + 16
 > ```
 >
-> Because the memory is contiguous, accessing elements is efficient. The address of any element can be calculated from the starting address and the size of each element.
-> This makes direct access possible without looping or searching.
+> Because the memory is contiguous, accessing elements is efficient. The address of any element can be calculated from the starting address and the size of each element. This makes direct access possible without looping or searching.
 
 Different languages are designed with different goals related to performance, control, and flexibility, arrays can differ with their declaration and capabilities.
 

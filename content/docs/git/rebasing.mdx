@@ -11,25 +11,20 @@ title: Rebasing
 
 What is it?
 
-> Let's say you start working on a new feature by creating a `feature` branch.
-> While you're developing, your teammates merge their completed work, such as bug fixes, into the `main` branch.
-> To keep your `feature` branch up to date and avoid working with known issues, you need to bring those changes in.
+> Let's say you start working on a new feature by creating a `feature` branch. While you're developing, your teammates merge their completed work, such as bug fixes, into the `main` branch. To keep your `feature` branch up to date and avoid working with known issues, you need to bring those changes in.
 >
 > Yes, you can do this just by merging the `main` branch into your `feature` branch. That's it, but...
 
 What is the problem?
 
-> As you keep working, more bug fixes and updates might get merged into the `main` branch that you'll want to include again in your `feature` branch.
-> You can keep merging to stay up to date, but imagine the `main` branch is very active and gets such updates several times a day.
-> If your feature takes a while to finish, your branch history can quickly fill up with unnecessary merge commits that don't really say anything about the actual work you're doing.
+> As you keep working, more bug fixes and updates might get merged into the `main` branch that you'll want to include again in your `feature` branch. You can keep merging to stay up to date, but imagine the `main` branch is very active and gets such updates several times a day. If your feature takes a while to finish, your branch history can quickly fill up with unnecessary merge commits that don't really say anything about the actual work you're doing.
 
 ![merge-fix](./merge-fix.png)
 
 The solution:
 
 - `git rebase <branch_name>`: Reapply your current branch's commits on top of the specified branch (integrate its latest changes).
-  > If conflicts appear, you can either resolve them or cancel the process with `git rebase --abort`.
-  > When resolving conflicts, don't commit as usual. Instead, use `git rebase --continue` to move forward.
+  > If conflicts appear, you can either resolve them or cancel the process with `git rebase --abort`. When resolving conflicts, don't commit as usual. Instead, use `git rebase --continue` to move forward.
 
 > Git rebasing solves the problem by reapplying your changes on top of another branch.
 >

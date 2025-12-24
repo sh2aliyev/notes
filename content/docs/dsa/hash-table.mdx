@@ -4,8 +4,7 @@ title: Hash Table
 
 ## Overview
 
-A hash table is a data structure that stores data as key value pairs.
-It uses a hashing function to map each key to a position in memory which gives fast access when storing or retrieving values by that key.
+A hash table is a data structure that stores data as key value pairs. It uses a hashing function to map each key to a position in memory which gives fast access when storing or retrieving values by that key.
 
 | Operations  | Complexity |
 | ----------- | ---------- |
@@ -49,11 +48,9 @@ How it works:
 > 1. Input:
 >    > You insert the value `John` using the key `name`.
 > 2. Hashing:
->    > The hash function converts `name` into a number such as `417`.
->    > This example uses character code sums. Real systems may use stronger functions for better distribution.
+>    > The hash function converts `name` into a number such as `417`. This example uses character code sums. Real systems may use stronger functions for better distribution.
 > 3. Indexing:
->    > The table reduces that number to a valid index with a modulo step such as `417 % 10` which becomes `7`.
->    > Again, real systems may use different indexing methods.
+>    > The table reduces that number to a valid index with a modulo step such as `417 % 10` which becomes `7`. Again, real systems may use different indexing methods.
 > 4. Storage:
 >    > The pair is stored in bucket `7`.
 >

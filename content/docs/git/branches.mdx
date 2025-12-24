@@ -6,8 +6,7 @@ title: Branches
 
 A Git branch is an independent line of development within a repository. Branches allow you to isolate changes and work on them independently.
 
-In a Git repository, there is a default branch (usually called `main` or `master`). Beyond that, you can create other branches to develop new features,
-fix bugs, test ideas, or work on updates without affecting the main codebase.
+In a Git repository, there is a default branch (usually called `main` or `master`). Beyond that, you can create other branches to develop new features, fix bugs, test ideas, or work on updates without affecting the main codebase.
 
 ![git-flow](./git-flow.png)
 
@@ -19,8 +18,7 @@ What is a branch reference?
 > - The file contains the hash of the latest commit on that branch.
 > - When you make a new commit, Git updates this file with the new commit hash.
 > - Creating a new branch simply means creating a new file in `.git/refs/heads/`.
->   > You can even do this manually by creating a file and writing a commit hash inside it.
->   > The file name becomes the branch name, and it starts from the commit you specified.
+>   > You can even do this manually by creating a file and writing a commit hash inside it. The file name becomes the branch name, and it starts from the commit you specified.
 
 What is `HEAD`?
 
@@ -30,11 +28,9 @@ What is `HEAD`?
 > - When you switch branches, Git updates `HEAD` to point to the new branch reference.
 
 > - Attached HEAD:
->   > This is the normal state where `HEAD` points to a branch reference.
->   > Any new commits you make are added to that branch, and `HEAD` moves forward along with it.
+>   > This is the normal state where `HEAD` points to a branch reference. Any new commits you make are added to that branch, and `HEAD` moves forward along with it.
 > - Detached HEAD:
->   > This occurs when `HEAD` points directly to a specific commit hash instead of a branch reference.
->   > In this state, new commits aren't associated with any branch, and you might need to create a new branch to save your work.
+>   > This occurs when `HEAD` points directly to a specific commit hash instead of a branch reference. In this state, new commits aren't associated with any branch, and you might need to create a new branch to save your work.
 
 > You can also use it instead of `<commit_hash>`:
 >
