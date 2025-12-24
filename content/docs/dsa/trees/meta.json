@@ -1,4 +1,3 @@
 {
-  "defaultOpen": true,
   "pages": ["binary-trees", "binary-search-tree", "binary-heaps", "trie"]
 }
