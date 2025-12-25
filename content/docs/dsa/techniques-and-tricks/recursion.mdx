@@ -1,0 +1,197 @@
+---
+title: Recursion
+---
+
+## Overview
+
+Recursion in programming is a technique where a function calls itself to solve a problem.
+
+Recursion lets you break a complex problem into smaller, more manageable subproblems. Each recursive call works on a smaller part of the original problem until it reaches a base case, where the recursion stops.
+
+Recursion is useful when you don't know in advance how many steps or iterations will be needed to find a solution. It allows you to go deeper into the problem until you reach a base case that can be easily solved.
+
+### Definitions
+
+- Key points:
+  > 1. Base Case:
+  >    > The stopping condition that prevents infinite recursion.
+  >    - Smallest valid input.
+  >      > The simplest case that can be solved directly without more recursion.
+  >    - Termination condition.
+  >      > A condition that tells the function when to stop recursing.
+  >    - Edge cases.
+  >      > Special cases that need specific handling.
+  > 2. Recursive Case:
+  >    > The part of the function that reduces the problem and moves it closer to the base case. Each call should make progress toward stopping.
+  > 3. Recursive Call:
+  >    > Calling the function from inside itself.
+- Process:
+  > 1. Stacking (going down):
+  >    > Each recursive call creates a new stack frame on the call stack, which stores the parameters and local variables for that call.
+  > 2. Unfolding (going up):
+  >    > After the base case is reached, the calls return one by one. Each call returns its result to the previous stack frame until the original call returns the final result.
+- Costs:
+  > - Space:
+  >   > Each recursive call adds a stack frame, so the space complexity is typically `O(recursion depth)`.
+
+## Examples
+
+1. Reverse a string:
+
+   ```js
+   function reverseStr(str) {
+     // Base case:
+     if (str.length <= 1) return str;
+
+     // Recursive case & call:
+     return reverseStr(str.slice(1)) + str[0];
+   }
+
+   console.log(reverseStr('Hello')); // "olleH"
+   console.log(reverseStr('abcdefg')); // "gfedcba"
+   ```
+
+   > Explanation: `reverseStr("Hello")`
+   >
+   > ```js
+   > reverseStr("Hello") = reverseStr("ello") + "H"
+   > ├─ reverseStr("ello") = reverseStr("llo") + "e"
+   > │  ├─ reverseStr("llo") = reverseStr("lo") + "l"
+   > │  │  ├─ reverseStr("lo") = reverseStr("o") + "l"
+   > │  │  │  └─ reverseStr("o") = "o" // (base case)
+   > │  │  │     returns "o"
+   > │  │  returns "o" + "l" = "ol"
+   > │  returns "ol" + "l" = "oll"
+   > returns "oll" + "e" = "olle"
+   > returns "olle" + "H" = "olleH"
+   > ```
+
+2. Factorial:
+
+   ```js
+   function factorial(num) {
+     // Base case:
+     if (num === 0 || num === 1) {
+       return 1;
+     }
+
+     // Recursive case & call:
+     return num * factorial(num - 1);
+   }
+
+   console.log(factorial(5)); // 120
+   ```
+
+   > Explanation:
+   >
+   > ```js
+   > factorial(5) = 5 * factorial(4)
+   > ├─ factorial(4) = 4 * factorial(3)
+   > │  ├─ factorial(3) = 3 * factorial(2)
+   > │  │  ├─ factorial(2) = 2 * factorial(1)
+   > │  │  │  └─ factorial(1) = 1 // (base case)
+   > │  │  │     returns 1
+   > │  │  returns 2 * 1 = 2
+   > │  returns 3 * 2 = 6
+   > returns 4 * 6 = 24
+   > returns 5 * 24 = 120
+   > ```
+
+3. Fibonacci:
+
+   ```js
+   function fib(n) {
+     // Base cases:
+     if (n === 0) return 0;
+     if (n === 1) return 1;
+
+     // Recursive case & call:
+     return fib(n - 1) + fib(n - 2);
+   }
+
+   console.log(fib(6)); // 8
+   console.log(fib(10)); // 55
+   console.log(fib(5)); // 5
+   ```
+
+   > Explanation: `fib(6)`
+   >
+   > ```js
+   > fib(6) = fib(5) + fib(4)
+   > ├─ fib(5) = fib(4) + fib(3)
+   > │  ├─ fib(4) = fib(3) + fib(2)
+   > │  │  ├─ fib(3) = fib(2) + fib(1)
+   > │  │  │  ├─ fib(2) = fib(1) + fib(0)
+   > │  │  │  │  ├─ fib(1) = 1 // (base case)
+   > │  │  │  │  └─ fib(0) = 0 // (base case)
+   > │  │  │  │  returns 1
+   > │  │  │  └─ fib(1) = 1 // (base case)
+   > │  │  │  returns 2
+   > │  │  └─ fib(2) = fib(1) + fib(0)
+   > │  │     ├─ fib(1) = 1 // (base case)
+   > │  │     └─ fib(0) = 0 // (base case)
+   > │  │     returns 1
+   > │  │  returns 3
+   > │  └─ fib(3) = fib(2) + fib(1)
+   > │     ├─ fib(2) = fib(1) + fib(0)
+   > │     │  ├─ fib(1) = 1 // (base case)
+   > │     │  └─ fib(0) = 0 // (base case)
+   > │     │  returns 1
+   > │     └─ fib(1) = 1 // (base case)
+   > │     returns 2
+   > │  returns 5
+   > └─ fib(4) = fib(3) + fib(2)
+   >   ├─ fib(3) = fib(2) + fib(1)
+   >   │  ├─ fib(2) = fib(1) + fib(0)
+   >   │  │  ├─ fib(1) = 1 // (base case)
+   >   │  │  └─ fib(0) = 0 // (base case)
+   >   │  │  returns 1
+   >   │  └─ fib(1) = 1 // (base case)
+   >   │  returns 2
+   >   └─ fib(2) = fib(1) + fib(0)
+   >      ├─ fib(1) = 1 // (base case)
+   >      └─ fib(0) = 0 // (base case)
+   >      returns 1
+   >   returns 3
+   >
+   > returns 5 + 3 = 8
+   > ```
+
+4. Count how many items are in a nested array:
+
+   ```js
+   function countItems(value) {
+     // Base case:
+     if (!Array.isArray(value)) return 1;
+
+     let total = 0;
+
+     // Recursive case & call:
+     for (const item of value) {
+       total += countItems(item);
+     }
+
+     return total;
+   }
+
+   console.log(countItems(['a', ['b', 'c'], [['d', ['e', 'f']], 'g']])); // 7
+   console.log(countItems([])); // 0
+   console.log(countItems(['a', [[]]])); // 1
+   ```
+
+   > Explanation: `countItems(['a', ['b', 'c'], [['d', ['e', 'f']], 'g']])`
+   >
+   > ```js
+   > countItems(['a', ['b','c'], [['d',['e','f']], 'g']]) = 1 + 2 + 4 = 7
+   > ├─ countItems('a') = 1
+   > ├─ countItems(['b','c']) = 1 + 1 = 2
+   > │  ├─ countItems('b') = 1
+   > │  └─ countItems('c') = 1
+   > └─ countItems([['d',['e','f']], 'g']) = 3 + 1 = 4
+   >    ├─ countItems(['d',['e','f']]) = 1 + 2 = 3
+   >    │  ├─ countItems('d') = 1
+   >    │  └─ countItems(['e','f']) = 1 + 1 = 2
+   >    │     ├─ countItems('e') = 1
+   >    │     └─ countItems('f') = 1
+   >    └─ countItems('g') = 1
+   > ```
