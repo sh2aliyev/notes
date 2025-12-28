@@ -1,4 +1,4 @@
 {
   "title": "Techniques and Tricks",
-  "pages": ["recursion"]
+  "pages": ["recursion", "backtracking"]
 }

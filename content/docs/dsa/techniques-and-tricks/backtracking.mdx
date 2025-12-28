@@ -1,0 +1,148 @@
+---
+title: Backtracking
+---
+
+## Overview
+
+Backtracking is a technique where you build a solution step by step, and as soon as you notice the current path can't lead to a valid answer, you undo the last step (or a few steps) and try a different choice.
+
+It is useful when a problem has many possible choices and you need to explore different possibilities to find a valid solution (or all valid solutions).
+
+## Examples
+
+1. Generate all combinations of well-formed parentheses.
+
+   ```js
+   function generateParentheses(n) {
+     const result = [];
+
+     function backtrack(current, openUsed, closeUsed) {
+       // Save:
+       if (current.length >= 2 * n) {
+         result.push(current);
+         return;
+       }
+
+       // Add "(" if we still can:
+       if (openUsed < n) {
+         backtrack(current + '(', openUsed + 1, closeUsed);
+       }
+
+       // Add ")" if it stays valid:
+       if (closeUsed < openUsed) {
+         backtrack(current + ')', openUsed, closeUsed + 1);
+       }
+     }
+
+     backtrack('', 0, 0);
+     return result;
+   }
+
+   console.log(generateParentheses(1)); // ['()']
+   console.log(generateParentheses(2)); // ['(())', '()()']
+   console.log(generateParentheses(3)); // ['((()))', '(()())', '(())()', '()(())', '()()()']
+   ```
+
+   > Explanation: `generateParenthesis(3)`
+   >
+   > ```js
+   > backtrack("", open=0, close=0)
+   > ├─ add "(" -> backtrack("(", open=1, close=0)
+   > │  ├─ add "(" -> backtrack("((", open=2, close=0)
+   > │  │  ├─ add "(" -> backtrack("(((", open=3, close=0)
+   > │  │  │  └─ add ")" -> backtrack("((()", open=3, close=1)
+   > │  │  │     └─ add ")" -> backtrack("((())", open=3, close=2)
+   > │  │  │        └─ add ")" -> backtrack("((()))", open=3, close=3)
+   > │  │  │           └─ save "((()))"
+   > │  │  └─ add ")" -> backtrack("(()", open=2, close=1)
+   > │  │     ├─ add "(" -> backtrack("(()(", open=3, close=1)
+   > │  │     │  └─ add ")" -> backtrack("(()()", open=3, close=2)
+   > │  │     │     └─ add ")" -> backtrack("(()())", open=3, close=3)
+   > │  │     │        └─ save "(()())"
+   > │  │     └─ add ")" -> backtrack("(())", open=2, close=2)
+   > │  │        └─ add "(" -> backtrack("(())(", open=3, close=2)
+   > │  │           └─ add ")" -> backtrack("(())()", open=3, close=3)
+   > │  │              └─ save "(())()"
+   > │  └─ add ")" -> backtrack("()", open=1, close=1)
+   > │     └─ add "(" -> backtrack("()(", open=2, close=1)
+   > │        ├─ add "(" -> backtrack("()((", open=3, close=1)
+   > │        │  └─ add ")" -> backtrack("()(()", open=3, close=2)
+   > │        │     └─ add ")" -> backtrack("()(())", open=3, close=3)
+   > │        │        └─ save "()(())"
+   > │        └─ add ")" -> backtrack("()()", open=2, close=2)
+   > │           └─ add "(" -> backtrack("()()(", open=3, close=2)
+   > │              └─ add ")" -> backtrack("()()()", open=3, close=3)
+   > │                 └─ save "()()()"
+   > ```
+
+2. Generate all subsets.
+
+   ```js
+   function subsets(arr) {
+     const result = [];
+
+     function backtrack(i, path) {
+       // save
+       result.push([...path]);
+
+       // try
+       for (let j = i; j < arr.length; j++) {
+         path.push(arr[j]); // choose
+         backtrack(j + 1, path); // explore
+         path.pop(); // undo (backtrack)
+       }
+     }
+
+     backtrack(0, []);
+
+     return result;
+   }
+
+   console.log(subsets([1, 2, 3])); // [[], [ 1 ], [ 1, 2 ], [ 1, 2, 3 ], [ 1, 3 ], [ 2 ], [ 2, 3 ], [ 3 ]]
+   console.log(subsets(['a', 'b', 'c'])); // [[], ['a'], ['a', 'b'], ['a', 'b', 'c'], ['a', 'c'], ['b'], ['b', 'c'], ['c']]
+   ```
+
+   > Explanation: `subsets(['a', 'b', 'c'])`
+   >
+   > ```js
+   > backtrack(0), path=[]
+   > ADD result: []
+   >
+   >   choose "a" -> path=[a]
+   >   backtrack(1)
+   >   ADD result: [a]
+   >
+   >     choose "b" -> path=[a,b]
+   >     backtrack(2)
+   >     ADD result: [a,b]
+   >
+   >       choose "c" -> path=[a,b,c]
+   >       backtrack(3)
+   >       ADD result: [a,b,c]
+   >       undo "c"  -> path=[a,b]
+   >
+   >     undo "b" -> path=[a]
+   >
+   >     choose "c" -> path=[a,c]
+   >     backtrack(3)
+   >     ADD result: [a,c]
+   >     undo "c" -> path=[a]
+   >
+   >   undo "a" -> path=[]
+   >
+   >   choose "b" -> path=[b]
+   >   backtrack(2)
+   >   ADD result: [b]
+   >
+   >     choose "c" -> path=[b,c]
+   >     backtrack(3)
+   >     ADD result: [b,c]
+   >     undo "c" -> path=[b]
+   >
+   >   undo "b" -> path=[]
+   >
+   >   choose "c" -> path=[c]
+   >   backtrack(3)
+   >   ADD result: [c]
+   >   undo "c" -> path=[]
+   > ```
