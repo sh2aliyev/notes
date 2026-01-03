@@ -1,0 +1,29 @@
+---
+title: Bubble Sort
+---
+
+| Stable? | Time     | Space  |
+| ------- | -------- | ------ |
+| Yes     | `O(n^2)` | `O(1)` |
+
+> Go through the list and compare each adjacent pair. If they are in the wrong order, swap them. After one full pass, the largest element moves to the end, so the next pass can skip it and check one less element. Repeat until a full pass finishes with no swaps.
+>
+> ![bubble-sort](./bubble-sort.gif)
+
+```js title="Bubble Sort" lineNumbers
+function bubbleSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+  }
+}
+
+const numbers = [6, 5, 3, 1, 8, 7, 2, 4];
+
+bubbleSort(numbers);
+
+console.log(numbers); // [1, 2, 3, 4, 5, 6, 7, 8]
+```
