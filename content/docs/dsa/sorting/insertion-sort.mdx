@@ -1,0 +1,37 @@
+---
+title: Insertion Sort
+---
+
+| Stable? | Time     | Space  |
+| ------- | -------- | ------ |
+| Yes     | `O(n^2)` | `O(1)` |
+
+> Treat the left side as sorted and scan from the second element onward. For each element, compare it backward with the sorted part, shift larger elements right, then insert it into the gap. Repeat until the entire list is sorted.
+>
+> ![insertion-sort](./insertion-sort.gif)
+
+> It is a good choice:
+>
+> - If the list is nearly sorted.
+>   > Most items shift only a little, so it does fewer moves.
+> - When data is streamed in real time.
+>   > Each new item acts like the last iteration of the algorithm, which is just moving the item into its correct position among the already sorted items without re-sorting the entire list.
+
+```js title="Insertion Sort" lineNumbers
+function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let j = i - 1;
+
+    while (j >= 0 && arr[j + 1] < arr[j]) {
+      [arr[j + 1], arr[j]] = [arr[j], arr[j + 1]];
+      j--;
+    }
+  }
+}
+
+const numbers = [6, 5, 3, 1, 8, 7, 2, 4];
+
+insertionSort(numbers);
+
+console.log(numbers); // [1, 2, 3, 4, 5, 6, 7, 8]
+```
