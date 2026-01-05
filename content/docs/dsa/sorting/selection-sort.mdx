@@ -6,9 +6,13 @@ title: Selection Sort
 | ------- | -------- | ------ |
 | No      | `O(n^2)` | `O(1)` |
 
+Explanation:
+
 > Move from left to right through the list. For each position, scan the remaining unsorted part to find the smallest element, then swap it into the current position. Repeat until the unsorted part is empty.
 >
 > ![selection-sort](./selection-sort.gif)
+
+Implementation:
 
 ```js title="Selection Sort" lineNumbers
 function selectionSort(arr) {

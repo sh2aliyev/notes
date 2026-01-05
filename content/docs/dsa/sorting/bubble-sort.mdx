@@ -6,9 +6,13 @@ title: Bubble Sort
 | ------- | -------- | ------ |
 | Yes     | `O(n^2)` | `O(1)` |
 
+Explanation:
+
 > Go through the list and compare each adjacent pair. If they are in the wrong order, swap them. After one full pass, the largest element moves to the end, so the next pass can skip it and check one less element. Repeat until a full pass finishes with no swaps.
 >
 > ![bubble-sort](./bubble-sort.gif)
+
+Implementation:
 
 ```js title="Bubble Sort" lineNumbers
 function bubbleSort(arr) {

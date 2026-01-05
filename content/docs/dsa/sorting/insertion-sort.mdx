@@ -6,16 +6,18 @@ title: Insertion Sort
 | ------- | -------- | ------ |
 | Yes     | `O(n^2)` | `O(1)` |
 
+Explanation:
+
 > Treat the left side as sorted and scan from the second element onward. For each element, compare it backward with the sorted part, shift larger elements right, then insert it into the gap. Repeat until the entire list is sorted.
 >
 > ![insertion-sort](./insertion-sort.gif)
 
-> It is a good choice:
->
-> - If the list is nearly sorted.
->   > Most items shift only a little, so it does fewer moves.
-> - When data is streamed in real time.
->   > Each new item acts like the last iteration of the algorithm, which is just moving the item into its correct position among the already sorted items without re-sorting the entire list.
+Extras:
+
+> - Nearly Sorted Data: If the list is nearly sorted, most items shift only a little, so it does fewer moves.
+> - Real-time Data: When data is streamed in real time, each new item acts like the last iteration of the algorithm, which is just moving the item into its correct position among the already sorted items without re-sorting the entire list.
+
+Implementation:
 
 ```js title="Insertion Sort" lineNumbers
 function insertionSort(arr) {
