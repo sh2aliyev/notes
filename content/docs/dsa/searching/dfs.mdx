@@ -1,0 +1,135 @@
+---
+title: Depth-First Search (DFS)
+---
+
+## Overview
+
+Explores one path fully in a graph or tree before returning to try other paths.
+
+| Time   | Space  |
+| ------ | ------ |
+| `O(n)` | `O(h)` |
+
+## Tree DFS
+
+> Example Tree:
+>
+> ![binary-search-tree](../trees/binary-search-tree.png)
+
+Order of searching:
+
+> - Pre-order: `Node -> Left -> Right`.
+>   > [60, 59, 28, 23, 28, 35, 77, 60, 76, 125]
+> - In-order: `Left -> Node -> Right`.
+>   > [23, 28, 28, 35, 59, 60, 60, 76, 77, 125]
+> - Post-order: `Left -> Right -> Node`.
+>   > [23, 35, 28, 28, 59, 76, 60, 125, 77, 60]
+>
+> The order of visiting children can be changed, such as visiting the right child before the left. To do this, simply swap the code for the left and right child traversals (use right before left) in the implementation below.
+
+### Implementation
+
+> Go to [Binary Search Tree](../trees/binary-search-tree.mdx) for the complete BST implementation.
+
+```js title="Binray Search Tree" lineNumbers
+class BinarySearchTree {
+  ...
+
+  preOrderDFS() { ... } // [!code highlight]
+  inOrderDFS() { ... } // [!code highlight]
+  postOrderDFS() { ... } // [!code highlight]
+}
+```
+
+> Usage:
+>
+> ```js
+> const tree = new BinarySearchTree();
+>
+> ...
+>
+> console.log(tree.preOrderDFS()); // [60, 59, 28, 23, 28, 35, 77, 60, 76, 125]
+> console.log(tree.inOrderDFS()); // [23, 28, 28, 35, 59, 60, 60, 76, 77, 125]
+> console.log(tree.postOrderDFS()); // [23, 35, 28, 28, 59, 76, 60, 125, 77, 60]
+> ```
+
+- Pre-order:
+
+  ```js
+  preOrderDFS() {
+    const traversePreOrder = (node, list) => {
+      if (node === null) return null;
+
+      // node:
+      list.push(node.value);
+
+      // left:
+      if (node.left) {
+        traversePreOrder(node.left, list);
+      }
+
+      // right:
+      if (node.right) {
+        traversePreOrder(node.right, list);
+      }
+
+      return list;
+    }
+
+    return traversePreOrder(this.root, []);
+  }
+  ```
+
+- In-order:
+
+  ```js
+  inOrderDFS() {
+    const traverseInOrder = (node, list) => {
+      if (node === null) return null;
+
+      // left:
+      if (node.left) {
+        traverseInOrder(node.left, list);
+      }
+
+      // node:
+      list.push(node.value);
+
+      // right:
+      if (node.right) {
+        traverseInOrder(node.right, list);
+      }
+
+      return list;
+    }
+
+    return traverseInOrder(this.root, []);
+  }
+  ```
+
+- Post-order:
+
+  ```js
+  postOrderDFS() {
+    const traversePostOrder = (node, list) => {
+      if (node === null) return null;
+
+      // left:
+      if (node.left) {
+        traversePostOrder(node.left, list);
+      }
+
+      // right:
+      if (node.right) {
+        traversePostOrder(node.right, list);
+      }
+
+      // node:
+      list.push(node.value);
+
+      return list;
+    };
+
+    return traversePostOrder(this.root, []);
+  }
+  ```

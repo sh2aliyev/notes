@@ -1,3 +1,3 @@
 {
-  "pages": ["linear-search", "binary-search"]
+  "pages": ["linear-search", "binary-search", "dfs"]
 }
