@@ -1,0 +1,28 @@
+---
+title: Linear Search
+---
+
+## Overview
+
+Scans each element in order until the target is found or all elements are checked.
+
+| Time   | Space  |
+| ------ | ------ |
+| `O(n)` | `O(1)` |
+
+## Implementation
+
+```js title="Linear Search" lineNumbers
+function linearSearch(arr, target) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === target) return i;
+  }
+
+  return -1;
+}
+
+const numbers = [9, 1, 9, 3, -4, 0, 3, 5, 6, 5];
+//               0  1  2  3   4  5  6  7  8  9
+
+console.log(linearSearch(numbers, 5)); // 7
+```
