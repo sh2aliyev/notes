@@ -133,3 +133,85 @@ class BinarySearchTree {
     return traversePostOrder(this.root, []);
   }
   ```
+
+## Graph DFS
+
+> Example Graph:
+>
+> ![graph-example](../graph-example.png)
+
+### Adjacency Matrix
+
+```js title="Graph DFS (adjacency matrix)" lineNumbers
+const adjMatrix = {
+  A: { A: 0, B: 1, C: 0, D: 0, E: 0, F: 0 },
+  B: { A: 1, B: 0, C: 1, D: 0, E: 1, F: 0 },
+  C: { A: 0, B: 1, C: 0, D: 1, E: 0, F: 0 },
+  D: { A: 0, B: 0, C: 1, D: 0, E: 1, F: 1 },
+  E: { A: 0, B: 1, C: 0, D: 1, E: 0, F: 0 },
+  F: { A: 0, B: 0, C: 0, D: 1, E: 0, F: 0 },
+};
+
+function adjMatrixDFS(vertex, graph, values, seen) {
+  values.push(vertex);
+
+  seen[vertex] = true;
+
+  const connections = graph[vertex];
+
+  for (const v in connections) {
+    if (connections[v] > 0 && !seen[v]) {
+      adjMatrixDFS(v, graph, values, seen);
+    }
+  }
+
+  return values;
+}
+```
+
+> Usage:
+>
+> ```js
+> console.log(adjMatrixDFS('C', adjMatrix, [], {})); // ['C', 'B', 'A', 'E', 'D', 'F']
+> console.log(adjMatrixDFS('A', adjMatrix, [], {})); // ['A', 'B', 'C', 'D', 'E', 'F']
+> console.log(adjMatrixDFS('B', adjMatrix, [], {})); // ['B', 'A', 'C', 'D', 'E', 'F']
+> ```
+
+### Adjacency List
+
+```js title="Graph DFS (adjacency list)" lineNumbers
+const adjList = {
+  A: ['B'],
+  B: ['A', 'C', 'E'],
+  C: ['B', 'D'],
+  D: ['C', 'E', 'F'],
+  E: ['B', 'D'],
+  F: ['D'],
+};
+
+function adjListDFS(vertex, graph, values, seen) {
+  values.push(vertex);
+
+  seen[vertex] = true;
+
+  const connections = graph[vertex];
+
+  for (let i = 0; i < connections.length; i++) {
+    const v = connections[i];
+
+    if (!seen[v]) {
+      adjListDFS(v, graph, values, seen);
+    }
+  }
+
+  return values;
+}
+```
+
+> Usage:
+>
+> ```js
+> console.log(adjListDFS('C', adjList, [], {})); // ['C', 'B', 'A', 'E', 'D', 'F']
+> console.log(adjListDFS('A', adjList, [], {})); // ['A', 'B', 'C', 'D', 'E', 'F']
+> console.log(adjListDFS('B', adjList, [], {})); // ['B', 'A', 'C', 'D', 'E', 'F']
+> ```
