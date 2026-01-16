@@ -215,3 +215,51 @@ function adjListDFS(vertex, graph, values, seen) {
 > console.log(adjListDFS('A', adjList, [], {})); // ['A', 'B', 'C', 'D', 'E', 'F']
 > console.log(adjListDFS('B', adjList, [], {})); // ['B', 'A', 'C', 'D', 'E', 'F']
 > ```
+
+## Matrix (2D Array) DFS
+
+> Example 2D Array:
+> ![matrix-dfs](./matrix-dfs.png)
+>
+> > The red line shows the search flow starting from points `col: 0` and `row: 0`.
+
+```js title="Matrix DFS" lineNumbers
+const arr2d = [
+  [1, 2, 3, 4, 5],
+  [6, 7, 8, 9, 10],
+  [11, 12, 13, 14, 15],
+  [16, 17, 18, 19, 20],
+];
+
+const directions = [
+  [-1, 0], // up
+  [0, 1], // right
+  [1, 0], // down
+  [0, -1], // left
+];
+
+function matrixDFS(matrix, row, col, seen, values) {
+  if (row < 0 || col < 0 || row >= matrix.length || col >= matrix[0].length || seen.has(`${row}${col}`)) {
+    return;
+  }
+
+  values.push(matrix[row][col]);
+
+  seen.add(`${row}${col}`);
+
+  for (let i = 0; i < directions.length; i++) {
+    const currDir = directions[i];
+    matrixDFS(matrix, row + currDir[0], col + currDir[1], seen, values);
+  }
+
+  return values;
+}
+```
+
+> Usage:
+>
+> ```js
+> console.log(matrixDFS(arr2d, 0, 0, new Set(), [])); // [1, 2, 3, 4, 5, 10, 15, 20, 19, 14, 9, 8, 13, 18, 17, 12, 7, 6, 11, 16]
+> console.log(matrixDFS(arr2d, 1, 0, new Set(), [])); // [6, 1, 2, 3, 4, 5, 10, 15, 20, 19, 14, 9, 8, 13, 18, 17, 12, 7, 11, 16]
+> console.log(matrixDFS(arr2d, 2, 3, new Set(), [])); // [14, 9, 4, 5, 10, 15, 20, 19, 18, 13, 8, 3, 2, 7, 12, 17, 16, 11, 6, 1]
+> ```
