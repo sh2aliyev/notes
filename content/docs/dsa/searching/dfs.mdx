@@ -27,7 +27,7 @@ Order of searching:
 >
 > The order of visiting children can be changed, such as visiting the right child before the left. To do this, simply swap the code for the left and right child traversals (use right before left) in the implementation below.
 
-### Implementation
+Implementation:
 
 > Go to [Binary Search Tree](../trees/binary-search-tree.mdx) for the complete BST implementation.
 
@@ -142,6 +142,8 @@ class BinarySearchTree {
 
 ### Adjacency Matrix
 
+Implementation:
+
 ```js title="Graph DFS (adjacency matrix)" lineNumbers
 const adjMatrix = {
   A: { A: 0, B: 1, C: 0, D: 0, E: 0, F: 0 },
@@ -152,16 +154,16 @@ const adjMatrix = {
   F: { A: 0, B: 0, C: 0, D: 1, E: 0, F: 0 },
 };
 
-function adjMatrixDFS(vertex, graph, values, seen) {
-  values.push(vertex);
+function adjMatrixDFS(node, graph, values, seen) {
+  values.push(node);
 
-  seen[vertex] = true;
+  seen[node] = true;
 
-  const connections = graph[vertex];
+  const connections = graph[node];
 
-  for (const v in connections) {
-    if (connections[v] > 0 && !seen[v]) {
-      adjMatrixDFS(v, graph, values, seen);
+  for (const key in connections) {
+    if (connections[key] > 0 && !seen[key]) {
+      adjMatrixDFS(key, graph, values, seen);
     }
   }
 
@@ -179,6 +181,8 @@ function adjMatrixDFS(vertex, graph, values, seen) {
 
 ### Adjacency List
 
+Implementation:
+
 ```js title="Graph DFS (adjacency list)" lineNumbers
 const adjList = {
   A: ['B'],
@@ -189,18 +193,18 @@ const adjList = {
   F: ['D'],
 };
 
-function adjListDFS(vertex, graph, values, seen) {
-  values.push(vertex);
+function adjListDFS(node, graph, values, seen) {
+  values.push(node);
 
-  seen[vertex] = true;
+  seen[node] = true;
 
-  const connections = graph[vertex];
+  const connections = graph[node];
 
   for (let i = 0; i < connections.length; i++) {
-    const v = connections[i];
+    const key = connections[i];
 
-    if (!seen[v]) {
-      adjListDFS(v, graph, values, seen);
+    if (!seen[key]) {
+      adjListDFS(key, graph, values, seen);
     }
   }
 
@@ -221,7 +225,9 @@ function adjListDFS(vertex, graph, values, seen) {
 > Example 2D Array:
 > ![matrix-dfs](./matrix-dfs.png)
 >
-> > The red line shows the search flow starting from points `col: 0` and `row: 0`.
+> > The red line shows the search flow starting from points `row: 0` and `col: 0`.
+
+Implementation:
 
 ```js title="Matrix DFS" lineNumbers
 const arr2d = [
