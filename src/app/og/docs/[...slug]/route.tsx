@@ -25,16 +25,14 @@ export async function GET(_req: Request, { params }: RouteContext<'/og/docs/[...
   }
 
   return new ImageResponse(
-    (
-      <DefaultImage
-        title={page.data.title}
-        primaryColor="#450a0a"
-        primaryTextColor="#b91c1c"
-        description={desc}
-        site={APP_NAME}
-        icon={<LogoIcon width={96} />}
-      />
-    ),
+    <DefaultImage
+      title={page.data.title}
+      primaryColor="#450a0a"
+      primaryTextColor="#b91c1c"
+      description={desc}
+      site={APP_NAME}
+      icon={<LogoIcon width={96} />}
+    />,
     {
       width: 1200,
       height: 630,

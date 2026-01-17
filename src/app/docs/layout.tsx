@@ -7,7 +7,7 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
   return (
     <DocsLayout
       {...baseOptions()}
-      tree={source.pageTree}
+      tree={source.getPageTree()}
       nav={{
         title: <Logo variant="docs" />,
       }}

@@ -6,7 +6,7 @@
 
 <p align="center" >
   <em>
-    Okay, this time I’m gonna make them more organized and easier to access (for me first, then for others).
+    Okay, this time I'm gonna make them more organized and easier to access.
   </em>
 </p>
 

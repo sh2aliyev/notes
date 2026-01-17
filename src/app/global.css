@@ -2,6 +2,19 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
+@utility container {
+  margin-inline: auto;
+}
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 90rem;
+}
+
 @theme {
   --color-fd-background: hsl(0, 0%, 96%);
   --color-fd-foreground: hsl(0, 0%, 3.9%);
