@@ -10,29 +10,22 @@ Recursion lets you break a complex problem into smaller, more manageable subprob
 
 Recursion is useful when you don't know in advance how many steps or iterations will be needed to find a solution. It allows you to go deeper into the problem until you reach a base case that can be easily solved.
 
+> More detailed explanation: https://www.youtube.com/watch?v=ngCos392W4w.
+
 ### Definitions
 
 - Key points:
-  > 1. Base Case:
-  >    > The stopping condition that prevents infinite recursion.
-  >    - Smallest valid input.
-  >      > The simplest case that can be solved directly without more recursion.
-  >    - Termination condition.
-  >      > A condition that tells the function when to stop recursing.
-  >    - Edge cases.
-  >      > Special cases that need specific handling.
-  > 2. Recursive Case:
-  >    > The part of the function that reduces the problem and moves it closer to the base case. Each call should make progress toward stopping.
-  > 3. Recursive Call:
-  >    > Calling the function from inside itself.
+  > 1. Base Case: The stopping condition that prevents infinite recursion.
+  >    - Smallest valid input: The simplest case that can be solved directly without more recursion.
+  >    - Termination condition: A condition that tells the function when to stop recursing.
+  >    - Edge cases: Special cases that need specific handling.
+  > 2. Recursive Case: The part of the function that reduces the problem and moves it closer to the base case. Each call should make progress toward stopping.
+  > 3. Recursive Call: Calling the function from inside itself.
 - Process:
-  > 1. Stacking (going down):
-  >    > Each recursive call creates a new stack frame on the call stack, which stores the parameters and local variables for that call.
-  > 2. Unfolding (going up):
-  >    > After the base case is reached, the calls return one by one. Each call returns its result to the previous stack frame until the original call returns the final result.
+  > 1. Stacking (going down): Each recursive call creates a new stack frame on the call stack, which stores the parameters and local variables for that call.
+  > 2. Unfolding (going up): After the base case is reached, the calls return one by one. Each call returns its result to the previous stack frame until the original call returns the final result.
 - Costs:
-  > - Space:
-  >   > Each recursive call adds a stack frame, so the space complexity is typically `O(recursion depth)`.
+  > - Space: Each recursive call adds a stack frame, so the space complexity is typically `O(recursion depth)`.
 
 ## Examples
 
