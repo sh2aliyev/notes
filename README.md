@@ -30,7 +30,7 @@
 
 - **Math** `planned ⚫`
 - [**Linux** (Debian)](./linux/README.md) `🟢`
-- [**Git**](./git/README.md) `🟢`
+- [**Git**](https://notes.sh2a.org/docs/git) `🟢` (web)
 - [**JavaScript**](./js/README.md) `in-progress 🟡`
 - [**Data Structures & Algorithms**](./dsa/README.md) `in-progress 🟡`
 - [**React.js**](./react/README.md) `🟢`
