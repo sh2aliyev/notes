@@ -32,7 +32,7 @@
 - [**Linux** (Debian)](./linux/README.md) `🟢`
 - [**Git**](https://notes.sh2a.org/docs/git) `🟢` (web)
 - [**JavaScript**](./js/README.md) `in-progress 🟡`
-- [**Data Structures & Algorithms**](./dsa/README.md) `in-progress 🟡`
+- [**Data Structures & Algorithms**](https://notes.sh2a.org/docs/dsa) `in-progress 🟡` (web)
 - [**React.js**](./react/README.md) `🟢`
 - [**TypeScript**](./ts/README.md) `🟢`
 - [**Go**](./go/README.md) `in-progress 🟡`
