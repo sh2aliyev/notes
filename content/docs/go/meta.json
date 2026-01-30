@@ -1,0 +1,7 @@
+{
+  "title": "Go",
+  "description": "Programming Language",
+  "icon": "GoIcon",
+  "root": true,
+  "pages": ["index"]
+}

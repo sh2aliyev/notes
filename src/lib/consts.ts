@@ -1,5 +1,6 @@
 import { DsaIcon } from '@/components/icons/dsa';
 import { GitIcon } from '@/components/icons/git';
+import { GoIcon } from '@/components/icons/go';
 
 export const APP_NAME = 'sh2a | Notes';
 export const APP_DESC = 'My Beloved Tech Notes';
@@ -9,6 +10,7 @@ export const REPO_URL = 'https://github.com/sh2aliyev/notes';
 export const customIcons = {
   GitIcon,
   DsaIcon,
+  GoIcon,
 };
 
 export const indexMetaMap = {
@@ -21,5 +23,10 @@ export const indexMetaMap = {
     title: 'Data Structures & Algorithms',
     desc: 'Data Structures and Algorithms (DSA) is a fundamental concept in computer science that involves organizing and manipulating data to solve problems and perform tasks effectively.',
     icon: DsaIcon,
+  },
+  go: {
+    title: 'Go',
+    desc: 'Go is a high-level general purpose programming language that is statically typed and compiled.',
+    icon: GoIcon,
   },
 };
