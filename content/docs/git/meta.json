@@ -1,6 +1,6 @@
 {
   "title": "Git",
-  "description": "Version control system",
+  "description": "Version Control System",
   "icon": "GitIcon",
   "root": true,
   "pages": [
