@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
 import { generate as DefaultImage } from 'fumadocs-ui/og';
 import { APP_NAME, indexMetaMap } from '@/lib/consts';
-import { LogoIcon } from '@/components/icons/logo';
+import { BookmarkIcon } from '@/components/icons/bookmark';
 import { getDirname, getFallbackDirname, isIndexPage } from '@/lib/utils';
 
 export const revalidate = false;
@@ -31,7 +31,7 @@ export async function GET(_req: Request, { params }: RouteContext<'/og/docs/[...
       primaryTextColor="#b91c1c"
       description={desc}
       site={APP_NAME}
-      icon={<LogoIcon width={96} />}
+      icon={<BookmarkIcon width={96} />}
     />,
     {
       width: 1200,

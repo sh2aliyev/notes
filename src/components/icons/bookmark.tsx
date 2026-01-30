@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-export function LogoIcon(props: SVGProps<SVGSVGElement>) {
+export function BookmarkIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0, 0, 400,400" {...props}>
       <path

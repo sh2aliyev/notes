@@ -17,7 +17,7 @@ export function Folder({ name }: { name: string }) {
       </div>
       <div className="bg-fd-primary-foreground dark:group-hover:bg-fd-secondary flex aspect-video items-center justify-center rounded-xl border shadow-sm group-hover:bg-neutral-100">
         {createElement(data.icon, {
-          className: 'size-1/3 text-fd-muted-foreground',
+          className: 'size-1/3 lg:size-2/5 text-fd-muted-foreground',
         })}
       </div>
       <p className="text-fd-primary/75 px-3 pt-2 text-center font-medium">{data.title}</p>
