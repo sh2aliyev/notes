@@ -1,0 +1,45 @@
+---
+title: Type Casting
+---
+
+Type casting in Go means explicitly converting a value from one compatible type to another.
+
+```go
+newValue := targetType(value)
+```
+
+> This is needed because Go is strict about types and does not allow automatic conversions. This helps prevent hidden bugs, makes code behavior predictable, and forces developers to be explicit about how values of different types should interact.
+>
+> ```go
+> a := 5.6 // float64
+> b := 10 // int
+>
+> c := a + b // invalid operation: a + b (mismatched types float64 and int)
+>
+> c := a + float64(b) // 15.6 (float64)
+> ```
+
+- Casting from `float` to `integer` removes (cuts off) the decimal part:
+
+  ```go
+  a := 5.8 // float64
+
+  b := int16(a) // 5 (int16)
+  ```
+
+- Casting between different integer sizes must also be explicit:
+
+  ```go
+  var a int64 = 100
+  var b int32 = 50
+
+  c := int32(a) + b // 150 (int32)
+  ```
+
+- Some types cannot be cast directly if they are not compatible with each other:
+
+  ```go
+  a := "123"
+
+  b := int(a) // cannot convert a (variable of type string) to type int
+  ```
