@@ -1,0 +1,79 @@
+---
+title: Declaring Variables
+---
+
+<Callout type="warn">You cannot re-declare a variable that has already been declared in the same scope.</Callout>
+
+## Using the `var` keyword
+
+```go
+var varName type = value
+```
+
+> Variables declared without an explicit initial value are given their zero value.
+
+- You must specify either `type` or `value` (or both):
+
+  ```go
+  var name string = "John"  // explicit type and value
+  var surname = "Doe"       // type is inferred as string
+  var age int16             // explicit type, initialized to the zero value (0)
+  ```
+
+- Declaring multiple variables of the same or different types on a single line:
+
+  ```go
+  var name, age = "John", 30  // mixed types, types inferred
+  var a, b, c int = 1, 2, 3   // all must be of the declared type
+  var x, y int                // both initialized to the zero value (0)
+  ```
+
+- Using grouped declaration syntax to declare variables together:
+
+  ```go
+  var (
+  	name    string = "John"
+  	surname        = "Doe"  // type is inferred
+  	age     int             // zero value (0)
+  )
+  ```
+
+## Using the `:=` syntax
+
+```go
+varName := value
+```
+
+> Can only be used inside functions, not at the package level.
+
+- Declaring multiple variables on a single line:
+
+  ```go
+  name, age := "John", 30
+  ```
+
+## Constants
+
+Constants are fixed values that cannot be changed after they are declared. They are read-only.
+
+```go
+const varName type = value
+```
+
+- Constants can be declared without explicit types, but they must have values:
+
+  ```go
+  const daysInWeek int = 7
+  const hoursInDay = 24
+  ```
+
+- Declaring multiple constants in a single block:
+
+  ```go
+  const (
+  	daysInWeek = 7
+  	hoursInDay = 24
+  )
+  ```
+
+> Computations on constants are mostly done at compile time, not at runtime.
