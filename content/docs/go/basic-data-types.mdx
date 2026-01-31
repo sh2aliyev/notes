@@ -1,0 +1,144 @@
+---
+title: Basic Data Types
+---
+
+Go has three basic data types: `boolean`, `numeric` and `string`. Each data type has a zero value that is automatically assigned when a variable is declared without an initial value.
+
+## Boolean
+
+| Keyword | Values            |
+| ------- | ----------------- |
+| `bool`  | `true` or `false` |
+
+> Zero value: `false`.
+
+## Numeric
+
+| Keyword        | Size            | Values                                      |
+| -------------- | --------------- | ------------------------------------------- |
+| `uint8`/`byte` | 8-bit           | 0 to 255                                    |
+| `uint16`       | 16-bit          | 0 to 65535                                  |
+| `uint32`       | 32-bit          | 0 to 4294967295                             |
+| `uint64`       | 64-bit          | 0 to 18446744073709551615                   |
+|                |                 |                                             |
+| `int8`         | 8-bit           | -128 to 127                                 |
+| `in16`         | 16-bit          | -32768 to 32767                             |
+| `int32`/`rune` | 32-bit          | -2147483648 to 2147483647                   |
+| `int64`        | 64-bit          | -9223372036854775808 to 9223372036854775807 |
+|                |                 |                                             |
+| `float32`      | 32-bit          | -3.4e+38 to 3.4e+38                         |
+| `float64`      | 64-bit          | -1.7e+308 to +1.7e+308                      |
+|                |                 |                                             |
+| `uint`         | 32 bit / 64 bit | `uint32` / `uint64`                         |
+| `int`          | 32 bit / 64 bit | `int32` / `int64`                           |
+
+> Zero value: `0`.
+
+## String
+
+| Keyword  | Values                                 |
+| -------- | -------------------------------------- |
+| `string` | "anything surrounded by double quotes" |
+
+> Zero value: `" "`.
+
+### More Details
+
+Technically, a string is a read-only slice of bytes:
+
+```go
+str := "abcd" // [97 98 99 100]
+
+fmt.Printf("str[0]: %v, type: %T\n", str[0], str[0]) // str[0]: 97, type: uint8
+
+for i, v := range str {
+	fmt.Println(i, v)
+}
+
+// 0 97
+// 1 98
+// 2 99
+// 3 100
+```
+
+but there are many characters that cannot be represented by only a single byte:
+
+```go
+str := "é"
+fmt.Printf("len(str): %v\n", len(str)) // len(str): 2
+```
+
+> `len()` returns the byte count, not the character count.
+
+In Go, strings are encoded using UTF-8. In other words, a string represents a sequence of characters encoded as UTF-8 bytes.
+
+UTF-8 supports a wide range of characters and symbols, and it uses a variable-length encoding scheme. This means a character can be represented by one or more bytes (up to 4), depending on its Unicode code point.
+
+| First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
+| ---------------- | --------------- | -------- | -------- | -------- | -------- |
+| 0                | 128             | 0yyyzzzz |          |          |          |
+| 128              | 2,047           | 110xxxyy | 10yyzzzz |          |          |
+| 2,048            | 65,535          | 1110wwww | 10xxxxyy | 10yyzzzz |          |
+| 65,536           | 1,114,111       | 11110uvv | 10vvwwww | 10xxxxyy | 10yyzzzz |
+
+Explanation:
+
+> For example, the character "`é`" has a Unicode code point of `U+00E9` (233 in decimal). Since `233` is in the range `128` to `2047`, it is represented in UTF-8 using two bytes:
+>
+> ```go
+> str := "é" // [195 169]
+>
+> fmt.Printf("str[0]: %v\n", str[0]) // str[0]: 195
+> fmt.Printf("str[1]: %v\n", str[1]) // str[1]: 169
+> ```
+>
+> Proof (decoding):
+>
+> > `195` is `11000011` in binary, and `169` is `10101001`.
+> >
+> > Matching the bytes using the table above:
+> >
+> > - First byte: `11000011` (110xxxyy) -> `110` + `00011`.
+> > - Second byte: `10101001` (10yyzzzz) -> `10` + `101001`.
+> >
+> > Extracted result: `00011` + `101001` = `0001101001` (binary) = `233` (decimal).
+
+Extra:
+
+> When you iterate over a string using `range`, Go automatically decodes each UTF-8 character and returns its Unicode code point:
+>
+> ```go
+> str := "Héllo" // [72 195 169 108 108 111]
+>
+> for i, v := range str {
+> 	fmt.Println(i, v)
+> }
+>
+> // 0 72
+> // 1 233
+> // 3 108
+> // 4 108
+> // 5 111
+> ```
+
+> If you do not care about memory (always uses 4 bytes per character) and want more flexibility (manipulating characters), just convert the string to a slice of runes:
+>
+> ```go
+> str := []rune("Héllo") // [72 233 108 108 111]
+>
+> fmt.Printf("str[1]: %v, type: %T\n", str[1], str[1]) // str[1]: 233, type: int32
+> fmt.Println(unsafe.Sizeof(str[0])) // 4 (total str size: 4x5=20 bytes)
+>
+> for i, v := range str {
+> 	fmt.Println(i, v)
+> }
+>
+> // 0 72
+> // 1 233
+> // 2 108
+> // 3 108
+> // 4 111
+>
+> str[1] = 'e'
+> fmt.Println(string(str)) // Hello
+> ```
