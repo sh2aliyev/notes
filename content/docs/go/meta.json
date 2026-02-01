@@ -3,5 +3,12 @@
   "description": "Programming Language",
   "icon": "GoIcon",
   "root": true,
-  "pages": ["index", "---Getting Started---", "basic-data-types", "declaring-variables", "type-casting"]
+  "pages": [
+    "index",
+    "---Getting Started---",
+    "basic-data-types",
+    "declaring-variables",
+    "type-casting",
+    "string-formatting"
+  ]
 }
