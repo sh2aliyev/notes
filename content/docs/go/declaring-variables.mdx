@@ -33,7 +33,7 @@ var varName type = value
   ```go
   var (
   	name    string = "John"
-  	surname        = "Doe"  // type is inferred
+  	surname        = "Doe"  // type is inferred as string
   	age     int             // zero value (0)
   )
   ```
@@ -52,7 +52,7 @@ varName := value
   name, age := "John", 30
   ```
 
-## Constants
+## Using the `const` keyword
 
 Constants are fixed values that cannot be changed after they are declared. They are read-only.
 
@@ -63,8 +63,8 @@ const varName type = value
 - Constants can be declared without explicit types, but they must have values:
 
   ```go
-  const daysInWeek int = 7
-  const hoursInDay = 24
+  const daysInWeek int = 7  // explicit type and value
+  const hoursInDay = 24     // type is inferred as int
   ```
 
 - Declaring multiple constants in a single block:
