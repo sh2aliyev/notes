@@ -1,0 +1,132 @@
+---
+title: Loops
+---
+
+Go keeps loops simple on purpose by having only one loop keyword, `for`, which can still be used in several different ways.
+
+## Variants
+
+- Classic loop:
+
+  ```go
+  for i := 0; i < 5; i++ {
+      fmt.Println(i)
+  }
+
+  // 0
+  // 1
+  // 2
+  // 3
+  // 4
+  ```
+
+- While loop:
+
+  ```go
+  i := 0
+  for i < 5 {
+      fmt.Println(i)
+      i++
+  }
+
+  // 0
+  // 1
+  // 2
+  // 3
+  // 4
+  ```
+
+- Infinite loop:
+
+  ```go
+  for {
+      fmt.Println("running")
+  }
+
+  // running
+  // running
+  // running
+  // running
+  // ... (infinite)
+  ```
+
+- Range loop:
+
+  > Used to loop over integers, strings (runes), arrays, slices, maps, and channels.
+
+  ```go
+  for i := range 3 {
+      fmt.Println(i)
+  }
+
+  // 0
+  // 1
+  // 2
+  ```
+
+  ```go
+  nums := []int{10, 20, 30}
+
+  for i, v := range nums {
+      fmt.Println(i, v)
+  }
+
+  // 0 10
+  // 1 20
+  // 2 30
+  ```
+
+## Control Keywords
+
+- `break`: Stops the loop completely.
+
+  ```go
+  for i := 0; i < 5; i++ {
+      if i == 2 {
+          break
+      }
+
+      fmt.Println(i)
+  }
+
+  // 0
+  // 1
+  ```
+
+- `continue`: Skips to the next iteration.
+
+  ```go
+  for i := 0; i < 5; i++ {
+      if i == 2 {
+          continue
+      }
+
+      fmt.Println(i)
+  }
+
+  // 0
+  // 1
+  // 3
+  // 4
+  ```
+
+### Labeled Loops
+
+A labeled loop is a loop with a name that lets `break` or `continue` target a specific loop when loops are nested.
+
+```go
+outerLoop:
+    for i := 0; i < 3; i++ {
+        for j := 0; j < 3; j++ {
+            if i == j {
+                continue outerLoop
+            }
+
+            fmt.Println(i, j)
+        }
+    }
+
+// 1 0
+// 2 0
+// 2 1
+```

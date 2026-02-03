@@ -5,10 +5,11 @@
   "root": true,
   "pages": [
     "index",
-    "---Getting Started---",
+    "---Basics---",
     "basic-data-types",
     "declaring-variables",
     "type-casting",
-    "string-formatting"
+    "string-formatting",
+    "loops"
   ]
 }
