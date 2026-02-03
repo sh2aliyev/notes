@@ -8,8 +8,10 @@
     "---Basics---",
     "basic-data-types",
     "declaring-variables",
-    "type-casting",
     "string-formatting",
-    "loops"
+    "conditions",
+    "loops",
+    "---Advanced---",
+    "type-casting"
   ]
 }

@@ -1,0 +1,96 @@
+---
+title: Conditions
+---
+
+## If-else Statement
+
+Executes a block of code when a condition is true.
+
+```go
+if condition {
+    // code runs if condition is true
+} else if anotherCondition {
+    // code runs if it gets here and anotherCondition is true
+} else {
+    // code runs if none of the above are true
+}
+```
+
+- Go lets you declare a variable that only exists in the `if` and `else` blocks:
+
+  ```go
+  s := "Hello"
+
+  if n := len(s); n == 1 {
+  	fmt.Println("Length is", n)
+  } else if n >= 2 {
+  	fmt.Println("Length is", n)
+  } else {
+  	fmt.Println("Empty string")
+  }
+
+  // Length is 5
+
+  fmt.Println("Length is", n) // undefined: n (compiler)
+  ```
+
+## Switch Statement
+
+Executes the matching case block.
+
+```go
+switch expression {
+case value1:
+    // code runs if expression == value1
+case value2:
+    // code runs if expression == value2
+case value3, value4:
+    // code runs if expression == value3 or value4
+default:
+    // code runs if expression does not match any case
+}
+```
+
+> Go auto `break` after each case implicitly, but the keyword can still be used.
+
+> Since Go breaks after each case by default, the `fallthrough` keyword allows you to explicitly override this behavior when sequential processing is needed.
+>
+> ```go
+> a := 2
+>
+> switch a {
+> case 1:
+>     fmt.Println("One")
+> case 2:
+>     fmt.Println("Two")
+>     fallthrough
+> case 3:
+>     fmt.Println("Three")
+> case 4:
+>     fmt.Println("Four")
+> default:
+>     fmt.Println("None of above")
+> }
+>
+> // Two
+> // Three
+> ```
+
+- Omitting the expression makes the `switch` statement act like an `if-else` statement:
+
+  ```go
+  a := 3
+
+  switch {
+  case a == 1:
+      fmt.Println("One")
+  case a == 2:
+      fmt.Println("Two")
+  case a == 3 || a == 4:
+      fmt.Println("Three or Four")
+  default:
+      fmt.Println("None of above")
+  }
+
+  // Three or Four
+  ```
