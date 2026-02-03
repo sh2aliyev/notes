@@ -42,103 +42,103 @@ Go has three basic data types: `boolean`, `numeric` and `string`. Each data type
 
 > Zero value: `" "`.
 
-### More Details
+More details:
 
-Technically, a string is a read-only slice of bytes:
-
-```go
-str := "abcd" // [97 98 99 100]
-
-fmt.Printf("str[0]: %v, type: %T\n", str[0], str[0]) // str[0]: 97, type: uint8
-
-for i, v := range str {
-	fmt.Println(i, v)
-}
-
-// 0 97
-// 1 98
-// 2 99
-// 3 100
-```
-
-but there are many characters that cannot be represented by only a single byte:
-
-```go
-str := "é"
-fmt.Printf("len(str): %v\n", len(str)) // len(str): 2
-```
-
-> `len()` returns the byte count, not the character count.
-
-In Go, strings are encoded using UTF-8. In other words, a string represents a sequence of characters encoded as UTF-8 bytes.
-
-UTF-8 supports a wide range of characters and symbols, and it uses a variable-length encoding scheme. This means a character can be represented by one or more bytes (up to 4), depending on its Unicode code point.
-
-| First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
-| ---------------- | --------------- | -------- | -------- | -------- | -------- |
-| 0                | 127             | 0yyyzzzz |          |          |          |
-| 128              | 2,047           | 110xxxyy | 10yyzzzz |          |          |
-| 2,048            | 65,535          | 1110wwww | 10xxxxyy | 10yyzzzz |          |
-| 65,536           | 1,114,111       | 11110uvv | 10vvwwww | 10xxxxyy | 10yyzzzz |
-
-Explanation:
-
-> For example, the character "`é`" has a Unicode code point of `U+00E9` (233 in decimal). Since `233` is in the range `128` to `2047`, it is represented in UTF-8 using two bytes:
+> Technically, a string is a read-only slice of bytes:
 >
 > ```go
-> str := "é" // [195 169]
+> str := "abcd" // [97 98 99 100]
 >
-> fmt.Printf("str[0]: %v\n", str[0]) // str[0]: 195
-> fmt.Printf("str[1]: %v\n", str[1]) // str[1]: 169
-> ```
->
-> Proof (decoding):
->
-> > `195` is `11000011` in binary, and `169` is `10101001`.
-> >
-> > Matching the bytes using the table above:
-> >
-> > - First byte: `11000011` (110xxxyy) -> `110` + `00011`.
-> > - Second byte: `10101001` (10yyzzzz) -> `10` + `101001`.
-> >
-> > Extracted result: `00011` + `101001` = `0001101001` (binary) = `233` (decimal).
-
-Extra:
-
-> When you iterate over a string using `range`, Go automatically decodes each UTF-8 character and returns its Unicode code point:
->
-> ```go
-> str := "Héllo" // [72 195 169 108 108 111]
+> fmt.Printf("str[0]: %v, type: %T\n", str[0], str[0]) // str[0]: 97, type: uint8
 >
 > for i, v := range str {
 > 	fmt.Println(i, v)
 > }
 >
-> // 0 72
-> // 1 233
-> // 3 108
-> // 4 108
-> // 5 111
+> // 0 97
+> // 1 98
+> // 2 99
+> // 3 100
 > ```
-
-> If you do not care about memory (always uses 4 bytes per character) and want more flexibility (manipulating characters), just convert the string to a slice of runes:
+>
+> but there are many characters that cannot be represented by only a single byte:
 >
 > ```go
-> str := []rune("Héllo") // [72 233 108 108 111]
->
-> fmt.Printf("str[1]: %v, type: %T\n", str[1], str[1]) // str[1]: 233, type: int32
-> fmt.Println(unsafe.Sizeof(str[0])) // 4 (total str size: 4x5=20 bytes)
->
-> for i, v := range str {
-> 	fmt.Println(i, v)
-> }
->
-> // 0 72
-> // 1 233
-> // 2 108
-> // 3 108
-> // 4 111
->
-> str[1] = 'e'
-> fmt.Println(string(str)) // Hello
+> str := "é"
+> fmt.Printf("len(str): %v\n", len(str)) // len(str): 2
 > ```
+>
+> > `len()` returns the byte count, not the character count.
+
+> In Go, strings are encoded using UTF-8. In other words, a string represents a sequence of characters encoded as UTF-8 bytes.
+>
+> UTF-8 supports a wide range of characters and symbols, and it uses a variable-length encoding scheme. This means a character can be represented by one or more bytes (up to 4), depending on its > Unicode code point.
+>
+> | First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
+> | ---------------- | --------------- | -------- | -------- | -------- | -------- |
+> | 0                | 127             | 0yyyzzzz |          |          |          |
+> | 128              | 2,047           | 110xxxyy | 10yyzzzz |          |          |
+> | 2,048            | 65,535          | 1110wwww | 10xxxxyy | 10yyzzzz |          |
+> | 65,536           | 1,114,111       | 11110uvv | 10vvwwww | 10xxxxyy | 10yyzzzz |
+>
+> Explanation:
+>
+> > For example, the character "`é`" has a Unicode code point of `U+00E9` (233 in decimal). Since `233` is in the range `128` to `2047`, it is represented in UTF-8 using two bytes:
+> >
+> > ```go
+> > str := "é" // [195 169]
+> >
+> > fmt.Printf("str[0]: %v\n", str[0]) // str[0]: 195
+> > fmt.Printf("str[1]: %v\n", str[1]) // str[1]: 169
+> > ```
+> >
+> > Proof (decoding):
+> >
+> > > `195` is `11000011` in binary, and `169` is `10101001`.
+> > >
+> > > Matching the bytes using the table above:
+> > >
+> > > - First byte: `11000011` (110xxxyy) -> `110` + `00011`.
+> > > - Second byte: `10101001` (10yyzzzz) -> `10` + `101001`.
+> > >
+> > > Extracted result: `00011` + `101001` = `0001101001` (binary) = `233` (decimal).
+>
+> Extra:
+>
+> > When you iterate over a string using `range`, Go automatically decodes each UTF-8 character and returns its Unicode code point:
+> >
+> > ```go
+> > str := "Héllo" // [72 195 169 108 108 111]
+> >
+> > for i, v := range str {
+> > 	fmt.Println(i, v)
+> > }
+> >
+> > // 0 72
+> > // 1 233
+> > // 3 108
+> > // 4 108
+> > // 5 111
+> > ```
+>
+> > If you do not care about memory (always uses 4 bytes per character) and want more flexibility (manipulating characters), just convert the string to a slice of runes:
+> >
+> > ```go
+> > str := []rune("Héllo") // [72 233 108 108 111]
+> >
+> > fmt.Printf("str[1]: %v, type: %T\n", str[1], str[1]) // str[1]: 233, type: int32
+> > fmt.Println(unsafe.Sizeof(str[0])) // 4 (total str size: 4x5=20 bytes)
+> >
+> > for i, v := range str {
+> > 	fmt.Println(i, v)
+> > }
+> >
+> > // 0 72
+> > // 1 233
+> > // 2 108
+> > // 3 108
+> > // 4 111
+> >
+> > str[1] = 'e'
+> > fmt.Println(string(str)) // Hello
+> > ```
