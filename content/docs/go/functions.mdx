@@ -1,0 +1,215 @@
+---
+title: Functions
+---
+
+## Overview
+
+- Declaring a function:
+
+  ```go
+  func add(a int, b int) int {
+      return a + b
+  }
+  ```
+
+- Calling a function:
+
+  ```go
+  result := add(2, 3) // result = 5
+  ```
+
+## Variants
+
+- Functions can have multiple return values:
+
+  ```go
+  func swap(a, b int) (int, int) {
+      return b, a
+  }
+
+  x, y := 1, 2
+  x, y = swap(x, y) // x = 2, y = 1
+  ```
+
+- Ignoring return values:
+
+  ```go
+  x, _ = getCoords()
+  ```
+
+- Named return values:
+
+  > With named return values, you can use return without specifying values. The function automatically returns the named variables.
+
+  ```go
+  func calculate(x int) (result int) {
+      result = x * x
+      return
+  }
+  ```
+
+- Variadic functions:
+
+  > Variadic functions accept zero or more arguments of the same type, which are treated as a slice inside the function.
+
+  ```go
+  func sum(numbers ...int) int {
+      total := 0
+
+      for _, number := range numbers {
+          total += number
+      }
+
+      return total
+  }
+
+  sum(2, 5, 7, 10) // 24
+  ```
+
+- First-class functions:
+
+  > First-class functions are functions that can be assigned to variables, passed as arguments to other functions, and returned as values from other functions.
+
+  ```go
+  func main() {
+      price := 100.00
+
+      fmt.Printf("Regular user price: $%.2f\n", applyDiscount(price, regularDiscount)) // Regular user price: $90.00
+      fmt.Printf("VIP user price: $%.2f\n", applyDiscount(price, vipDiscount))         // VIP user price: $80.00
+  }
+
+  func vipDiscount(price float64) float64 {
+      return price * 0.8
+  }
+
+  func regularDiscount(price float64) float64 {
+      return price * 0.9
+  }
+
+  func applyDiscount(price float64, strategy func(float64) float64) float64 {
+      return strategy(price)
+  }
+  ```
+
+- Anonymous functions:
+
+  > Anonymous functions are functions without a name.
+
+  ```go
+  func main() {
+      func() {
+          fmt.Println("Hello, world!")
+      }() // <-- Immediately invoking the anonymous function
+  }
+  ```
+
+  - Assigning an anonymous function to a variable:
+
+    ```go
+    myVar := func(a, b int) {
+        fmt.Println(a + b)
+    }
+
+    myVar(1, 2) // 3
+    ```
+
+## Pass-by Value & Reference
+
+In Go, all function arguments are passed by value. When a value is passed to a function, Go creates a copy of that value and the function works with the copy. Changes made to the parameter inside the function do not affect the original variable.
+
+```go
+func increment(num int) {
+	num++
+	fmt.Println("Inside:", num) // Inside: 6
+}
+
+func main() {
+	num := 5
+	increment(num)
+	fmt.Println("Outside:", num) // Outside: 5
+}
+```
+
+> Fully independent basic types: Booleans, Strings, Numerics, Arrays, Structs.
+
+However, some types such as slices, maps, and channels contain references to underlying data. When these values are copied, the reference is copied, which allows the function to modify the shared underlying data.
+
+```go
+func change(s []int) {
+	s[0] = 99
+}
+
+func main() {
+	nums := []int{1, 2, 3}
+	change(nums)
+	fmt.Println(nums) // [99 2 3]
+}
+```
+
+> Reference-containing types: Slices, Maps, Channels, Pointers, Functions, and Interfaces.
+
+## Closures
+
+Closures are functions that capture and use variables from their surrounding scope, even after that scope has finished executing.
+
+```go
+func sum() func(int) int {
+	total := 0
+
+	return func(number int) int {
+		total += number
+		return total
+	}
+}
+
+func main() {
+	add1 := sum()
+	add2 := sum()
+
+	fmt.Println(add1(1)) // 1
+	fmt.Println(add1(2)) // 3
+	fmt.Println(add1(3)) // 6
+
+	fmt.Println(add2(2)) // 2
+	fmt.Println(add2(4)) // 6
+	fmt.Println(add2(6)) // 12
+}
+```
+
+> Each call to `sum()` returns a new closure with its own independent variables (`total`), allowing `add1` and `add2` to maintain separate internal state.
+
+## The `defer` Keyword
+
+The `defer` keyword allows us to execute a function or line of code at the end of the current function's execution. This is useful for cleaning up resources, such as closing files or connections.
+
+```go
+func main() {
+	defer sayBye()
+
+	fmt.Println("1")
+
+	defer fmt.Println("2")
+
+	fmt.Println("3")
+
+	fmt.Println(myFunc())
+}
+
+func myFunc() string {
+	defer fmt.Println("4")
+	return "5"
+}
+
+func sayBye() {
+	fmt.Println("bye")
+}
+
+// 1
+// 3
+// 4
+// 5
+// 2
+// bye
+```
+
+> Multiple deferred statements are executed in last-in-first-out (LIFO) order. This means that the most recently deferred function is executed first.
