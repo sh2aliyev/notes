@@ -1,0 +1,453 @@
+---
+title: Composite Types
+---
+
+Composite types are data types that combine multiple values into a single structured unit, enabling organized and flexible data representation.
+
+## Arrays
+
+In Go, array is a fixed-size sequence of elements of a single type.
+
+- Declare:
+
+  ```go
+  var arr [5]int // zero valued
+  ```
+
+  > Or initialize at declaration:
+  >
+  > ```go
+  > arr := [5]int{1, 2, 3, 4, 5}
+  > ```
+
+- Access:
+
+  ```go
+  fmt.Println(arr[0]) // 1
+  ```
+
+- Modify:
+
+  ```go
+  arr[0] = 100
+  fmt.Println(arr[0]) // 100
+  ```
+
+<Callout>
+
+Array elements are stored in contiguous memory locations, meaning they are placed directly next to each other in memory.
+
+```go
+func main() {
+	arr := [3]int{1, 2, 3}
+
+	fmt.Printf("&arr[0]: %v\n", &arr[0]) // &arr[0]: 0xc00011e000
+	fmt.Printf("&arr[1]: %v\n", &arr[1]) // &arr[1]: 0xc00011e008
+	fmt.Printf("&arr[2]: %v\n", &arr[2]) // &arr[2]: 0xc00011e010
+}
+```
+
+> Here, the type `int` is `int64` (because I'm on a 64-bit system), so each element takes up 8 bytes of memory. The addresses of the elements are spaced 8 bytes apart (`0` -> `8` -> `16`).
+
+</Callout>
+
+Extra:
+
+- Let the compiler determine the size:
+
+  ```go
+  arr := [...]int{3, 5, 6, 2, 1} // [5]int
+  ```
+
+- Initialize specific indices:
+
+  > The `index: value` syntax assigns values to selected indices. Unspecified indices remain zero-valued.
+
+  ```go
+  arr := [...]int{3, 5, 4: 6, 10: 1, 2, 1}
+  fmt.Println(arr) // [3 5 0 0 6 0 0 0 0 0 1 2 1]
+  ```
+
+- Multi-dimensional arrays:
+
+  ```go
+  arr2d := [3][2]int{
+      {1, 2},
+      {3, 4},
+      {5, 6},
+  }
+  fmt.Println(arr2d) // [[1 2] [3 4] [5 6]]
+  ```
+
+- Slicing an array:
+
+  > Slicing selects a range of elements from an array.
+
+  ```go
+  arr := [5]int{0, 10, 20, 30, 40}
+  fmt.Println(arr[1:3]) // [10 20]
+  ```
+
+  > Examples:
+  >
+  > ```go
+  > slice1 := arr[2:4] // elements at index 2 and 3
+  > slice2 := arr[:4]  // from start to index 3
+  > slice3 := arr[4:]  // from index 4 to end
+  > slice4 := arr[:]   // entire array
+  > ```
+
+## Slices
+
+In Go, a slice is a dynamically-sized, flexible view into the elements of an array. Unlike arrays, slices can grow and shrink the length during execution.
+
+- Declare:
+
+  ```go
+  var slice []int // zero length
+  ```
+
+  > Or initialize at declaration:
+  >
+  > ```go
+  > slice := []int{1, 2, 3, 4, 5}
+  > ```
+
+  > Or using the `make` function:
+  >
+  > ```go
+  > slice := make([]int, 5) // non-zero length but zero valued
+  > ```
+
+  <Callout>
+
+  Slices have a length, which is the number of elements they contain, and a capacity, which is the size of the underlying array they reference.
+
+  If you append elements to a slice beyond its current capacity, Go automatically handles this by allocating a larger (2x) array and copying the existing elements into it at a new memory address. This can be an expensive operation in terms of performance.
+
+  ```go
+  var slice []int // slice is initially nil, with a length and capacity of 0.
+  fmt.Println(len(slice)) // 0
+  fmt.Println(cap(slice)) // 0
+
+  slice = append(slice, 1, 2, 3, 4)
+
+  fmt.Println(len(slice)) // len: 4
+  fmt.Println(cap(slice)) // cap: 4
+
+  slice = append(slice, 5, 6)
+
+  fmt.Println(len(slice)) // len: 6
+  fmt.Println(cap(slice)) // cap: 8
+  ```
+
+  To improve performance, we can predefine the capacity of a slice. Predefining the capacity helps avoid unnecessary reallocations when appending elements.
+
+  Predefining the capacity:
+
+  ```go
+  slice := make([]int, 0, 10)
+
+  fmt.Println(slice)      // []
+  fmt.Println(len(slice)) // len: 0
+  fmt.Println(cap(slice)) // cap: 10
+  ```
+
+  > Predefining the capacity only makes sense when you have a reasonable knowledge of how the data will grow or change over time.
+
+  </Callout>
+
+- Append:
+
+  ```go
+  slice := []int{1, 2, 3}
+  slice = append(slice, 4, 5, 6)
+  fmt.Println(slice) // [1 2 3 4 5 6]
+  ```
+
+  <Callout type="warn">
+
+  Never use `append` on anything other than itself.
+
+  ```go
+  func main() {
+    a := make([]int, 5, 7)
+    fmt.Println("a:", a) // a: [0 0 0 0 0]
+
+    b := append(a, 1)
+    fmt.Println("b:", b) // b: [0 0 0 0 0 1]
+
+    c := append(a, 2)
+
+    fmt.Println("a:", a) // a: [0 0 0 0 0]
+    fmt.Println("b:", b) // b: [0 0 0 0 0 2] <-- b got updated because of c
+    fmt.Println("c:", c) // c: [0 0 0 0 0 2]
+  }
+  ```
+
+  Here, when creating the `b` slice, the `a` slice has a capacity of `7` and a length of `5`, which means it can add a new element without allocating a new array. So, `b` now references the same underlying array as `a`. The same thing happens when creating `c`. It also references the same array as `a`. At this point, because both `b` and `c` share the same underlying array, appending `2` through `c` updates the `1` that was appended through `b`.
+
+  This unexpected behavior would not occur if there were not enough capacity for the new element. In that case, Go would allocate a new array and copy the existing elements to it, resulting in new addresses. But still, it is prone to go unexpected.
+
+  </Callout>
+
+- Remove:
+
+  > Remove all elements except the first two:
+  >
+  > ```go
+  > slice = slice[:2]
+  > ```
+
+  > Remove the last element:
+  >
+  > ```go
+  > slice = slice[:len(slice)-1]
+  > ```
+
+  > Remove a specific indexed element:
+  >
+  > ```go
+  > slice = append(slice[:2], slice[3:]...) // removes the element at index 2
+  > ```
+
+  <Callout>
+
+  The `...` is called the variadic expansion (or ellipsis) operator, and it expands a slice into individual elements.
+
+  ```go
+  slice := []int{2, 4, 6}
+  otherSlice := []int{1, 3, 5}
+
+  slice = append(slice, otherSlice...)
+
+  fmt.Println(slice) // [2 4 6 1 3 5]
+  ```
+
+  </Callout>
+
+## Maps
+
+Maps in Go are unordered collections of key-value pairs.
+
+- Declare:
+
+  ```go
+  m := make(map[string]int)
+  ```
+
+  > Or initialize at declaration:
+  >
+  > ```go
+  > m := map[string]int{
+  > 	"one":   1,
+  > 	"two":   2,
+  > 	"three": 3,
+  > }
+  > ```
+
+  <Callout type="warn">
+
+  You cannot simply declare a map with `var m map[string]int` and then assign values to it. If you try, you will get a `panic: assignment to entry in nil map`. To make the map ready to use, you must initialize it (either empty or with values) using the `make` function.
+
+  </Callout>
+
+- Access:
+
+  ```go
+  fmt.Println(m["one"]) // 1
+  ```
+
+- Insert:
+
+  ```go
+  m["four"] = 4
+  fmt.Println(m) // map[four:4 one:1 three:3 two:2]
+  ```
+
+- Modify:
+
+  ```go
+  m["one"] = 100
+  fmt.Println(m["one"]) // 100
+  ```
+
+- Remove:
+
+  ```go
+  delete(m, "two")
+  fmt.Println(m) // map[one:1 three:3]
+  ```
+
+Extra:
+
+- Clear all elements from a map:
+
+  ```go
+  clear(m)
+  ```
+
+- Check if a key exists in a map:
+
+  > The optional second return value is a boolean indicating whether the key was found.
+
+  ```go
+  val, ok := m["two"]
+  fmt.Println(ok) // true
+  ```
+
+  > This is important because maps always return a value for a key, even if the key does not exist. If you access a missing key, Go returns the zero value for the map's value type.
+  >
+  > ```go
+  > m := map[string]int{
+  >   "zero":  0,
+  >   "one":   1,
+  >   "two":   2,
+  > }
+  >
+  > fmt.Println(m["three"]) // 0
+  > ```
+
+- Nested maps:
+
+  ```go
+  m2d := make(map[string]map[string]int)
+
+  m2d["a"] = map[string]int{"first": 1}
+
+  fmt.Println(m2d) // map[a:map[first:1]]
+
+  fmt.Println(m2d["a"]["first"]) // 1
+  ```
+
+  <Callout type="warn">
+
+  Maps must be initialized before use.
+
+  ```go
+  func main() {
+    m2d := make(map[string]map[string]int)
+
+    m2d["a"]["b"] = 1 // <-- panic: assignment to entry in nil map
+
+    m2d["a"] = make(map[string]int)
+
+    m2d["a"]["b"] = 1 // <- ok
+
+    fmt.Println(m2d["a"]["b"]) // 1
+  }
+  ```
+
+  </Callout>
+
+## Structs
+
+A struct is a collection of uniquely named elements called fields, each of which has a name and a type.
+
+- Define:
+
+  ```go
+  type person struct {
+    name string
+    age  int
+  }
+  ```
+
+- Create an instance:
+
+  ```go
+  user := person{name: "John", age: 35}
+  ```
+
+  > Or zero valued:
+  >
+  > ```go
+  > var user person
+  > ```
+
+- Access:
+
+  ```go
+  fmt.Println(user.name) // John
+  ```
+
+- Modify:
+
+  ```go
+  user.age = 30
+
+  fmt.Println(user.age) // 30
+  ```
+
+Extra:
+
+- Embedded and nested structs:
+
+  ```go
+  type address struct {
+    city    string
+    state   string
+    zipCode string
+  }
+
+  type contact struct {
+    phone string
+    email string
+  }
+
+  type person struct {
+    name    string
+    age     int
+    address         // Embedded struct
+    contact contact // Nested struct
+
+  }
+
+  func main() {
+    user := person{
+      name: "John",
+      age:  35,
+      address: address{
+        city:    "Los Angeles",
+        state:   "California",
+        zipCode: "00000",
+      },
+      contact: contact{
+        phone: "(000) 000-0000",
+        email: "john@example.com",
+      },
+    }
+
+    fmt.Println(user)               // {John 35 {Los Angeles California 00000} {(000) 000-0000 john@example.com}}
+    fmt.Println(user.city)          // Los Angeles
+    fmt.Println(user.contact.phone) // (000) 000-0000
+  }
+  ```
+
+### Struct Tags
+
+Struct tags are metadata attached to struct fields. They are typically used by packages like `encoding/json` to control how fields are encoded or decoded.
+
+> By default, Go uses struct field names as they are when encoding to JSON or other formats. Suppose you need to export the fields, which requires the field names to be capitalized. This often results in capitalized field names in the JSON output, which may not match your desired JSON structure or naming convention. Struct tags allow you to specify how the fields should be named in other formats.
+
+```go
+type User struct {
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+func main() {
+	myUser := User{
+		Id: 1, Name: "John", Email: "hello@example.com",
+	}
+
+	fmt.Printf("myUser: %+v\n", myUser) // myUser: {Id:1 Name:John Email:hello@example.com}
+
+	jUser, _ := json.Marshal(myUser) // Converting struct to JSON
+
+	fmt.Printf("jUser: %+v\n", string(jUser)) // jUser: {"id":1,"name":"John","email":"hello@example.com"}
+}
+```
+
+> Tags use backticks and the format: `key:"value"`, and are not limited to `json`.
