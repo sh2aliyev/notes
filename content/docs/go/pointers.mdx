@@ -1,0 +1,91 @@
+---
+title: Pointers
+---
+
+Pointers in Go allow you to reference a variable's memory address so you can directly access and modify the value stored at that location.
+
+- `&`: Get the memory address of a variable.
+- `*`: Access or modify the value stored at a pointer's address.
+
+```go
+func main() {
+	// Declaring a variable:
+	a := 10
+
+	fmt.Println(a)        // 10
+	fmt.Printf("%T\n", a) // int
+
+	// Declaring a pointer and assigning it the address of 'a':
+	ptr := &a
+
+	fmt.Println(ptr)        // 0xc0000a4010 (memory address of 'a')
+	fmt.Printf("%T\n", ptr) // *int
+	fmt.Println(*ptr)       // 10 (value at the memory address)
+
+	// Changing the value at the memory address:
+	*ptr = 20
+
+	fmt.Println(a) // 20
+}
+```
+
+> By using pointers as function parameters, you pass the memory address of a variable rather than a copy of its value. This changes Go's default pass-by-value behavior and allows the function to modify the original data directly.
+>
+> ```go
+> func main() {
+> 	num := 10
+> 	fmt.Println(num) // 10
+>
+> 	resetVal(num)
+> 	fmt.Println(num) // 10
+>
+> 	resetPtr(&num)
+> 	fmt.Println(num) // 0
+> }
+>
+> func resetVal(val int) {
+> 	val = 0
+> }
+>
+> func resetPtr(val *int) {
+> 	*val = 0
+> }
+> ```
+
+> Pointers as function parameters also allow you to work with large data structures more efficiently.
+>
+> No unnecessary copying = Better performance.
+>
+> - Without pointer:
+>
+>   ```go
+>   func main() {
+>   	arr := [5]int{1, 2, 3, 4, 5}
+>
+>   	fmt.Printf("mem addr (arr): %p, arr: %v\n", &arr, arr) // mem addr (arr): 0xc00011e000, arr: [1 2 3 4 5]
+>   	myFunc(arr) // mem addr (items): 0xc00011e060, items: [1 2 3 4 5]
+>   }
+>
+>   func myFunc(items [5]int) [5]int {
+>   	fmt.Printf("mem addr (items): %p, items: %v\n", &items, items)
+>   	return items
+>   }
+>   ```
+>
+> - With pointer:
+>
+>   ```go
+>   func main() {
+>   	arr := [5]int{1, 2, 3, 4, 5}
+>
+>   	fmt.Printf("mem addr (arr): %p, arr: %v\n", &arr, arr) // mem addr (arr): 0xc00011e000, arr: [1 2 3 4 5]
+>   	myFunc(&arr) // mem addr (items): 0xc00011e000, items: [1 2 3 4 5]
+>   }
+>
+>   func myFunc(items *[5]int) [5]int {
+>   	fmt.Printf("mem addr (items): %p, items: %v\n", items, *items)
+>   	return *items
+>   }
+>   ```
+>
+>   Since arrays are fully independent pass-by-value types in Go (like booleans, numerics, and structs), passing them normally creates a full copy. Using pointers avoids that copying.
