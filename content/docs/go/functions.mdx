@@ -115,7 +115,7 @@ Extra:
 
 ## Pass-by Value & Reference
 
-In Go, all function arguments are passed by value. When a value is passed to a function, Go creates a copy of that value and the function works with the copy. Changes made to the parameter inside the function do not affect the original variable.
+In Go, all function arguments are passed by value. When a value is passed to a function, Go creates a copy of that value and the function operates on the copy. Changes made to the parameter inside the function do not affect the original variable.
 
 ```go
 func increment(num int) {
@@ -130,9 +130,9 @@ func main() {
 }
 ```
 
-> Fully independent basic types: Booleans, Strings, Numerics, Arrays, Structs.
+<Callout>Fully independent types: Booleans, Numerics, Strings, Arrays, Structs.</Callout>
 
-However, some types such as slices, maps, and channels contain references to underlying data. When these values are copied, the reference is copied, which allows the function to modify the shared underlying data.
+However, some types contain internal references to underlying data. When such a value is copied, the underlying data itself is not duplicated, only the internal reference is copied, allowing the function to modify the shared underlying data.
 
 ```go
 func change(s []int) {
@@ -141,12 +141,31 @@ func change(s []int) {
 
 func main() {
 	nums := []int{1, 2, 3}
+
+    fmt.Println(nums) // [1 2 3]
 	change(nums)
 	fmt.Println(nums) // [99 2 3]
 }
 ```
 
-> Reference-containing types: Slices, Maps, Channels, Pointers, Functions, and Interfaces.
+> Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
+>
+>     ```go
+>     func reassignSlice(s []int) {
+>         s = []int{100, 200, 300}
+>         s[0] = 99
+>     }
+>
+>     func main() {
+>         nums := []int{1, 2, 3}
+>
+>         fmt.Println("Before:", nums) // Before: [1 2 3]
+>         reassignSlice(nums)
+>         fmt.Println("After:", nums) // After: [1 2 3]
+>     }
+>     ```
+
+<Callout>Reference-containing types: Slices, Maps, Channels, Pointers, Functions, Interfaces.</Callout>
 
 ## Closures
 
