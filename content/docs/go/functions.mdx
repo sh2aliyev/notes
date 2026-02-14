@@ -130,7 +130,7 @@ func main() {
 }
 ```
 
-<Callout>Fully independent types: Booleans, Numerics, Strings, Arrays, Structs.</Callout>
+<Callout>Fully independent types: Booleans, Numerics, Arrays, Structs.</Callout>
 
 However, some types contain internal references to underlying data. When such a value is copied, the underlying data itself is not duplicated, only the internal reference is copied, allowing the function to modify the shared underlying data.
 
@@ -165,7 +165,9 @@ func main() {
 >     }
 >     ```
 
-<Callout>Reference-containing types: Slices, Maps, Channels, Pointers, Functions, Interfaces.</Callout>
+<Callout>
+  Reference-containing types: Strings (immutable), Slices, Maps, Channels, Pointers, Functions, Interfaces.
+</Callout>
 
 ## Closures
 
