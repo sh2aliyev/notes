@@ -1,0 +1,100 @@
+---
+title: Methods
+---
+
+In Go, a method is a function that is associated with a specific type. It allows you to define behavior that operates on instances of that type.
+
+<Callout>
+
+Methods can only be defined on named types. They cannot be defined on unnamed types such as `[]int` or
+`map[string]int`.
+
+A named type is any type that is declared using the `type` keyword and given its own name.
+
+```go
+type MyInt int
+```
+
+```go
+type Person struct {
+ name string
+ age  int
+}
+```
+
+</Callout>
+
+> Syntax:
+>
+> ```go
+> func (receiver ReceiverType) MethodName(parameters) returnType {
+>     // method body
+> }
+> ```
+>
+> - `receiver`: The variable that represents the instance the method is called on.
+> - `ReceiverType`: The type the method is attached to.
+> - `MethodName`: The name of the method being defined.
+> - `parameters`: The input arguments the method accepts (optional).
+> - `returnType`: The value type the method returns (optional).
+
+- Define:
+
+  ```go
+  type person struct {
+      name string
+      age  int
+  }
+
+  func (p person) sayHello() {
+      fmt.Println("Hello, my name is " + p.name)
+  }
+  ```
+
+- Call:
+
+  ```go
+  user := person{name: "John", age: 35}
+  user.sayHello() // Hello, my name is John
+  ```
+
+<Callout>
+
+To allow a method to modify the original data in types that use `pass-by-value` (fully independent types) semantics, the method must use a pointer receiver.
+
+```go
+func (p *person) changeName(name string) {
+	p.name = name
+	// (*p).name = name // This is also valid, but unnecessary in Go.
+	// Go simplifies pointer access for structs by dereferencing p behind the scenes.
+}
+
+func main() {
+	user := person{name: "John", age: 35}
+
+	user.sayHello() // Hello, my name is John
+
+	user.changeName("Jane")
+
+	user.sayHello() // Hello, my name is Jane
+}
+```
+
+```go
+type myCounter int
+
+func (mc *myCounter) increment() {
+	*mc++
+}
+
+func main() {
+	count := myCounter(0)
+
+	count.increment()
+	count.increment()
+
+	fmt.Printf("count: %v\n", count) // count: 2
+}
+```
+
+</Callout>
