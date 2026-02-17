@@ -16,6 +16,7 @@
     "---Advanced---",
     "composite-types",
     "pointers",
-    "methods"
+    "methods",
+    "generics"
   ]
 }
