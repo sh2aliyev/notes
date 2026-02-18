@@ -17,6 +17,7 @@
     "composite-types",
     "pointers",
     "methods",
+    "interfaces",
     "generics"
   ]
 }

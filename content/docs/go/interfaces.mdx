@@ -1,0 +1,180 @@
+---
+title: Interfaces
+---
+
+## Overview
+
+In Go, an interface is a type that defines a set of method signatures. A type is considered to satisfy an interface when it implements all of the methods declared by that interface.
+
+> Interfaces allow you to write more flexible code by enabling functions to work with any type that implements the required methods. A type can implement multiple interfaces, and a single interface can be satisfied by multiple types.
+
+- Define:
+
+  ```go
+  type shape interface {
+      area() float64
+      perimeter() float64
+  }
+  ```
+
+  > Here, the `shape` interface defines two method signatures, `area()` and `perimeter()`. Any type that implements these methods is considered a `shape`.
+
+- Implement:
+
+  ```go
+  type circle struct {
+      radius float64
+  }
+
+  func (c circle) area() float64 {
+      return math.Pi * c.radius * c.radius
+  }
+
+  func (c circle) perimeter() float64 {
+      return 2 * math.Pi * c.radius
+  }
+  ```
+
+  ```go
+  type rect struct {
+      width  float64
+      height float64
+  }
+
+  func (r rect) area() float64 {
+      return r.width * r.height
+  }
+
+  func (r rect) perimeter() float64 {
+      return 2*r.width + 2*r.height
+  }
+  ```
+
+  > Both `circle` and `rect` satisfy the `shape` interface because they implement all the required methods. This happens automatically, and no explicit declaration is needed.
+
+- Use:
+
+  ```go
+  func printArea(s shape) {
+      fmt.Println("Area:", s.area())
+      fmt.Println("Perimeter:", s.perimeter())
+  }
+
+  func main() {
+      myCircle := circle{radius: 3}
+      printArea(myCircle)
+      // Area: 28.274333882308138
+      // Perimeter: 18.84955592153876
+
+      myRect := rect{width: 3, height: 4}
+      printArea(myRect)
+      // Area: 12
+      // Perimeter: 14
+  }
+  ```
+
+  > Functions can accept interface types as parameters, which allows them to work with any type that satisfies the interface.
+
+## Empty Interface
+
+An empty interface (`interface{}`) requires zero methods, so every type satisfies it. You can also use the alias `any` instead of `interface{}`.
+
+```go
+func main() {
+    var x interface{}
+
+	x = 5
+	x = "hello"
+	x = true
+
+	fmt.Println(x) // true
+}
+```
+
+You can use empty interfaces with type switches to handle values of different types at runtime:
+
+```go
+func describe(i interface{}) {
+	switch v := i.(type) {
+	case string:
+		fmt.Println("It's a string:", v)
+	case int:
+		fmt.Println("It's an integer:", v)
+	default:
+		fmt.Println("Unknown type")
+	}
+}
+
+func main() {
+	x := 5
+	describe(x) // It's an integer: 5
+}
+```
+
+## Type Assertion
+
+The `x.(T)` syntax is known as a type assertion. It can be used with any type, including named types and pointer types:
+
+```go
+func main() {
+	var x interface{} = "Hello"
+
+	val, ok := x.(string)
+	if ok {
+		fmt.Println("It's a string:", val)
+	} else {
+		fmt.Println("Not a string")
+		// val is zero value here
+	}
+}
+```
+
+The `ok` variable is `true` if the type assertion succeeds and `false` if it fails. When `ok` is `false`, `val` contains the zero value of the asserted type.
+
+> Here is an example showing usage with the `shape` interface defined above:
+>
+> ```go
+> // ...
+>
+> func identifyShape(s shape) {
+> 	val, ok := s.(circle)
+> 	if ok {
+> 		fmt.Println("Shape is a circle, val:", val)
+> 	} else {
+> 		fmt.Println("Shape is not a circle")
+> 		// val is zero value here
+> 	}
+> }
+>
+> func main() {
+> 	// ...
+>
+> 	identifyShape(myCircle) // Shape is a circle, val: {3}
+> }
+> ```
+
+## Interface Composition
+
+Interface composition allows you to create new interfaces by combining existing ones.
+
+```go
+type Reader interface {
+	Read(p []byte) (n int, err error)
+}
+
+type Writer interface {
+	Write(p []byte) (n int, err error)
+}
+
+type ReadWriter interface {
+	Reader
+	Writer
+}
+```
+
+> The `ReadWriter` interface requires both `Read` and `Write` methods. Any type that implements both methods automatically satisfies the `ReadWriter` interface.
+
+<Callout>
+  If multiple interfaces are composed and they contain methods with the same name, those methods must have identical
+  signatures in all interfaces.
+</Callout>
