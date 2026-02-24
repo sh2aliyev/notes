@@ -1,0 +1,109 @@
+---
+title: Goroutines
+---
+
+## Overview
+
+Goroutines are lightweight concurrent functions in Go that run independently and are managed by the Go runtime scheduler rather than the operating system.
+
+> In general, program execution can be divided into two types of routines:
+>
+> - Main Routine: The main routine is the first goroutine that starts when a Go program runs. It executes the `main()` function in the main package and determines the lifetime of the entire program. When the main routine finishes, the program exits immediately even if other goroutines are still running.
+> - Child Routine: A child routine is any goroutine started from another routine using the `go` keyword. It runs concurrently with the routine that created it and performs work independently. A child routine does not block its parent unless synchronization is explicitly implemented. It finishes when its function returns or when the program terminates.
+
+```go
+func main() {
+	go expensiveFunc("Hello")
+
+	fmt.Println("Main")
+
+	time.Sleep(1700 * time.Millisecond)
+}
+
+func expensiveFunc(text string) {
+	for i := 0; i < 4; i++ {
+		time.Sleep(500 * time.Millisecond)
+		fmt.Println(text, i)
+	}
+}
+
+// Main
+// Hello 0
+// Hello 1
+// Hello 2
+```
+
+> The time.Sleep in the main function is used here only as an example to give the goroutine enough time to run before the main routine exits. Without it, the program would terminate immediately after the main routine completes.
+>
+> The output shows only 3 iterations even though the loop is set for 4 iterations because the `time.Sleep` of `1700 ms` is less than the `4 * 500 ms` required for all iterations of the `expensiveFunc` function. This means only the first 3 iterations had enough time to complete before the program exited.
+
+## WaitGroup
+
+In Go, a `WaitGroup` from the `sync` package is used to wait for a collection of goroutines to finish before continuing execution in the main routine.
+
+> How it works:
+>
+> - A WaitGroup tracks the number of goroutines to wait for.
+> - `Add(n)` increments the counter by `n` before starting the goroutines.
+> - Each goroutine calls `Done()` when it finishes, which decrements the counter.
+> - `Wait()` blocks the main routine until the counter reaches zero.
+
+```go
+func main() {
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go expensiveFunc("Hello", &wg)
+
+	fmt.Println("Main")
+
+	wg.Wait()
+
+	fmt.Println("End")
+}
+
+func expensiveFunc(text string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	for i := range 4 {
+		time.Sleep(500 * time.Millisecond)
+		fmt.Println(text, i)
+	}
+}
+
+// Main
+// Hello 0
+// Hello 1
+// Hello 2
+// Hello 3
+// End
+```
+
+> We can also wrap the business logic function inside an anonymous function to keep the business logic itself clean:
+>
+> ```go
+> func main() {
+> 	var wg sync.WaitGroup
+>
+> 	wg.Add(1)
+> 	go func(wg *sync.WaitGroup) {
+> 		defer wg.Done()
+> 		expensiveFunc("Hello")
+> 	}(&wg)
+>
+> 	fmt.Println("Main")
+>
+> 	wg.Wait()
+>
+> 	fmt.Println("End")
+> }
+>
+> func expensiveFunc(text string) {
+> 	for i := range 4 {
+> 		time.Sleep(500 * time.Millisecond)
+> 		fmt.Println(text, i)
+> 	}
+> }
+> ```
+>
+> This way, the `expensiveFunc` function remains clean and focused on its own logic, while the goroutine management is handled separately.

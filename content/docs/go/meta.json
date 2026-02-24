@@ -18,6 +18,7 @@
     "pointers",
     "methods",
     "interfaces",
-    "generics"
+    "generics",
+    "concurrency"
   ]
 }
