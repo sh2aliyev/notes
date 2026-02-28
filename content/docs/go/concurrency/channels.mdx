@@ -1,0 +1,348 @@
+---
+title: Channels
+---
+
+## Overview
+
+Channels in Go are a mechanism for communicating between goroutines by sending and receiving values.
+
+- Declare:
+  ```go
+  ch := make(chan int)
+  ```
+  > The type of a channel specifies what kind of data it can carry.
+- Send:
+  ```go
+  ch <- 10
+  ```
+- Receive:
+  ```go
+  value := <-ch
+  ```
+- Close:
+  ```go
+  close(ch)
+  ```
+  > Closing a channel signals to the receiving goroutine that no more values will be sent. It is important to close a channel when you are done sending values to help avoid deadlocks.
+
+<Callout>
+
+Channel synchronization ensures that communication between goroutines is properly coordinated, guaranteeing that data is not lost and that goroutines wait for each other when necessary to maintain the correct order and timing of operations.
+
+- Send Operation: When a goroutine sends a value to a channel, it blocks until another goroutine is ready to receive that value.
+- Receive Operation: When a goroutine attempts to receive a value from a channel, it blocks until a value becomes available.
+
+</Callout>
+
+> Example:
+>
+> ```go
+> func main() {
+> 	ch := make(chan string)
+>
+> 	go expensiveFunc("Hello", ch)
+>
+> 	fmt.Println("Main")
+>
+> 	for range 4 {
+> 		fmt.Println(<-ch)
+> 	}
+>
+>     fmt.Println("End")
+> }
+>
+> func expensiveFunc(text string, ch chan string) {
+> 	for i := range 4 {
+> 		time.Sleep(500 * time.Millisecond)
+> 		ch <- text + " " + fmt.Sprint(i)
+> 	}
+> }
+>
+> // Main
+> // Hello 0
+> // Hello 1
+> // Hello 2
+> // Hello 3
+> // End
+> ```
+>
+> Here, we do not need any additional mechanism in the `main` function to wait for the goroutine to finish. The `<-ch` operation in `main` blocks until a value is available to receive from the channel. This blocking behavior synchronizes the `main` function with the `expensiveFunc` goroutine. Each iteration of the loop in `main` waits for a corresponding send operation from `expensiveFunc`. Also, we are not required to use a loop here. We could call `fmt.Println(<-ch)` directly 4 times in sequence, and it would produce the same result.
+
+> In the example above, we did not strictly need to close the channel because `main` only catches a fixed number of messages (4) before exiting. However, here is a modified version that requires the channel to be closed explicitly:
+>
+> ```go
+> func main() {
+> 	ch := make(chan string)
+>
+> 	go expensiveFunc("Hello", ch)
+>
+> 	fmt.Println("Main")
+>
+> 	for msg := range ch {
+> 		fmt.Println(msg)
+> 	}
+>
+> 	fmt.Println("Done.")
+> }
+>
+> func expensiveFunc(text string, ch chan string) {
+> 	defer close(ch)
+>
+> 	for i := range 4 {
+> 		time.Sleep(500 * time.Millisecond)
+> 		ch <- text + " " + fmt.Sprint(i)
+> 	}
+> }
+>
+> // Main
+> // Hello 0
+> // Hello 1
+> // Hello 2
+> // Hello 3
+> // Done.
+> ```
+>
+> The `for msg := range ch { ... }` syntax essentially performs a `msg := <-ch` operation under the hood, which is where the blocking occurs.
+>
+> `range` doesn't know how many values a channel will receive, it can be infinite. To stop the loop, we must explicitly close the channel to indicate that no more values are coming.
+
+## Buffered Channels
+
+Buffered channels in Go are channels with a specific capacity, allowing them to hold a certain number of values before blocking.
+
+> - A buffered channel only blocks sending when the buffer is full.
+> - Receiving removes a value from the buffer. If the buffer is empty, it blocks until a value becomes available.
+> - You can still receive remaining values from a closed buffered channel until it is empty.
+
+- Declare:
+  ```go
+  ch := make(chan int, 3)
+  ```
+
+> Example:
+>
+> ```go
+> func main() {
+> 	ch := make(chan string, 4)
+>
+> 	go myFunc("Hello", ch)
+>
+> 	fmt.Println("Main")
+>
+> 	for range 8 {
+> 		time.Sleep(1000 * time.Millisecond)
+> 		fmt.Println(<-ch)
+> 	}
+>
+> 	fmt.Println("End")
+> }
+>
+> func myFunc(text string, ch chan string) {
+> 	for i := range 8 {
+> 		ch <- text + " " + fmt.Sprint(i)
+> 		fmt.Println("myFunc loop.", i)
+> 	}
+>
+> 	close(ch)
+>
+> 	fmt.Println("myFunc End")
+> }
+>
+> // Main
+> // myFunc loop. 0
+> // myFunc loop. 1
+> // myFunc loop. 2
+> // myFunc loop. 3
+> // Hello 0
+> // myFunc loop. 4
+> // Hello 1
+> // myFunc loop. 5
+> // Hello 2
+> // myFunc loop. 6
+> // Hello 3
+> // myFunc loop. 7
+> // myFunc End
+> // Hello 4
+> // Hello 5
+> // Hello 6
+> // Hello 7
+> // End
+> ```
+
+## Channel Status
+
+The receiver of a channel can check its status using the second return value of the receive operation.
+
+```go
+val, ok := <-ch
+```
+
+> The second return value (`ok`) is a boolean that indicates whether the channel is open or closed.
+>
+> - `true`: The channel is open, and values can still be received from it.
+> - `false`: The channel is closed, and no more values can be received.
+
+```go
+func main() {
+	ch := make(chan int)
+
+	go func(ch chan int) {
+		ch <- 1
+		ch <- 2
+		close(ch)
+	}(ch)
+
+	for {
+		val, ok := <-ch
+		if !ok {
+			fmt.Println("Channel is closed.")
+			break
+		}
+		fmt.Println("Received:", val)
+	}
+}
+
+// Received: 1
+// Received: 2
+// Channel is closed.
+```
+
+## The `select` Statement
+
+The `select` statement in Go is a control structure that allows you to work with multiple channels simultaneously. It is similar to a `switch` statement but is specifically designed for channel operations.
+
+> - The `select` statement listens to multiple channels.
+> - It executes the first case that is ready to proceed.
+> - If multiple cases are ready, Go randomly selects one to execute.
+> - If there is no `default` case, it blocks until a case becomes ready.
+> - If a `default` case is present and no other cases are ready, it executes the `default` case immediately without blocking.
+
+```go
+func main() {
+	// Preparation:
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+	ch3 := make(chan int)
+
+	go func(ch chan int) {
+		time.Sleep(time.Second)
+		ch <- 1
+	}(ch1)
+
+	go func(ch chan int) {
+		time.Sleep(time.Second * 3)
+		ch <- 2
+	}(ch2)
+
+	go func(ch chan int) {
+		time.Sleep(time.Second * 2)
+		ch <- 3
+	}(ch3)
+
+	time.Sleep(time.Second * 5)
+
+	// Usage:
+	select {
+	case val1 := <-ch1:
+		fmt.Println(val1)
+	case val2 := <-ch2:
+		fmt.Println(val2)
+	case val3 := <-ch3:
+		fmt.Println(val3)
+	default:
+		fmt.Println("No channels are ready.")
+	}
+
+	fmt.Println("Done.")
+}
+
+// 2
+// Done.
+```
+
+<Callout>
+  The `select` statement is not a loop, it executes only one case even if multiple are ready, and then breaks the
+  `select` statement.
+</Callout>
+
+## Read-Only & Write-Only Channels
+
+In Go, channels can be restricted to Read-Only or Write-Only. This helps define clear communication patterns between goroutines and improves code safety and clarity.
+
+> - Read-Only (`<-chan type`): A read-only channel can only be used to receive values. You cannot send values into a read-only channel.
+> - Write-Only (`chan<- type`): A write-only channel can only be used to send values. You cannot receive values from a write-only channel.
+
+```go
+func sendData(ch chan<- int) { // ch is write-only
+	ch <- 42
+	// can't do: <-ch
+	close(ch)
+}
+
+func receiveData(ch <-chan int) { // ch is read-only
+	fmt.Println(<-ch)
+	// can't do: ch <- 24
+}
+
+func main() {
+	ch := make(chan int)
+
+	go sendData(ch)
+	receiveData(ch)
+}
+```
+
+## The "Done Channel" Pattern
+
+The "Done Channel" pattern is a technique used to signal the completion or termination of a goroutine. It involves using a separate helper channel to indicate when a goroutine should stop its execution.
+
+- Without a Done Channel:
+
+  ```go
+  func myFunc() {
+  	for {
+  		fmt.Println("MyFunc")
+  	}
+  }
+
+  func main() {
+  	go myFunc()
+
+  	time.Sleep(1 * time.Hour)
+  }
+  ```
+
+  > The `myFunc` goroutine will print "MyFunc" continuously until the main program exits.
+
+- With a Done Channel:
+
+  ```go
+  func myFunc(doneCh <-chan struct{}) {
+      for {
+          select {
+          case <-doneCh:
+              return
+          default:
+              fmt.Println("MyFunc")
+          }
+      }
+  }
+
+  func main() {
+      doneCh := make(chan struct{})
+
+      go myFunc(doneCh)
+
+      time.Sleep(5 * time.Second)
+      close(doneCh)
+
+      time.Sleep(1 * time.Hour)
+  }
+  ```
+
+  > The `myFunc` goroutine will print "MyFunc" for 5 seconds and then return, even though the main program continues to run for an hour.
+
+  <Callout>
+    The `struct{}` type represents an empty struct in Go. It consumes zero bytes of memory, making it ideal for
+    signaling and control purposes without causing any memory overhead.
+  </Callout>
