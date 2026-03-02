@@ -60,7 +60,7 @@ type Person struct {
 
 <Callout>
 
-To allow a method to modify the original data in types that use `pass-by-value` (fully independent types) semantics, the method must use a pointer receiver.
+To allow a method to modify the original data in types that use `pass-by-value` (Pure Value Types) semantics, the method must use a pointer receiver.
 
 ```go
 func (p *person) changeName(name string) {

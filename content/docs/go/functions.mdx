@@ -130,7 +130,7 @@ func main() {
 }
 ```
 
-<Callout>Fully independent types: Booleans, Numerics, Arrays, Structs.</Callout>
+<Callout>Pure Value Types (`pass-by-value`): Booleans, Numerics, Arrays, Structs.</Callout>
 
 However, some types contain internal references to underlying data. When such a value is copied, the underlying data itself is not duplicated, only the internal reference is copied, allowing the function to modify the shared underlying data.
 
@@ -148,6 +148,11 @@ func main() {
 }
 ```
 
+<Callout>
+  Reference-Containing Types (`pass-by-reference`): Strings (immutable), Slices, Maps, Channels, Pointers, Functions,
+  Interfaces.
+</Callout>
+
 > Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
 >
 >     ```go
@@ -164,10 +169,21 @@ func main() {
 >         fmt.Println("After:", nums) // After: [1 2 3]
 >     }
 >     ```
-
-<Callout>
-  Reference-containing types: Strings (immutable), Slices, Maps, Channels, Pointers, Functions, Interfaces.
-</Callout>
+>
+> or
+>
+>      ```go
+>      func addItem(s []int, v int) {
+>          s = append(s, v)
+>      }
+>
+>      func main() {
+>          nums := []int{1, 2, 3}
+>          fmt.Println("Before:", nums) // Before: [1 2 3]
+>          addItem(nums, 4)
+>          fmt.Println("After:", nums) // After: [1 2 3]
+>      }
+>      ```
 
 ## Closures
 
