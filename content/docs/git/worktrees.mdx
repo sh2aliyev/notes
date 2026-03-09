@@ -4,49 +4,53 @@ title: Worktrees
 
 Git worktrees let you have multiple working directories attached to a single repository.
 
+> A worktree is simply another folder connected to the same repository. It can point to any branch or commit. Each worktree is isolated in its working files, but all of them share the same Git history, and switching to a worktree is as simple as moving into that folder with `cd`. This lets you work on different branches or commits in parallel, avoid stashing or making temporary commits just to move around, and keep each task in its own separate folder.
+
 - `git worktree`
   > - `list` - Show all active worktrees.
   > - `add <path> <branch_name>` - Create a worktree for an existing branch.
   > - `add <path> <commit_hash>` - Create a worktree at a specific commit in a `detached HEAD` state.
   > - `remove <path>` - Remove the worktree folder and its reference.
 
-How?
-
-> - A worktree is simply another folder connected to the same repository.
-> - It can point to any branch or commit.
-> - Each worktree is isolated in its working files, but all of them share the same Git history.
-> - Switching to a worktree is simply moving into that folder with `cd`.
-
-Why?
-
-> - You can work on different branches or commits in parallel.
-> - You avoid stashing or making temporary commits just to move around.
-> - Each task stays in its own separate folder.
-
-## Worktree Strategies
-
 <Callout type="warn" title="Do not place worktrees inside other working directories.">
 
-If you create a worktree folder inside another working directory, Git treats the folder as new content.
+If you create a worktree folder inside another working directory, Git treats that folder as new content.
 
-While Git can detect that it is a worktree and reduce it to a single entry, it still shows up as untracked content, which you usually don't want in your real project history.
+While Git can detect that it is a worktree and reduce it to a single entry, it still appears as untracked content, which you usually do not want in your real project history.
 
 </Callout>
 
-With this warning in mind, there are two approaches to structuring projects when working with worktrees:
+Example approaches to structure projects when working with worktrees.
 
-1.  Keep your worktrees outside the main working directory.
-    > E.g., right next to your main project folder.
-    > `git worktree add ../feat feature`
-    >
-    > ```sh
-    > ├─ project/  # <- main working directory
-    > ├─ feat/     # <- worktree for a feature branch
-    > ```
-2.  Use a bare clone.
+- One base and others:
 
-    > - `git clone --bare <remote_url>`: Create a local bare copy of a remote repository.
+  > You have one main working directory and other worktree folders next to it.
+  >
+  > ```sh
+  > ├─ project/  # <- main working directory (the repository folder)
+  > ├─ feat/     # <- worktree for the feature branch
+  > ```
 
-    > A bare clone is a repository without a working directory. It contains only the `.git` data.
-    >
-    > To start working, you need to create a worktree.
+  > How:
+  >
+  > Run `git worktree add ../feat feature` inside the repository folder.
+
+- Everything is a worktree:
+
+  > There is one repository folder, but to work, you have to create a worktree.
+  >
+  > ```sh
+  > ├─ repo.git/  # <- the repository folder
+  > ├─ main/      # <- worktree for the main branch
+  > ├─ feat/      # <- worktree for the feature branch
+  > ```
+
+  > How:
+  >
+  > First, you need to run `git clone --bare <remote_url>` to create a local bare copy.
+  >
+  > > A bare clone is a repository without a working directory. It contains only the `.git/` data.
+  >
+  > Then you can create worktrees from the bare clone to work in, using `git worktree add ../main main` and `git worktree add ../feat feature`.
+
+<Callout>To run the `git worktree` command, you need to be inside a repository folder.</Callout>
