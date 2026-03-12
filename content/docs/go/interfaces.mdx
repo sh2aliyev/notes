@@ -75,6 +75,40 @@ In Go, an interface is a type that defines a set of method signatures. A type is
 
   > Functions can accept interface types as parameters, which allows them to work with any type that satisfies the interface.
 
+Examples:
+
+> 1. Let's say you have a slice and want to sort it using the [`Sort` function ↗](https://pkg.go.dev/sort#Sort) from the `sort` package.
+>
+>    The `Sort` function accepts data that implements an interface. To pass the slice to it, we need to satisfy [that interface ↗](https://pkg.go.dev/sort#Interface). It requires us to have `Len() int`, `Less(i, j int) bool`, and `Swap(i, j int)` methods.
+>
+>    ```go
+>    import (
+>        "fmt"
+>        "sort"
+>    )
+>
+>    type Ages []uint8
+>
+>    func (a Ages) Len() int {
+>        return len(a)
+>    }
+>
+>    func (a Ages) Swap(i, j int) {
+>        a[i], a[j] = a[j], a[i]
+>    }
+>
+>    func (a Ages) Less(i, j int) bool {
+>        return a[i] < a[j]
+>    }
+>
+>    func main() {
+>        studentAges := Ages{19, 18, 22, 20, 20, 18}
+>        sort.Sort(studentAges)
+>
+>        fmt.Println(studentAges) // [18 18 19 20 20 22]
+>    }
+>    ```
+
 ## Empty Interface
 
 An empty interface (`interface{}`) requires zero methods, so every type satisfies it. You can also use the alias `any` instead of `interface{}`.
