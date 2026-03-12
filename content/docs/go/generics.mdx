@@ -50,83 +50,77 @@ func add[T int | float64](a T, b T) T {
 
 Examples:
 
-- Example 1:
+1.  > ```go
+    > func main() {
+    >     fmt.Println(add(1, 2))     // 3
+    >     fmt.Println(add(1.5, 2.3)) // 3.8
+    > }
+    >
+    > func add[T int | float64](a T, b T) T {
+    >     return a + b
+    > }
+    > ```
+    >
+    > > Without generics:
+    > >
+    > > ```go
+    > > func main() {
+    > >     fmt.Println(addInts(1, 2))       // 3
+    > >     fmt.Println(addFloats(1.5, 2.3)) // 3.8
+    > > }
+    > >
+    > > func addInts(a, b int) int {
+    > >     return a + b
+    > > }
+    > >
+    > > func addFloats(a, b float64) float64 {
+    > >     return a + b
+    > > }
+    > > ```
 
-  ```go
-  func main() {
-      fmt.Println(add(1, 2))     // 3
-      fmt.Println(add(1.5, 2.3)) // 3.8
-  }
+2.  > ```go
+    > func main() {
+    >     fmt.Println(swap(2.5, 5))      // 5, 2.5
+    >     fmt.Println(swap("Hello", 99)) // 99, Hello
+    > }
+    >
+    > func swap[T any, U any](a T, b U) (U, T) {
+    >     return b, a
+    > }
+    > ```
 
-  func add[T int | float64](a T, b T) T {
-      return a + b
-  }
-  ```
-
-  > Without generics:
-  >
-  > ```go
-  > func main() {
-  >     fmt.Println(addInts(1, 2))       // 3
-  >     fmt.Println(addFloats(1.5, 2.3)) // 3.8
-  > }
-  >
-  > func addInts(a, b int) int {
-  >     return a + b
-  > }
-  >
-  > func addFloats(a, b float64) float64 {
-  >     return a + b
-  > }
-  > ```
-
-- Example 2:
-
-  ```go
-  func main() {
-      fmt.Println(swap(2.5, 5))      // 5, 2.5
-      fmt.Println(swap("Hello", 99)) // 99, Hello
-  }
-
-  func swap[T any, U any](a T, b U) (U, T) {
-      return b, a
-  }
-  ```
-
-- Example 3:
-
-  ```go
-  type gasEngine struct {
-      hp int
-  }
-
-  type electricEngine struct {
-      kWh int
-  }
-
-  type car[T gasEngine | electricEngine] struct {
-      model  string
-      year   int
-      engine T
-  }
-
-  func main() {
-      gCar := car[gasEngine]{
-          model: "Audi",
-          year:  2018,
-          engine: gasEngine{
-              hp: 385,
-          },
-      }
-
-      eCar := car[electricEngine]{
-          model: "Tesla",
-          year:  2022,
-          engine: electricEngine{
-              kWh: 60,
-          },
-      }
-
-      fmt.Println(gCar, eCar) // {Audi 2018 {385}} {Tesla 2022 {60}}
-  }
-  ```
+3.  > ```go
+    > type gasEngine struct {
+    >     hp int
+    > }
+    >
+    > type electricEngine struct {
+    >     kWh int
+    > }
+    >
+    > type car[T gasEngine | electricEngine] struct {
+    >     model  string
+    >     year   int
+    >     engine T
+    > }
+    >
+    > func main() {
+    >     gCar := car[gasEngine]{
+    >         model: "Audi",
+    >         year:  2018,
+    >         engine: gasEngine{
+    >             hp: 385,
+    >         },
+    >     }
+    >
+    >     eCar := car[electricEngine]{
+    >         model: "Tesla",
+    >         year:  2022,
+    >         engine: electricEngine{
+    >             kWh: 60,
+    >         },
+    >     }
+    >
+    >     fmt.Println(gCar, eCar) // {Audi 2018 {385}} {Tesla 2022 {60}}
+    > }
+    > ```
