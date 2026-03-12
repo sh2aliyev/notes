@@ -7,46 +7,69 @@ Generics in Go allow you to write code that works with different data types whil
 > Syntax:
 >
 > ```go
-> func FunctionName[T constraint](param T) ReturnType {
+> func functionName[T constraint](param T) returnType {
 >     //
 > }
 > ```
 
-<Callout>
+Extra:
 
-Go does not support direct union types. You cannot do something like:
+> Go does not support union types. You cannot write something like:
+>
+> ```go
+> type number int | float64
+> ```
+>
+> Instead, you can use an interface to define a type set for use as a generic constraint:
+>
+> ```go
+> type number interface {
+>     int | float64
+> }
+> ```
+>
+> > The `|` operator is only valid in type constraints. It specifies that a type parameter may be one of several types.
+>
+> then use it like:
+>
+> ```go
+> func add[T number](a T, b T) T {
+>     return a + b
+> }
+> ```
+>
+> > You can also use `|` directly without declaring a named interface:
+> >
+> > ```go
+> > func add[T int | float64](a T, b T) T {
+> >     return a + b
+> > }
+> > ```
 
-```go
-type Number int | float64
-```
-
-Instead, you can use an interface to define a type set used as a generic constraint:
-
-```go
-type Number interface {
-    int | float64
-}
-```
-
-> The `|` operator is only valid in generic constraints. It specifies that a type parameter can be one of several types.
-
-Then use it like:
-
-```go
-func add[T Number](a T, b T) T {
-    return a + b
-}
-```
-
-You can also use `|` directly without declaring a named interface:
-
-```go
-func add[T int | float64](a T, b T) T {
-    return a + b
-}
-```
-
-</Callout>
+> If you want the constraint to also accept user-defined types whose underlying type matches one of those types, use `~`:
+>
+> ```go
+> type number interface {
+>     ~int | ~float64
+> }
+> ```
+>
+> > Here, `~int` means `int` and any named type whose underlying type is `int`, and `~float64` means `float64` and any named type whose underlying type is `float64`.
+>
+> ```go
+> type myInt int
+>
+> func add[T ~int | ~float64](a T, b T) T {
+>     return a + b
+> }
+>
+> func main() {
+> 	var a myInt = 5
+> 	var b myInt = 10
+>
+> 	fmt.Println(add(a, b)) // 15
+> }
+> ```
 
 Examples:
 
