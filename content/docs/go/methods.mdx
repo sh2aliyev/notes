@@ -12,11 +12,11 @@ Methods can only be defined on named types. They cannot be defined on unnamed ty
 A named type is any type that is declared using the `type` keyword and given its own name.
 
 ```go
-type MyInt int
+type myInt int
 ```
 
 ```go
-type Person struct {
+type person struct {
  name string
  age  int
 }
@@ -27,14 +27,14 @@ type Person struct {
 > Syntax:
 >
 > ```go
-> func (receiver ReceiverType) MethodName(parameters) returnType {
+> func (receiver receiverType) methodName(parameters) returnType {
 >     // method body
 > }
 > ```
 >
 > - `receiver`: The variable that represents the instance the method is called on.
-> - `ReceiverType`: The type the method is attached to.
-> - `MethodName`: The name of the method being defined.
+> - `receiverType`: The type the method is attached to.
+> - `methodName`: The name of the method being defined.
 > - `parameters`: The input arguments the method accepts (optional).
 > - `returnType`: The value type the method returns (optional).
 

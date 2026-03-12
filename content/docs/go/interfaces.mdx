@@ -83,26 +83,26 @@ Examples:
     >
     > ```go
     > import (
-    >     "fmt"
-    >     "sort"
+    > 	"fmt"
+    > 	"sort"
     > )
     >
-    > type Ages []uint8
+    > type ages []uint8
     >
-    > func (a Ages) Len() int {
+    > func (a ages) Len() int {
     >     return len(a)
     > }
     >
-    > func (a Ages) Swap(i, j int) {
+    > func (a ages) Swap(i, j int) {
     >     a[i], a[j] = a[j], a[i]
     > }
     >
-    > func (a Ages) Less(i, j int) bool {
+    > func (a ages) Less(i, j int) bool {
     >     return a[i] < a[j]
     > }
     >
     > func main() {
-    >     studentAges := Ages{19, 18, 22, 20, 20, 18}
+    >     studentAges := ages{19, 18, 22, 20, 20, 18}
     >     sort.Sort(studentAges)
     >
     >     fmt.Println(studentAges) // [18 18 19 20 20 22]
