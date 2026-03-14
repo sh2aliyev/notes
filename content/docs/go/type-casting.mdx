@@ -36,6 +36,15 @@ newValue := targetType(value)
   c := int32(a) + b // 150 (int32)
   ```
 
+- Casting from `string` to `[]byte` or `[]rune` converts it into different forms:
+
+  ```go
+  a := "1aé"
+
+  b := []byte(a) // [49 97 195 169] (UTF-8 bytes)
+  c := []rune(a) // [49 97 233] (Unicode code points)
+  ```
+
 - Some types cannot be cast directly if they are not compatible with each other:
 
   ```go
