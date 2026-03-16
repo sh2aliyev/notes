@@ -22,21 +22,21 @@ if condition {
   s := "Hello"
 
   if n := len(s); n == 1 {
-  	fmt.Println("Length is", n)
+  	fmt.Println("n is:", n)
   } else if n >= 2 {
-  	fmt.Println("Length is", n)
+  	fmt.Println("n is:", n)
   } else {
-  	fmt.Println("Empty string")
+  	fmt.Println("Empty string", n)
   }
 
-  // Length is 5
+  // n is: 5
 
-  fmt.Println("Length is", n) // undefined: n (compiler)
+  fmt.Println("n is:", n) // undefined: n (compiler)
   ```
 
 ## Switch Statement
 
-Executes the matching case block.
+Executes the block for the matching case.
 
 ```go
 switch expression {
@@ -53,28 +53,47 @@ default:
 
 > Go auto `break` after each case implicitly, but the keyword can still be used.
 
-> Since Go breaks after each case by default, the `fallthrough` keyword allows you to explicitly override this behavior when sequential processing is needed.
->
-> ```go
-> a := 2
->
-> switch a {
-> case 1:
->     fmt.Println("One")
-> case 2:
->     fmt.Println("Two")
->     fallthrough
-> case 3:
->     fmt.Println("Three")
-> case 4:
->     fmt.Println("Four")
-> default:
->     fmt.Println("None of above")
-> }
->
-> // Two
-> // Three
-> ```
+- Using the `fallthrough` keyword overrides the implicit `break` behavior and continues execution into the next case:
+
+  ```go
+  a := 2
+
+  switch a {
+  case 1:
+      fmt.Println("One")
+  case 2:
+      fmt.Println("Two")
+      fallthrough
+  case 3:
+      fmt.Println("Three")
+  case 4:
+      fmt.Println("Four")
+  default:
+      fmt.Println("None of above")
+  }
+
+  // Two
+  // Three
+  ```
+
+- You can also declare a variable for case matching that only exists within the `switch` block:
+
+  ```go
+  s := "hi"
+
+  switch n := len(s); n {
+  case 1:
+  	fmt.Println("n is:", n)
+  case 2:
+  	fmt.Println("n is:", n)
+  default:
+  	fmt.Println("None of above", n)
+  }
+
+  // n is: 2
+
+  fmt.Println("n is:", n) // undefined: n (compiler)
+  ```
 
 - Omitting the expression makes the `switch` statement act like an `if-else` statement:
 
