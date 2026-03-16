@@ -2,27 +2,32 @@
 title: Pointers
 ---
 
-Pointers in Go allow you to reference a variable's memory address so you can directly access and modify the value stored at that location.
+A pointer is a variable that stores the location of a value in memory. It lets you work with the original value directly instead of making a copy.
 
-- `&`: Get the memory address of a variable.
-- `*`: Access or modify the value stored at a pointer's address.
+```go
+var p *int
+```
+
+> Zero value: `nil`.
+
+- `&p`: Address of `p`.
+- `*p`: Value pointed to by `p` (dereferencing).
 
 ```go
 func main() {
-	// Declaring a variable:
 	a := 10
 
 	fmt.Println(a)        // 10
 	fmt.Printf("%T\n", a) // int
 
-	// Declaring a pointer and assigning it the address of 'a':
+	// Declare a pointer and assign it the address of `a`:
 	ptr := &a
 
-	fmt.Println(ptr)        // 0xc0000a4010 (memory address of 'a')
+	fmt.Println(ptr)        // 0xed92788e008
 	fmt.Printf("%T\n", ptr) // *int
-	fmt.Println(*ptr)       // 10 (value at the memory address)
+	fmt.Println(*ptr)       // 10
 
-	// Changing the value at the memory address:
+	// Change the value through the pointer:
 	*ptr = 20
 
 	fmt.Println(a) // 20
