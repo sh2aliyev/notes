@@ -74,30 +74,33 @@ Extra:
       {3, 4},
       {5, 6},
   }
-  fmt.Println(arr2d) // [[1 2] [3 4] [5 6]]
+
+  arr2d[1][1] = 9
+  fmt.Println(arr2d) // [[1 2] [3 9] [5 6]]
   ```
 
 - Slicing an array:
 
-  > Slicing selects a range of elements from an array.
+  > Slicing creates a slice from a selected range of elements in an array.
 
   ```go
   arr := [5]int{0, 10, 20, 30, 40}
-  fmt.Println(arr[1:3]) // [10 20]
+  slice := arr[1:3]
+  fmt.Printf("%T, %v", slice, slice) // []int, [10 20]
   ```
 
   > Examples:
   >
   > ```go
-  > slice1 := arr[2:4] // elements at index 2 and 3
-  > slice2 := arr[:4]  // from start to index 3
-  > slice3 := arr[4:]  // from index 4 to end
-  > slice4 := arr[:]   // entire array
+  > slice1 := arr[2:4] // [20 30] (elements at index 2 and 3)
+  > slice2 := arr[:4]  // [0 10 20 30] (from the start to index 3)
+  > slice3 := arr[4:]  // [40] (from index 4 to the end)
+  > slice4 := arr[:]   // [0 10 20 30 40] (the entire array)
   > ```
 
 ## Slices
 
-In Go, a slice is a dynamically-sized, flexible view into the elements of an array. Unlike arrays, slices can grow and shrink the length during execution.
+In Go, a slice is a dynamically-sized, flexible view into the elements of an array.
 
 - Declare:
 
@@ -119,12 +122,12 @@ In Go, a slice is a dynamically-sized, flexible view into the elements of an arr
 
   <Callout>
 
-  Slices have a length, which is the number of elements they contain, and a capacity, which is the size of the underlying array they reference.
+  Slices have a length, which is the number of elements they contain, and a capacity, which is the size of the underlying array they reference. The initial capacity is automatically set to match the initial length.
 
   If you append elements to a slice beyond its current capacity, Go automatically handles this by allocating a larger (2x) array and copying the existing elements into it at a new memory address. This can be an expensive operation in terms of performance.
 
   ```go
-  var slice []int // slice is initially nil, with a length and capacity of 0.
+  var slice []int // slice is initially nil (has no underlying array).
   fmt.Println(len(slice)) // 0
   fmt.Println(cap(slice)) // 0
 
@@ -137,21 +140,24 @@ In Go, a slice is a dynamically-sized, flexible view into the elements of an arr
 
   fmt.Println(len(slice)) // len: 6
   fmt.Println(cap(slice)) // cap: 8
+
+  slice = append(slice, 7, 8, 9)
+
+  fmt.Println(len(slice)) // len: 9
+  fmt.Println(cap(slice)) // cap: 16
   ```
 
   To improve performance, we can predefine the capacity of a slice. Predefining the capacity helps avoid unnecessary reallocations when appending elements.
 
-  Predefining the capacity:
-
   ```go
-  slice := make([]int, 0, 10)
+  slice := make([]int, 0, 20) // the third argument specifies capacity.
 
   fmt.Println(slice)      // []
   fmt.Println(len(slice)) // len: 0
-  fmt.Println(cap(slice)) // cap: 10
+  fmt.Println(cap(slice)) // cap: 20
   ```
 
-  > Predefining the capacity only makes sense when you have a reasonable knowledge of how the data will grow or change over time.
+  Predefining the capacity manually only makes sense when you have a reasonable knowledge of how the data will grow or change over time.
 
   </Callout>
 
@@ -224,17 +230,32 @@ In Go, a slice is a dynamically-sized, flexible view into the elements of an arr
 
   </Callout>
 
+Extra:
+
+- Multi-dimensional slices:
+
+  ```go
+  slice2d := [][]string{
+    {"a", "b", "c"},
+    {"d", "e"},
+    {"f", "g"},
+  }
+
+  slice2d[1][1] = "x"
+  fmt.Println(slice2d) // [[a b c] [d x] [f g]]
+  ```
+
 ## Maps
 
 Maps in Go are unordered collections of key-value pairs.
 
-- Declare:
+- Initialize:
 
   ```go
   m := make(map[string]int)
   ```
 
-  > Or initialize at declaration:
+  > Or with values:
   >
   > ```go
   > m := map[string]int{
@@ -246,7 +267,7 @@ Maps in Go are unordered collections of key-value pairs.
 
   <Callout type="warn">
 
-  You cannot simply declare a map with `var m map[string]int` and then assign values to it. If you try, you will get a `panic: assignment to entry in nil map`. To make the map ready to use, you must initialize it (either empty or with values) using the `make` function.
+  You cannot simply declare a map with `var m map[string]int` and then assign values to it. If you try, you will get a `panic: assignment to entry in nil map`. To make a map ready to use, you must initialize it, either empty using the `make` function or with values.
 
   </Callout>
 
@@ -256,18 +277,11 @@ Maps in Go are unordered collections of key-value pairs.
   fmt.Println(m["one"]) // 1
   ```
 
-- Insert:
+- Insert/Modify:
 
   ```go
   m["four"] = 4
   fmt.Println(m) // map[four:4 one:1 three:3 two:2]
-  ```
-
-- Modify:
-
-  ```go
-  m["one"] = 100
-  fmt.Println(m["one"]) // 100
   ```
 
 - Remove:
