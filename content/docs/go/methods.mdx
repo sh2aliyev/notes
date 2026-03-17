@@ -2,7 +2,7 @@
 title: Methods
 ---
 
-In Go, a method is a function that is associated with a specific type. It allows you to define behavior that operates on instances of that type.
+In Go, a method is a function with a special receiver argument that is associated with a specific type. It allows you to define behavior that operates on instances of that type.
 
 <Callout>
 
@@ -38,7 +38,7 @@ type person struct {
 > - `parameters`: The input arguments the method accepts (optional).
 > - `returnType`: The value type the method returns (optional).
 
-- Define:
+- Declare:
 
   ```go
   type person struct {
@@ -50,6 +50,8 @@ type person struct {
       fmt.Println("Hello, my name is " + p.name)
   }
   ```
+
+  <Callout type="warn">You can only declare a method on a receiver type defined in the same package.</Callout>
 
 - Call:
 
@@ -64,9 +66,7 @@ To allow a method to modify the original data in types that use `pass-by-value` 
 
 ```go
 func (p *person) changeName(name string) {
-	p.name = name
-	// (*p).name = name // This is also valid, but unnecessary in Go.
-	// Go simplifies pointer access for structs by dereferencing p behind the scenes.
+	p.name = name // `(*p).name = name` is also valid, but unnecessary in Go.
 }
 
 func main() {
@@ -79,6 +79,8 @@ func main() {
 	user.sayHello() // Hello, my name is Jane
 }
 ```
+
+> Go automatically dereferences struct pointers when accessing fields. That is why we write `p.name = name` instead of `(*p).name = name`.
 
 Another example:
 
