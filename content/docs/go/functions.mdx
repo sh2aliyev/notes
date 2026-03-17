@@ -189,31 +189,64 @@ func main() {
 
 Closures are functions that capture and use variables from their surrounding scope, even after that scope has finished executing.
 
-```go
-func sum() func(int) int {
-	total := 0
+Examples:
 
-	return func(number int) int {
-		total += number
-		return total
-	}
-}
+1.  > ```go
+    > func sum() func(int) int {
+    > 	total := 0
+    >
+    > 	return func(number int) int {
+    > 		total += number
+    > 		return total
+    > 	}
+    > }
+    >
+    > func main() {
+    > 	add1 := sum()
+    > 	add2 := sum()
+    >
+    > 	fmt.Println(add1(1)) // 1
+    > 	fmt.Println(add1(2)) // 3
+    > 	fmt.Println(add1(3)) // 6
+    >
+    > 	fmt.Println(add2(2)) // 2
+    > 	fmt.Println(add2(4)) // 6
+    > 	fmt.Println(add2(6)) // 12
+    > }
+    > ```
+    >
+    > Each call to `sum()` returns a new closure with its own independent variables (`total`), allowing `add1` and `add2` to maintain separate internal state.
 
-func main() {
-	add1 := sum()
-	add2 := sum()
-
-	fmt.Println(add1(1)) // 1
-	fmt.Println(add1(2)) // 3
-	fmt.Println(add1(3)) // 6
-
-	fmt.Println(add2(2)) // 2
-	fmt.Println(add2(4)) // 6
-	fmt.Println(add2(6)) // 12
-}
-```
-
-> Each call to `sum()` returns a new closure with its own independent variables (`total`), allowing `add1` and `add2` to maintain separate internal state.
+2.  > ```go
+    > func fibonacci() func() int {
+    > 	a, b := 0, 1
+    >
+    > 	return func() int {
+    > 		result := a
+    > 		a, b = b, a+b
+    > 		return result
+    > 	}
+    > }
+    >
+    > func main() {
+    > 	f := fibonacci()
+    > 	for i := 0; i < 10; i++ {
+    > 		fmt.Println(f())
+    > 	}
+    > }
+    >
+    >
+    > // 0
+    > // 1
+    > // 1
+    > // 2
+    > // 3
+    > // 5
+    > // 8
+    > // 13
+    > // 21
+    > // 34
+    > ```
 
 ## The `defer` Keyword
 
