@@ -52,6 +52,23 @@ varName := value
   name, age := "John", 30
   ```
 
+  <Callout>
+
+  You cannot re-declare a variable that has already been declared in the same scope.
+
+  BUT
+
+  If at least one identifier on the left-hand side is a new variable, it is allowed.
+
+  ```go
+  x := 10
+  x := 20 // <-- compiler: no new variables on left side of :=
+
+  x, y := 20, 30 // (y is new, so this is allowed)
+  ```
+
+  </Callout>
+
 ## Using the `const` keyword
 
 Constants are fixed values that cannot be changed after they are declared. They are read-only.
