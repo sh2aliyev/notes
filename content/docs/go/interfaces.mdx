@@ -4,9 +4,9 @@ title: Interfaces
 
 ## Overview
 
-In Go, an interface is a type that defines a set of method signatures. A type is considered to satisfy an interface when it implements all of the methods declared by that interface.
+In Go, an interface is a type that defines a set of method signatures. A type satisfies an interface when it implements all of the methods declared by that interface.
 
-> Interfaces allow you to write more flexible code by enabling functions to work with any type that implements the required methods. A type can implement multiple interfaces, and a single interface can be satisfied by multiple types.
+> Interfaces help you write flexible code by allowing functions to work with any type that provides the required methods. A type can satisfy multiple interfaces, and a single interface can be satisfied by many different types.
 
 - Define:
 
@@ -17,7 +17,7 @@ In Go, an interface is a type that defines a set of method signatures. A type is
   }
   ```
 
-  > Here, the `shape` interface defines two method signatures, `area()` and `perimeter()`. Any type that implements these methods is considered a `shape`.
+  > Here, the `shape` interface defines two method signatures, `area()` and `perimeter()`. Any type that implements both methods satisfies `shape`.
 
 - Implement:
 
@@ -50,7 +50,37 @@ In Go, an interface is a type that defines a set of method signatures. A type is
   }
   ```
 
-  > Both `circle` and `rect` satisfy the `shape` interface because they implement all the required methods. This happens automatically, and no explicit declaration is needed.
+  > Both `circle` and `rect` satisfy the `shape` interface because they implement all required methods. This happens automatically, with no explicit declaration.
+
+  <Callout>
+
+  Interface satisfaction also depends on method receivers. Methods defined on a value receiver are part of both `T` and `*T`, while methods defined on a pointer receiver are part of only `*T`.
+
+  ```go
+  type speaker interface {
+      sayHello()
+  }
+
+  type person struct {
+      name string
+  }
+
+  func (d *person) sayHello() {
+      fmt.Println("Hello, my name is " + d.name)
+  }
+
+  func main() {
+      var s speaker
+
+      p := person{name: "John"}
+
+      // s = p   // <-- compiler: cannot use p (variable of struct type person) as speaker value in assignment: person does not implement speaker (method sayHello has pointer receiver)
+      s = &p
+      s.sayHello() // Hello, my name is John
+  }
+  ```
+
+  </Callout>
 
 - Use:
 
@@ -73,7 +103,7 @@ In Go, an interface is a type that defines a set of method signatures. A type is
   }
   ```
 
-  > Functions can accept interface types as parameters, which allows them to work with any type that satisfies the interface.
+  > Functions can accept interface types as parameters, which lets them work with any type that satisfies the interface.
 
 Examples:
 
@@ -109,6 +139,76 @@ Examples:
     > }
     > ```
 
+2.  > Change how `fmt` behaves for your own type.
+    >
+    > The `fmt` package checks whether a value satisfies the [`Stringer` interface ↗](https://pkg.go.dev/fmt#Stringer). This interface requires a single method, `String() string`. If a type implements that method, `fmt` uses it automatically when printing. Otherwise, it falls back to the default representation.
+    >
+    > ```go
+    > import (
+    > 	"fmt"
+    > )
+    >
+    > type ipAddr [4]byte
+    >
+    > func (i ipAddr) String() string {
+    > 	return fmt.Sprintf("is: %d.%d.%d.%d", i[0], i[1], i[2], i[3]) // (prints the address as a dotted quad)
+    > }
+    >
+    > func main() {
+    > 	hosts := map[string]ipAddr{
+    > 		"loopback":  {127, 0, 0, 1},
+    > 		"googleDNS": {8, 8, 8, 8},
+    > 	}
+    >
+    > 	for name, ip := range hosts {
+    > 		fmt.Println(name, ip)
+    > 	}
+    > }
+    >
+    > // loopback is: 127.0.0.1
+    > // googleDNS is: 8.8.8.8
+    > ```
+    >
+    > As you can see from the output, `fmt` prints the map keys using the default behavior because they are plain `string` values. For the map values, it detects that they are of type `IPAddr` and automatically uses the custom `String()` method.
+
+3.  > Customize printing errors.
+    >
+    > Go programs express error state with error values. The built-in `error` type is an interface and defined like:
+    >
+    > ```go
+    > type error interface {
+    > 	Error() string
+    > }
+    > ```
+    >
+    > If a type implements the `Error() string` method, it satisfies the `error` interface. The `fmt` package also looks for the `error` interface when printing values, so if a value is an error, `fmt` uses its `Error()` method.
+    >
+    > ```go
+    > import (
+    > 	"fmt"
+    > )
+    >
+    > type errNegativeVal int
+    >
+    > func (e errNegativeVal) Error() string {
+    > 	return fmt.Sprintf("Number can't be negative: %v", int(e))
+    > }
+    >
+    > func twoTimes(x int) (int, error) {
+    > 	if x < 0 {
+    > 		return 0, errNegativeVal(x)
+    > 	}
+    >
+    > 	return x * 2, nil
+    > }
+    >
+    > func main() {
+    > 	fmt.Println(twoTimes(4)) // 8 <nil>
+    > 	fmt.Println(twoTimes(2)) // 4 <nil>
+    > 	fmt.Println(twoTimes(-2)) // 0 Number can't be negative: -2
+    > }
+    > ```
+
 ## Empty Interface
 
 An empty interface (`interface{}`) requires zero methods, so every type satisfies it. You can also use the alias `any` instead of `interface{}`.
@@ -125,45 +225,59 @@ func main() {
 }
 ```
 
-You can use empty interfaces with type switches to handle values of different types at runtime:
+### Type Assertion
 
-```go
-func describe(i interface{}) {
-	switch v := i.(type) {
-	case string:
-		fmt.Println("It's a string:", v)
-	case int:
-		fmt.Println("It's an integer:", v)
-	default:
-		fmt.Println("Unknown type")
-	}
-}
+A type assertion is an operation that compares an interface value against a specific type and returns the underlying value if it matches.
 
-func main() {
-	x := 5
-	describe(x) // It's an integer: 5
-}
-```
-
-## Type Assertion
-
-The `x.(T)` syntax is known as a type assertion. It can be used with any type, including named types and pointer types:
+> Syntax:
+>
+> ```go
+> val, ok := x.(assertedType)
+> ```
+>
+> - `assertedType`: Can be any type, including named types and pointer types.
+> - `val`: The extracted value. If the assertion fails, it is the zero value of the asserted type.
+> - `ok`: A boolean indicating whether the assertion succeeded.
 
 ```go
 func main() {
 	var x interface{} = "Hello"
 
 	val, ok := x.(string)
+
 	if ok {
 		fmt.Println("It's a string:", val)
 	} else {
 		fmt.Println("Not a string")
-		// val is zero value here
 	}
+}
+
+// It's a string: Hello
+```
+
+<Callout>
+
+You can also omit `ok`, but if the assertion fails, it causes a panic:
+
+```go
+func main() {
+	var i interface{} = "hello"
+
+	s1, ok1 := i.(string)
+	fmt.Println(s1, ok1) // hello true
+
+	s2 := i.(string)
+	fmt.Println(s2) // hello
+
+	f1, ok2 := i.(float64)
+	fmt.Println(f1, ok2) // 0 false
+
+	f2 := i.(float64) // <-- panic: interface conversion: interface {} is string, not float64
+	fmt.Println(f2)
 }
 ```
 
-The `ok` variable is `true` if the type assertion succeeds and `false` if it fails. When `ok` is `false`, `val` contains the zero value of the asserted type.
+</Callout>
 
 > Here is an example showing usage with the `shape` interface defined above:
 >
@@ -186,6 +300,28 @@ The `ok` variable is `true` if the type assertion succeeds and `false` if it fai
 > 	identifyShape(myCircle) // Shape is a circle, val: {3}
 > }
 > ```
+
+### Type Switches
+
+A type switch is a `switch` statement that compares an interface value against multiple possible types.
+
+```go
+func describe(i interface{}) {
+	switch v := i.(type) {
+	case string:
+		fmt.Println("A string", v)
+	case int:
+		fmt.Println("An int", v)
+	default:
+		fmt.Println("Unknown type", v)
+	}
+}
+
+func main() {
+	x := 5
+	describe(x) // An int 5
+}
+```
 
 ## Interface Composition
 
