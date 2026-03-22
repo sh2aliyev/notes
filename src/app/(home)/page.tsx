@@ -1,7 +1,7 @@
 import { Bookmark } from '@/components/bookmark';
 import { Folder } from '@/components/folder';
 import { MountainIcon } from '@/components/icons/mountain';
-import { APP_DESC, indexMetaMap } from '@/lib/consts';
+import { APP_DESC, indexMetaMap } from '@/consts';
 import Link from 'next/link';
 
 export default function HomePage() {

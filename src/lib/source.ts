@@ -1,8 +1,8 @@
-import { docs } from 'fumadocs-mdx:collections/server';
+import { docs } from 'collections/server';
 import { type InferPageType, loader } from 'fumadocs-core/source';
 import { icons } from 'lucide-react';
 import { createElement } from 'react';
-import { customIcons } from './consts';
+import { customIcons } from '@/consts';
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
@@ -17,7 +17,7 @@ export const source = loader({
 });
 
 export function getPageImage(page: InferPageType<typeof source>) {
-  const segments = [...page.slugs, 'image.png'];
+  const segments = [...page.slugs, 'image.webp'];
 
   return {
     segments,

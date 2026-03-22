@@ -5,7 +5,11 @@ import { GoIcon } from '@/components/icons/go';
 export const APP_NAME = 'sh2a | Notes';
 export const APP_DESC = 'My Beloved Tech Notes';
 export const WEB_URL = 'https://notes.sh2a.org';
-export const REPO_URL = 'https://github.com/sh2aliyev/notes';
+export const REPO_INFO = {
+  user: 'sh2aliyev',
+  repo: 'notes',
+  branch: 'main',
+};
 
 export const customIcons = {
   GitIcon,

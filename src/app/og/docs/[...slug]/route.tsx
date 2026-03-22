@@ -1,8 +1,8 @@
 import { getPageImage, source } from '@/lib/source';
 import { notFound } from 'next/navigation';
-import { ImageResponse } from 'next/og';
-import { generate as DefaultImage } from 'fumadocs-ui/og';
-import { APP_NAME, indexMetaMap } from '@/lib/consts';
+import { ImageResponse } from '@takumi-rs/image-response';
+import { generate as DefaultImage } from 'fumadocs-ui/og/takumi';
+import { APP_NAME, indexMetaMap } from '@/consts';
 import { BookmarkIcon } from '@/components/icons/bookmark';
 import { getDirname, getFallbackDirname, isIndexPage } from '@/lib/utils';
 
@@ -36,6 +36,7 @@ export async function GET(_req: Request, { params }: RouteContext<'/og/docs/[...
     {
       width: 1200,
       height: 630,
+      format: 'webp',
     },
   );
 }

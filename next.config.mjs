@@ -4,6 +4,7 @@ const withMDX = createMDX();
 
 /** @type {import('next').NextConfig} */
 const config = {
+  serverExternalPackages: ['@takumi-rs/image-response'],
   output: 'export',
   images: {
     unoptimized: true,

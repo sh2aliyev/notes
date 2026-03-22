@@ -1,3 +1,5 @@
+export { twMerge as cn } from 'tailwind-merge';
+
 export function isIndexPage(path: string) {
   const parts = path.split('/');
   return parts.at(-1) === 'index.mdx';
