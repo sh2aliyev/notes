@@ -2,7 +2,11 @@
 title: Generics
 ---
 
-Generics in Go allow you to write code that works with different data types while maintaining type safety. Instead of creating separate functions for each type, you can define one function that operates on multiple types in a type-safe way.
+Generics in Go allow you to write code that works with different data types while maintaining type safety.
+
+## Generic Functions
+
+Instead of creating separate functions for each type, you can define one function that operates on multiple types in a type-safe way.
 
 > Syntax:
 >
@@ -145,5 +149,26 @@ Examples:
     >     }
     >
     >     fmt.Println(gCar, eCar) // {Audi 2018 {385}} {Tesla 2022 {60}}
+    > }
+    > ```
+
+## Generic Types
+
+Instead of creating separate versions of the same type for different data types, you can define a single type that can be reused with many types.
+
+> Syntax:
+>
+> ```go
+> type typeName[T constraint] struct {
+>     fieldName T
+> }
+> ```
+
+Example:
+
+1.  > ```go
+    > type List[T any] struct {
+    > 	next *List[T]
+    > 	val  T
     > }
     > ```
