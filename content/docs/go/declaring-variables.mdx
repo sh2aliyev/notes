@@ -44,7 +44,7 @@ var varName type = value
 varName := value
 ```
 
-> Can only be used inside functions, not at the package level.
+<Callout type="warn">Can only be used inside functions, not at the package level.</Callout>
 
 - Declaring multiple variables on a single line:
 
@@ -92,5 +92,3 @@ const varName type = value
   	hoursInDay = 24
   )
   ```
-
-> Computations on constants are mostly done at compile time, not at runtime.

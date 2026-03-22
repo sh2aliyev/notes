@@ -14,7 +14,7 @@ newValue := targetType(value)
 > a := 5.6 // float64
 > b := 10 // int
 >
-> c := a + b // invalid operation: a + b (mismatched types float64 and int)
+> c := a + b // <-- compiler: invalid operation: a + b (mismatched types float64 and int)
 >
 > c := a + float64(b) // 15.6 (float64)
 > ```
@@ -50,5 +50,5 @@ newValue := targetType(value)
   ```go
   a := "123"
 
-  b := int(a) // cannot convert a (variable of type string) to type int
+  b := int(a) // <-- compiler: cannot convert a (variable of type string) to type int
   ```
