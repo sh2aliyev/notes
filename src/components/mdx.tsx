@@ -2,7 +2,7 @@ import { Image } from 'fumadocs-core/framework';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
-export function getMDXComponents(components?: MDXComponents): MDXComponents {
+export function getMDXComponents(components?: MDXComponents) {
   return {
     ...defaultMdxComponents,
     blockquote: ({ children, ...props }) => (
@@ -13,7 +13,13 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         {children}
       </blockquote>
     ),
-    img: (props) => <Image className="border-fd-border m-auto border-2" {...(props as any)} />,
     ...components,
-  };
+    img: (props) => <Image className="border-fd-border m-auto border-2" {...(props as any)} />,
+  } satisfies MDXComponents;
+}
+
+export const useMDXComponents = getMDXComponents;
+
+declare global {
+  type MDXProvidedComponents = ReturnType<typeof getMDXComponents>;
 }

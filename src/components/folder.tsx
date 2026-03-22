@@ -1,4 +1,4 @@
-import { indexMetaMap } from '@/lib/consts';
+import { indexMetaMap } from '@/consts';
 import Link from 'next/link';
 import { createElement } from 'react';
 
