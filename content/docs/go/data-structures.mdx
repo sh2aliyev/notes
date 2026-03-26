@@ -195,6 +195,14 @@ In Go, a slice is a dynamically-sized, flexible view into the elements of an arr
 
   </Callout>
 
+- Prepend:
+
+  ```go
+  slice := []int{1, 2, 3, 4, 5}
+  slice = append([]int{99, 98}, slice...)
+  fmt.Println(slice) // [99 98 1 2 3 4 5]
+  ```
+
 - Remove:
 
   > Remove all elements except the first two:
