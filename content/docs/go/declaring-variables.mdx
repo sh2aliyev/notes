@@ -64,7 +64,7 @@ varName := value
   x := 10
   x := 20 // <-- compiler: no new variables on left side of :=
 
-  x, y := 20, 30 // (y is new, so this is allowed)
+  x, y := 20, 30 // y is new, so this is allowed
   ```
 
   </Callout>
@@ -76,6 +76,8 @@ Constants are fixed values that cannot be changed after they are declared. They 
 ```go
 const varName type = value
 ```
+
+<Callout>Only booleans, numbers and strings can be constants.</Callout>
 
 - Constants can be declared without explicit types, but they must have values:
 

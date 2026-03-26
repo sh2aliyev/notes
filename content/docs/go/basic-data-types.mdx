@@ -40,12 +40,12 @@ Go has three basic data types: `boolean`, `numeric` and `string`. Each data type
 | -------- | ------------------------------------------------------- |
 | `string` | "anything surrounded by double quotes" or \`backticks\` |
 
-> Zero value: `" "`.
+> Zero value: `""`.
 
 Extra:
 
 - > - A string written with double quotes is an interpreted string literal. The compiler processes escape sequences such as `\n`, `\t`, `\uXXXX`, and `\xNN`, converting them into their corresponding byte values. It cannot span multiple lines directly in source code.
-  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written, with no escape processing. Backslashes have no special meaning, and sequences like `\n` remain literal text. It may span multiple lines and retains all whitespace, making it suitable for multi-line or precisely formatted content.
+  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written, with no escape processing. Backslashes have no special meaning, and sequences like `\n` remain literal text. It may span multiple lines and retains all whitespace.
 
 - > Technically, a string is a read-only slice of bytes:
   >
@@ -68,7 +68,7 @@ Extra:
   >
   > ```go
   > str := "é"
-  > fmt.Printf("len(str): %v\n", len(str)) // len(str): 2
+  > fmt.Printf("str: %v, len: %v, bytes: %v", str, len(str), []byte(str)) // str: é, len: 2, bytes: [195 169]
   > ```
   >
   > > `len()` returns the byte count, not the character count.

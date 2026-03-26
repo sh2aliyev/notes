@@ -9,7 +9,7 @@ In Go, array is a fixed-size sequence of elements of a single type.
 - Declare:
 
   ```go
-  var arr [5]int // zero valued
+  var arr [5]int // [0 0 0 0 0] (zero valued)
   ```
 
   > Or initialize at declaration:
@@ -117,7 +117,7 @@ In Go, a slice is a dynamically-sized, flexible view into the elements of an arr
   > Or using the `make` function:
   >
   > ```go
-  > slice := make([]int, 5) // non-zero length but zero valued
+  > slice := make([]int, 5) // [0 0 0 0 0] (non-zero length but zero valued)
   > ```
 
   <Callout>
@@ -374,7 +374,7 @@ A struct is a collection of uniquely named elements called fields, each of which
   > Or zero valued:
   >
   > ```go
-  > var user person
+  > var user person // { 0}
   > ```
 
 - Access:

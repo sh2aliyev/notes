@@ -22,9 +22,11 @@ newValue := targetType(value)
 - Casting from `float` to `integer` removes (cuts off) the decimal part:
 
   ```go
-  a := 5.8 // float64
+  a := 5.6 // float64
 
   b := int16(a) // 5 (int16)
+
+  c := float64(b) // 5 (float64)
   ```
 
 - Casting between different integer sizes must also be explicit:

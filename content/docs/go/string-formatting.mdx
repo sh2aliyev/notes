@@ -4,7 +4,7 @@ title: String Formatting
 
 | Placeholder | Description                                | Usage                                    | Output               |
 | ----------- | ------------------------------------------ | ---------------------------------------- | -------------------- |
-| `%v`        | Default format for any value.              | `("%v", 123)`                            | `123`                |
+| `%v`        | Default variable format for any value.     | `("%v", 123)`                            | `123`                |
 | `%+v`       | Struct format with field names.            | `("%+v", Person{Name: "John", Age: 35})` | `{Name:John Age:35}` |
 | `%#v`       | Go syntax representation of the value.     | `("%#v", []int{1, 2, 3})`                | `[]int{1, 2, 3}`     |
 |             |                                            |                                          |                      |
@@ -42,3 +42,35 @@ Examples:
     > pi := 3.14159
     > fmt.Printf("Pi: %.2f", pi) // Pi: 3.14
     > ```
+
+3.  > You can also use `[n]` to explicitly reference the nth argument in `fmt`, which lets you reuse (optimize) the same already-evaluated value multiple times.
+    >
+    > ```go
+    > func expensiveFunc(a int) int {
+    > 	fmt.Println("Calculated")
+    > 	return a
+    > }
+    > ```
+    >
+    > - Unoptimized:
+    >
+    >   ```go
+    >   func main() {
+    >   	fmt.Printf("%v and %v", expensiveFunc(5), expensiveFunc(5))
+    >   }
+    >
+    >   // Calculated
+    >   // Calculated
+    >   // 5 and 5
+    >   ```
+    >
+    > - Optimized:
+    >
+    >   ```go
+    >   func main() {
+    >   	fmt.Printf("%[1]v and %[1]v", expensiveFunc(5))
+    >   }
+    >
+    >   // Calculated
+    >   // 5 and 5
+    >   ```
