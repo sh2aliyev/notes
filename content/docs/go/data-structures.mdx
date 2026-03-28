@@ -257,25 +257,37 @@ Extra:
 
 Maps in Go are unordered collections of key-value pairs.
 
+> Syntax:
+>
+> ```go
+> map[keyType]valueType
+> ```
+
 - Initialize:
 
   ```go
-  m := make(map[string]int) // key: string, value: int
+  m := make(map[string]int)
   ```
 
-  > Or with values:
-  >
-  > ```go
-  > m := map[string]int{
-  > 	"one":   1,
-  > 	"two":   2,
-  > 	"three": 3,
-  > }
-  > ```
+  > or
+
+  ```go
+  m := map[string]int{}
+  ```
+
+  > or with values:
+
+  ```go
+  m := map[string]int{
+  	"one":   1,
+  	"two":   2,
+  	"three": 3,
+  }
+  ```
 
   <Callout type="warn">
 
-  You cannot simply declare a map with `var m map[string]int` and then assign values to it. If you try, you will get a `panic: assignment to entry in nil map`. To make a map ready to use, you must initialize it, either empty using the `make` function or with values.
+  You cannot just declare a map with `var m map[string]int` and then assign values to it. If you try, you will get a `panic: assignment to entry in nil map`. That is why you need to initialize the map first, either empty or with values as shown above before using it.
 
   </Callout>
 
@@ -305,6 +317,7 @@ Extra:
 
   ```go
   clear(m)
+  fmt.Println(m) // map[]
   ```
 
 - Check if a key exists in a map:
@@ -316,17 +329,25 @@ Extra:
   fmt.Println(ok) // true
   ```
 
-  > This is important because maps always return a value for a key, even if the key does not exist. If you access a missing key, Go returns the zero value for the map's value type.
-  >
-  > ```go
-  > m := map[string]int{
-  >   "zero":  0,
-  >   "one":   1,
-  >   "two":   2,
-  > }
-  >
-  > fmt.Println(m["three"]) // 0
-  > ```
+  <Callout>
+
+  Maps always return a value for a key, even if the key does not exist. If you access a missing key, Go returns the zero value for the map's value type.
+
+  ```go
+  m := map[string]int{
+    "zero": 0,
+    "one":  1,
+    "two":  2,
+  }
+
+  fmt.Println(m["three"]) // 0
+
+  m["x"]++
+
+  fmt.Println(m) // map[one:1 two:2 x:1 zero:0]
+  ```
+
+  </Callout>
 
 - Nested maps:
 
