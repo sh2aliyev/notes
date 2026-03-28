@@ -115,75 +115,105 @@ Extra:
 
 ## Pass-by Value & Reference
 
-In Go, all function arguments are passed by value. When a value is passed to a function, Go creates a copy of that value and the function operates on the copy. Changes made to the parameter inside the function do not affect the original variable.
+In Go, all function arguments are passed by value. The difference is in what gets copied.
 
-```go
-func increment(num int) {
-	num++
-	fmt.Println("Inside:", num) // Inside: 6
-}
+- Pass-by Value:
 
-func main() {
-	num := 5
-	increment(num)
-	fmt.Println("Outside:", num) // Outside: 5
-}
-```
+  > With pure value types, Go copies the actual data. The function works with its own copy, so any change made inside the function stays local and does not affect the original.
 
-<Callout>Pure Value Types (`pass-by-value`): Booleans, Numerics, Arrays, Structs.</Callout>
+  ```go
+  func increment(num int) {
+      num++
+      fmt.Println("Inside:", num) // Inside: 6
+  }
 
-However, some types contain internal references to underlying data. When such a value is copied, the underlying data itself is not duplicated, only the internal reference is copied, allowing the function to modify the shared underlying data.
+  func main() {
+      num := 5
+      increment(num)
+      fmt.Println("Outside:", num) // Outside: 5
+  }
+  ```
 
-```go
-func change(s []int) {
-	s[0] = 99
-}
+  <Callout>
 
-func main() {
-	nums := []int{1, 2, 3}
+  Pure Value Types (`pass-by-value`): Booleans, Numerics, Arrays, Structs.
 
-    fmt.Println(nums) // [1 2 3]
-	change(nums)
-	fmt.Println(nums) // [99 2 3]
-}
-```
+  ```go
+  a := [3]int{2, 4, 6} // array
+  b := a
+  b[1] = 99
 
-<Callout>
+  fmt.Println(a, b) // [2 4 6] [2 99 6]
+  ```
+
+  </Callout>
+
+- Pass-by Reference:
+
+  > With reference-containing types, Go copies the value, but that value contains a reference to shared underlying data. So changes inside the function affect that shared data.
+
+  ```go
+  func change(s []int) {
+      s[0] = 99
+  }
+
+  func main() {
+      nums := []int{1, 2, 3}
+
+      fmt.Println(nums) // [1 2 3]
+      change(nums)
+      fmt.Println(nums) // [99 2 3]
+  }
+  ```
+
+  <Callout>
+
   Reference-Containing Types (`pass-by-reference`): Strings (immutable), Slices, Maps, Channels, Pointers, Functions,
   Interfaces.
-</Callout>
 
-> Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
->
->     ```go
->     func reassignSlice(s []int) {
->         s = []int{100, 200, 300}
->         s[0] = 99
->     }
->
->     func main() {
->         nums := []int{1, 2, 3}
->
->         fmt.Println("Before:", nums) // Before: [1 2 3]
->         reassignSlice(nums)
->         fmt.Println("After:", nums) // After: [1 2 3]
->     }
->     ```
->
-> or
->
->      ```go
->      func addItem(s []int, v int) {
->          s = append(s, v)
->      }
->
->      func main() {
->          nums := []int{1, 2, 3}
->          fmt.Println("Before:", nums) // Before: [1 2 3]
->          addItem(nums, 4)
->          fmt.Println("After:", nums) // After: [1 2 3]
->      }
->      ```
+  ```go
+  a := []int{2, 4, 6} // slice
+  b := a
+  b[1] = 99
+
+  fmt.Println(a, b) // [2 99 6] [2 99 6]
+  ```
+
+  </Callout>
+
+Examples:
+
+1.  > Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
+    >
+    >     ```go
+    >     func reassignSlice(s []int) {
+    >         s = []int{100, 200, 300}
+    >         s[0] = 99
+    >     }
+    >
+    >     func main() {
+    >         nums := []int{1, 2, 3}
+    >
+    >         fmt.Println("Before:", nums) // Before: [1 2 3]
+    >         reassignSlice(nums)
+    >         fmt.Println("After:", nums) // After: [1 2 3]
+    >     }
+    >     ```
+    >
+    > or
+    >
+    >      ```go
+    >      func addItem(s []int, v int) {
+    >          s = append(s, v)
+    >      }
+    >
+    >      func main() {
+    >          nums := []int{1, 2, 3}
+    >          fmt.Println("Before:", nums) // Before: [1 2 3]
+    >          addItem(nums, 4)
+    >          fmt.Println("After:", nums) // After: [1 2 3]
+    >      }
+    >      ```
 
 ## Closures
 
