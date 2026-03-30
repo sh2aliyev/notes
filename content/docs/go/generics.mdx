@@ -16,62 +16,81 @@ Generic functions let you use one function with different types while keeping co
 
 Extra:
 
-> Go does not support union types. You cannot write something like:
->
-> ```go
-> type number int | float64
-> ```
->
-> Instead, you can use an interface to define a type set for use as a generic constraint:
->
-> ```go
-> type number interface {
->     int | float64
-> }
-> ```
->
-> > The `|` operator is only valid in type constraints. It specifies that a type parameter may be one of several types.
->
-> then use it like:
->
-> ```go
-> func add[T number](a T, b T) T {
->     return a + b
-> }
-> ```
->
-> > You can also use `|` directly without declaring a named interface:
-> >
-> > ```go
-> > func add[T int | float64](a T, b T) T {
-> >     return a + b
-> > }
-> > ```
+- > Go does not support union types. You cannot write something like:
+  >
+  > ```go
+  > type number int | float64
+  > ```
+  >
+  > Instead, you can use an interface to define a type set for use as a generic constraint:
+  >
+  > ```go
+  > type number interface {
+  >     int | float64
+  > }
+  > ```
+  >
+  > > The `|` operator is only valid in type constraints. It specifies that a type parameter may be one of several types.
+  >
+  > then use it like:
+  >
+  > ```go
+  > func add[T number](a T, b T) T {
+  >     return a + b
+  > }
+  > ```
+  >
+  > > You can also use `|` directly without declaring a named interface:
+  > >
+  > > ```go
+  > > func add[T int | float64](a T, b T) T {
+  > >     return a + b
+  > > }
+  > > ```
 
-> If you want the constraint to also accept user-defined types whose underlying type matches one of those types, use `~`:
->
-> ```go
-> type number interface {
->     ~int | ~float64
-> }
-> ```
->
-> > Here, `~int` means `int` and any named type whose underlying type is `int`, and `~float64` means `float64` and any named type whose underlying type is `float64`.
->
-> ```go
-> type myInt int
->
-> func add[T ~int | ~float64](a T, b T) T {
->     return a + b
-> }
->
-> func main() {
-> 	var a myInt = 5
-> 	var b myInt = 10
->
-> 	fmt.Println(add(a, b)) // 15
-> }
-> ```
+- > If you want the constraint to also accept named types whose underlying type matches one of those types, use `~`:
+  >
+  > ```go
+  > type number interface {
+  >     ~int | ~float64
+  > }
+  > ```
+  >
+  > > Here, `~int` means `int` and any named type whose underlying type is `int`, and `~float64` means `float64` and any named type whose underlying type is `float64`.
+  >
+  > ```go
+  > type myInt int
+  >
+  > func add[T ~int | ~float64](a T, b T) T {
+  >     return a + b
+  > }
+  >
+  > func main() {
+  > 	var a myInt = 5
+  > 	var b myInt = 10
+  >
+  > 	fmt.Println(add(a, b)) // 15
+  > }
+  > ```
+  >
+  > > Why?
+  > >
+  > > Because in Go, a named type is distinct from its underlying type, even if it uses the same representation.
+  > >
+  > > ```go
+  > > type myInt int
+  > >
+  > > func main() {
+  > > 	var a myInt = 10
+  > > 	var b = 20
+  > >
+  > > 	a = b // <-- compiler: cannot use b (variable of type int) as myInt value in assignment
+  > >
+  > > 	a = myInt(b) // <- ok (compatible for type casting)
+  > >
+  > > 	fmt.Println(a, b) // 20 20
+  > > }
+  > > ```
 
 Examples:
 
