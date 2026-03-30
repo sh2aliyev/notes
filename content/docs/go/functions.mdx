@@ -68,7 +68,7 @@ Extra:
 
 - First-class functions:
 
-  > First-class functions are functions that can be assigned to variables, passed as arguments to other functions, and returned as values from other functions.
+  > In Go, functions are first-class values. They can be assigned to variables, passed as arguments, and returned from functions.
 
   ```go
   func main() {
@@ -168,8 +168,7 @@ In Go, all function arguments are passed by value. The difference is in what get
 
   <Callout>
 
-  Reference-Containing Types (`pass-by-reference`): Strings (immutable), Slices, Maps, Channels, Pointers, Functions,
-  Interfaces.
+  Reference-Containing Types (`pass-by-reference`): Strings (immutable), Slices, Maps, Channels, Pointers (&x).
 
   ```go
   a := []int{2, 4, 6} // slice
@@ -181,39 +180,40 @@ In Go, all function arguments are passed by value. The difference is in what get
 
   </Callout>
 
-Examples:
+  <Callout type="warn">
 
-1.  > Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
-    >
-    >     ```go
-    >     func reassignSlice(s []int) {
-    >         s = []int{100, 200, 300}
-    >         s[0] = 99
-    >     }
-    >
-    >     func main() {
-    >         nums := []int{1, 2, 3}
-    >
-    >         fmt.Println("Before:", nums) // Before: [1 2 3]
-    >         reassignSlice(nums)
-    >         fmt.Println("After:", nums) // After: [1 2 3]
-    >     }
-    >     ```
-    >
-    > or
-    >
-    >      ```go
-    >      func addItem(s []int, v int) {
-    >          s = append(s, v)
-    >      }
-    >
-    >      func main() {
-    >          nums := []int{1, 2, 3}
-    >          fmt.Println("Before:", nums) // Before: [1 2 3]
-    >          addItem(nums, 4)
-    >          fmt.Println("After:", nums) // After: [1 2 3]
-    >      }
-    >      ```
+  Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
+
+  ```go
+  func reassignSlice(s []int) {
+      s = []int{100, 200, 300}
+      s[0] = 99
+  }
+
+  func main() {
+      nums := []int{1, 2, 3}
+      fmt.Println("Before:", nums) // Before: [1 2 3]
+      reassignSlice(nums)
+      fmt.Println("After:", nums) // After: [1 2 3]
+  }
+  ```
+
+  > another example:
+
+  ```go
+  func addItem(s []int, v int) {
+      s = append(s, v)
+  }
+
+  func main() {
+      nums := []int{1, 2, 3}
+      fmt.Println("Before:", nums) // Before: [1 2 3]
+      addItem(nums, 4)
+      fmt.Println("After:", nums) // After: [1 2 3]
+  }
+  ```
+
+  </Callout>
 
 ## Closures
 
@@ -239,9 +239,9 @@ Examples:
     > 	fmt.Println(add1(2)) // 3
     > 	fmt.Println(add1(3)) // 6
     >
-    > 	fmt.Println(add2(2)) // 2
-    > 	fmt.Println(add2(4)) // 6
-    > 	fmt.Println(add2(6)) // 12
+    > 	fmt.Println(add2(1)) // 1
+    > 	fmt.Println(add2(2)) // 3
+    > 	fmt.Println(add2(6)) // 9
     > }
     > ```
     >
@@ -252,21 +252,19 @@ Examples:
     > 	a, b := 0, 1
     >
     > 	return func() int {
-    > 		result := a
     > 		a, b = b, a+b
-    > 		return result
+    > 		return a
     > 	}
     > }
     >
     > func main() {
     > 	f := fibonacci()
-    > 	for i := 0; i < 10; i++ {
+    >
+    > 	for range 10 {
     > 		fmt.Println(f())
     > 	}
     > }
     >
-    >
-    > // 0
     > // 1
     > // 1
     > // 2
@@ -276,40 +274,77 @@ Examples:
     > // 13
     > // 21
     > // 34
+    > // 55
     > ```
 
 ## The `defer` Keyword
 
-The `defer` keyword allows us to execute a function or line of code at the end of the current function's execution. This is useful for cleaning up resources, such as closing files or connections.
+The `defer` keyword allows us to execute a function or line of code at the end of the current function's execution.
 
 ```go
 func main() {
-	defer sayBye()
-
-	fmt.Println("1")
-
-	defer fmt.Println("2")
-
-	fmt.Println("3")
-
-	fmt.Println(myFunc())
+    defer fmt.Println("done")
+    fmt.Println("work")
 }
 
-func myFunc() string {
-	defer fmt.Println("4")
-	return "5"
-}
-
-func sayBye() {
-	fmt.Println("bye")
-}
-
-// 1
-// 3
-// 4
-// 5
-// 2
-// bye
+// work
+// done
 ```
 
-> Multiple deferred statements are executed in last-in-first-out (LIFO) order. This means that the most recently deferred function is executed first.
+Extra:
+
+- `defer` depends only on the surrounding function scope:
+
+  > `defer` is registered when execution reaches that line, but it runs when the surrounding function ends. It does not run when a block such as `if` or `for` ends, even if it is inside them.
+
+  ```go
+  func main() {
+      fmt.Println("start")
+
+      if true {
+          defer fmt.Println("inside if")
+          fmt.Println("in block")
+      }
+
+      fmt.Println("end of function")
+  }
+
+  // start
+  // in block
+  // end of function
+  // inside if
+  ```
+
+- Multiple defers:
+
+  > Multiple deferred statements are executed in last-in-first-out (LIFO) order. This means that the most recently deferred function is executed first.
+
+  ```go
+  func main() {
+      defer sayBye()
+
+      fmt.Println("1")
+
+      defer fmt.Println("2")
+
+      fmt.Println("3")
+
+      fmt.Println(myFunc())
+  }
+
+  func myFunc() string {
+      defer fmt.Println("4")
+      return "5"
+  }
+
+  func sayBye() {
+      fmt.Println("bye")
+  }
+
+  // 1
+  // 3
+  // 4
+  // 5
+  // 2
+  // bye
+  ```
