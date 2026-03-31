@@ -82,6 +82,11 @@ Extra:
 - Slicing an array:
 
   > Slicing creates a slice from a selected range of elements in an array.
+  >
+  > `arr[low:high]`
+  >
+  > - `low`: the starting index, inclusive.
+  > - `high`: the ending index, exclusive.
 
   ```go
   arr := [5]int{0, 10, 20, 30, 40}
@@ -89,7 +94,7 @@ Extra:
   fmt.Printf("%T, %v", slice, slice) // []int, [10 20]
   ```
 
-  > Examples:
+  > Variants:
   >
   > ```go
   > slice1 := arr[2:4] // [20 30] (elements at index 2 and 3)
@@ -98,6 +103,22 @@ Extra:
   > slice4 := arr[:]   // [0 10 20 30 40] (the entire array)
   > ```
 
+  <Callout>
+
+  Slicing does not copy the elements. It creates a slice that refers to the same underlying array.
+
+  ```go
+  slice[0] = 99
+  fmt.Printf("%T, %v", slice, slice) // []int, [99 20]
+  fmt.Printf("%T, %v", arr, arr)     // [5]int, [0 99 20 30 40]
+
+  slice = append(slice, 100)
+  fmt.Printf("%T, %v", slice, slice) // []int, [99 20 100]
+  fmt.Printf("%T, %v", arr, arr)     // [5]int, [0 99 20 100 40]
+  ```
+
+  </Callout>
+
 ## Slices
 
 In Go, a slice is a dynamically-sized, flexible view into the elements of an array.
@@ -105,19 +126,23 @@ In Go, a slice is a dynamically-sized, flexible view into the elements of an arr
 - Declare:
 
   ```go
-  var slice []int // zero length
+  var slice []int // []int(nil) // (nil slice, zero length)
   ```
 
   > Or initialize at declaration:
   >
   > ```go
-  > slice := []int{1, 2, 3, 4, 5}
+  > slice := []int{} // []int{} (non-nil, zero length)
+  > ```
+  >
+  > ```go
+  > slice := []int{1, 2, 3, 4, 5} // []int{1, 2, 3, 4, 5}
   > ```
 
   > Or using the `make` function:
   >
   > ```go
-  > slice := make([]int, 5) // [0 0 0 0 0] (non-zero length but zero valued)
+  > slice := make([]int, 5) // []int{0, 0, 0, 0, 0} (non-zero length but zero valued)
   > ```
 
   <Callout>
@@ -252,6 +277,27 @@ Extra:
   slice2d[1][1] = "x"
   fmt.Println(slice2d) // [[a b c] [d x] [f g]]
   ```
+
+- Full slice expression:
+
+  > With a normal slice expression (`x[low:high]`), the resulting slice inherits the remaining `cap(x)-low` capacity of the underlying array.
+  >
+  > ```go
+  > a := []int{1, 2, 3, 4, 5}
+  >
+  > b := a[1:2]
+  >
+  > fmt.Printf("a:%v, len:%v, cap:%v", a, len(a), cap(a)) // a:[1 2 3 4 5], len:5, cap:5
+  > fmt.Printf("b:%v, len:%v, cap:%v", b, len(b), cap(b)) // b:[2], len:1, cap:4
+  > ```
+
+  > With a full slice expression (`x[low:high:max]`), you can control that capacity explicitly (`max-low`).
+  >
+  > ```go
+  > c := a[1:2:3]
+  >
+  > fmt.Printf("c:%v, len:%v, cap:%v", c, len(c), cap(c)) // c:[2], len:1, cap:2
+  > ```
 
 ## Maps
 
