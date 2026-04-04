@@ -446,6 +446,8 @@ A struct is a collection of uniquely named elements called fields, each of which
   user := person{name: "John", age: 35}
   ```
 
+  <Callout>Any field that is not explicitly specified is automatically assigned the zero value of its type.</Callout>
+
   > Or zero valued:
   >
   > ```go
@@ -515,7 +517,7 @@ Extra:
 
 Struct tags are metadata attached to struct fields. They are typically used by packages like `encoding/json` to control how fields are encoded or decoded.
 
-> By default, Go uses struct field names as they are when encoding to JSON or other formats. Suppose you need to export the fields, which requires the field names to be capitalized. This often results in capitalized field names in the JSON output, which may not match your desired JSON structure or naming convention. Struct tags allow you to specify how the fields should be named in other formats.
+> By default, Go encodes fields using their names. In cases where fields must be capitalized but a different naming format is required in the output, struct tags allow you to define how fields appear in external formats, such as custom JSON names.
 
 ```go
 type User struct {
