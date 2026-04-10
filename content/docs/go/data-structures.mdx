@@ -448,6 +448,14 @@ A struct is a collection of uniquely named elements called fields, each of which
 
   <Callout>Any field that is not explicitly specified is automatically assigned the zero value of its type.</Callout>
 
+  > Or without field names:
+  >
+  > ```go
+  > user := person{"John", 35}
+  > ```
+  >
+  > > When field names are omitted, values must be given in the exact declaration order, and every field must be provided.
+
   > Or zero valued:
   >
   > ```go
@@ -471,6 +479,9 @@ A struct is a collection of uniquely named elements called fields, each of which
 Extra:
 
 - Embedded and nested structs:
+
+  > - The embedded struct's fields are promoted to the outer struct and can be accessed directly as if they belong to it.
+  > - The nested struct remains a separate field and its fields must be accessed through that field name.
 
   ```go
   type address struct {

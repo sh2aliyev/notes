@@ -102,3 +102,51 @@ func main() {
 ```
 
 </Callout>
+
+Extra:
+
+- Embedded structs with methods.
+
+  > Methods from an embedded struct are aslo promoted to the outer struct and can be called directly.
+  >
+  > ```go
+  > type person struct {
+  > 	name string
+  > 	age  int
+  > }
+  >
+  > func (p person) sayHello() {
+  > 	fmt.Println("Hello, my name is", p.name)
+  > }
+  >
+  > type employee struct {
+  > 	person
+  > 	company string
+  > }
+  >
+  > func main() {
+  > 	user := person{name: "John", age: 35}
+  > 	user.sayHello() // Hello, my name is John
+  >
+  > 	user2 := employee{person{name: "Jane", age: 28}, "Google"}
+  > 	user2.sayHello() // Hello, my name is Jane
+  > }
+  > ```
+
+  > If the outer struct defines a method with the same name, that method is used instead of the promoted one. The embedded method is shadowed but can still be accessed through the embedded field.
+  >
+  > ```go
+  > func (e employee) sayHello() {
+  > 	fmt.Println("Hello, my name is", e.name, "and I'm working at", e.company)
+  > }
+  >
+  > func main() {
+  > 	user := person{name: "John", age: 35}
+  > 	user.sayHello() // Hello, my name is John
+  >
+  > 	user2 := employee{person{name: "Jane", age: 28}, "Google"}
+  > 	user2.sayHello() // Hello, my name is Jane and I'm working at Google
+  >
+  > 	user2.person.sayHello() // Hello, my name is Jane
+  > }
+  > ```
