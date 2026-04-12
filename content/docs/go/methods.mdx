@@ -60,50 +60,84 @@ type person struct {
   user.sayHello() // Hello, my name is John
   ```
 
-<Callout>
-
-To allow a method to modify the original data in types that use `pass-by-value` (Pure Value Types) semantics, the method must use a pointer receiver.
-
-```go
-func (p *person) changeName(name string) {
-	p.name = name // `(*p).name = name` is also valid, but unnecessary in Go.
-}
-
-func main() {
-	user := person{name: "John", age: 35}
-
-	user.sayHello() // Hello, my name is John
-
-	user.changeName("Jane")
-
-	user.sayHello() // Hello, my name is Jane
-}
-```
-
-> Go automatically dereferences struct pointers when accessing fields. That is why we write `p.name = name` instead of `(*p).name = name`.
-
-Another example:
-
-```go
-type myCounter int
-
-func (mc *myCounter) increment() {
-	*mc++
-}
-
-func main() {
-	count := myCounter(0)
-
-	count.increment()
-	count.increment()
-
-	fmt.Printf("count: %v\n", count) // count: 2
-}
-```
-
-</Callout>
-
 Extra:
+
+- Pointer receivers.
+
+  > To allow a method to modify the original data in types that use `pass-by-value` (Pure Value Types) semantics, the method must use a pointer receiver.
+  >
+  > ```go
+  > type myCounter int
+  >
+  > func (mc *myCounter) increment() {
+  > 	*mc++
+  > }
+  >
+  > func main() {
+  > 	count := myCounter(0)
+  >
+  > 	count.increment()
+  > 	count.increment()
+  >
+  > 	fmt.Printf("count: %v\n", count) // count: 2
+  > }
+  > ```
+  >
+  > Another example:
+  >
+  > ```go
+  > func (p *person) changeName(name string) {
+  > 	p.name = name // `(*p).name = name` is also valid, but unnecessary in Go.
+  > }
+  >
+  > func main() {
+  > 	user := person{name: "John", age: 35}
+  >
+  > 	user.sayHello() // Hello, my name is John
+  >
+  > 	user.changeName("Jane")
+  >
+  > 	user.sayHello() // Hello, my name is Jane
+  > }
+  > ```
+  >
+  > > Go automatically dereferences struct pointers (`T` to `*T`) when accessing fields. That is why we write `p.name = name` instead of `(*p).name = name`.
+
+  <Callout type="warn">
+
+  The automatic `T` to `*T` conversion only happens when the value is addressable.
+
+  A value is addressable when it has a stable memory location.
+
+  ```go
+  type person struct {
+    name string
+  }
+
+  func (p *person) sayHello() {
+    fmt.Println("Hello, my name is", p.name)
+  }
+
+  func main() {
+    user := person{name: "John"}
+
+    user.sayHello() // Hello, my name is John
+
+    person{name: "John"}.sayHello() // <-- compiler: cannot call pointer method sayHello on person
+  }
+  ```
+
+  > `user` is a variable, so it has a stable address and Go can take `&user` implicitly when calling the pointer receiver method.
+
+  > `person{name: "John"}` is a temporary value with no stable address, so the compiler cannot take its address, which is why the call does not compile.
+  >
+  > > To make it work, the address must be taken explicitly:
+  > >
+  > > ```go
+  > > (&person{name: "John"}).sayHello() // Hello, my name is John
+  > > ```
+
+  </Callout>
 
 - Embedded structs with methods.
 
