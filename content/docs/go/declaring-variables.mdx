@@ -82,7 +82,11 @@ Constants are fixed values that cannot be changed after they are declared. They 
 const varName type = value
 ```
 
-<Callout>Only booleans, numbers and strings can be constants.</Callout>
+<Callout type="warn">
+  In Go, constants must be fully known at compile time. They cannot depend on variables, function calls, or any runtime
+  values. Only expressions that the compiler can evaluate during compilation are allowed, and constants are limited to
+  basic types like booleans, numbers, and strings.
+</Callout>
 
 - Constants can be declared without explicit types, but they must have values:
 
