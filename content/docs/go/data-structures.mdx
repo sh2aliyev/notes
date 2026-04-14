@@ -352,6 +352,8 @@ Maps in Go are unordered collections of key-value pairs.
 
 - Remove:
 
+  > Can safely be used even on a non-existent key.
+
   ```go
   delete(m, "two")
   fmt.Println(m) // map[one:1 three:3]
