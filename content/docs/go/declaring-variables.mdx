@@ -2,7 +2,7 @@
 title: Declaring Variables
 ---
 
-<Callout type="warn">You cannot re-declare a variable that has already been declared in the same scope.</Callout>
+<Callout type="warn">Re-declaration of a variable in the same scope is not allowed.</Callout>
 
 ## Using the `var` keyword
 
@@ -10,30 +10,30 @@ title: Declaring Variables
 var varName type = value
 ```
 
-> Variables declared without an explicit initial value are given their zero value.
+> Variables declared without an explicit initial value receive their zero value.
 
-- You must specify either `type` or `value` (or both):
+- Either `type`, `value`, or both must be specified:
 
   ```go
   var name string = "John"  // explicit type and value
-  var surname = "Doe"       // type is inferred as string
-  var age int16             // explicit type, initialized to the zero value (0)
+  var surname = "Doe"       // type inferred as string
+  var age int16             // explicit type, zero value (0)
   ```
 
-- Declaring multiple variables of the same or different types on a single line:
+- Declaring multiple variables on single line, same or different types:
 
   ```go
   var name, age = "John", 30  // mixed types, types inferred
   var a, b, c int = 1, 2, 3   // all must be of the declared type
-  var x, y int                // both initialized to the zero value (0)
+  var x, y int                // both zero value (0)
   ```
 
-- Using grouped declaration syntax to declare variables together:
+- Grouped declaration:
 
   ```go
   var (
   	name    string = "John"
-  	surname        = "Doe"  // type is inferred as string
+  	surname        = "Doe"  // type inferred as string
   	age     int             // zero value (0)
   )
   ```
@@ -44,9 +44,9 @@ var varName type = value
 varName := value
 ```
 
-<Callout type="warn">Can only be used inside functions, not at the package level.</Callout>
+<Callout type="warn">Only valid inside functions, not at package level.</Callout>
 
-- Declaring multiple variables on a single line:
+- Multiple variables on single line:
 
   ```go
   name, age := "John", 30
@@ -54,11 +54,11 @@ varName := value
 
   <Callout>
 
-  You cannot re-declare a variable that has already been declared in the same scope.
+  Re-declaration of a variable in the same scope is not allowed.
 
   BUT
 
-  If at least one identifier on the left-hand side is new, this syntax is allowed.
+  If at least one identifier on the left side is new, this syntax is allowed.
 
   ```go
   x := 10
@@ -70,32 +70,32 @@ varName := value
   fmt.Println(x, y) // 20 30
   ```
 
-  The new identifiers are declared and the existing ones are reassigned.
+  New identifiers are declared and existing ones are reassigned.
 
   </Callout>
 
 ## Using the `const` keyword
 
-Constants are fixed values that cannot be changed after they are declared. They are read-only.
+Constants are fixed values and cannot change after declaration.
 
 ```go
 const varName type = value
 ```
 
 <Callout type="warn">
-  In Go, constants must be fully known at compile time. They cannot depend on variables, function calls, or any runtime
-  values. Only expressions that the compiler can evaluate during compilation are allowed, and constants are limited to
-  basic types like booleans, numbers, and strings.
+  Constants must be known at compile time. They cannot depend on variables, function calls, or any other runtime values.
+  Expressions that the compiler can evaluate during compilation are allowed. Constants are limited to booleans, numbers,
+  and strings.
 </Callout>
 
-- Constants can be declared without explicit types, but they must have values:
+- Constants may omit the type but must have a value:
 
   ```go
   const daysInWeek int = 7  // explicit type and value
   const hoursInDay = 24     // type is inferred as int
   ```
 
-- Declaring multiple constants in a single block:
+- Grouped declaration:
 
   ```go
   const (

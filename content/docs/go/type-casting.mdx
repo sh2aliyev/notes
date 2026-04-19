@@ -2,13 +2,13 @@
 title: Type Casting
 ---
 
-Type casting in Go means explicitly converting a value from one compatible type to another.
+Type casting in Go is the explicit conversion of a value from one compatible type to another.
 
 ```go
 newValue := targetType(value)
 ```
 
-> This is needed because Go is strict about types and does not allow automatic conversions. This helps prevent hidden bugs, makes code behavior predictable, and forces developers to be explicit about how values of different types should interact.
+> Go does not allow implicit type conversions. This prevents hidden bugs, keeps behavior predictable, and requires explicit control over how different types interact.
 >
 > ```go
 > a := 5.6 // float64
@@ -38,7 +38,7 @@ newValue := targetType(value)
   c := int32(a) + b // 150 (int32)
   ```
 
-- Casting from `string` to `[]byte` or `[]rune` converts it into different forms:
+- Casting from `string` to `[]byte` or `[]rune` converts it into different representations:
 
   ```go
   a := "1aé"
@@ -47,7 +47,7 @@ newValue := targetType(value)
   c := []rune(a) // [49 97 233] (Unicode code points)
   ```
 
-- Some types cannot be cast directly if they are not compatible with each other:
+- Some types cannot be cast directly if they are not compatible:
 
   ```go
   a := "123"

@@ -44,8 +44,8 @@ Go has three basic data types: `boolean`, `numeric` and `string`. Each data type
 
 Extra:
 
-- > - A string written with double quotes is an interpreted string literal. The compiler processes escape sequences such as `\n`, `\t`, `\uXXXX`, and `\xNN`, converting them into their corresponding byte values. It cannot span multiple lines directly in source code.
-  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written, with no escape processing. Backslashes have no special meaning, and sequences like `\n` remain literal text. It may span multiple lines and retains all whitespace.
+- > - A string written with double quotes is an interpreted string literal. The compiler processes escape sequences such as `\n`, `\t`, `\uXXXX` and `\xNN`, converting them into their corresponding byte values. It cannot span multiple lines directly in source code.
+  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written, with no escape processing. Backslashes have no special meaning and sequences like `\n` remain literal text. It may span multiple lines and retains all whitespace.
 
 - > Technically, a string is a read-only slice of bytes:
   >
@@ -64,7 +64,7 @@ Extra:
   > // 3 100
   > ```
   >
-  > but there are many characters that cannot be represented by only a single byte:
+  > But some characters cannot be represented by a single byte:
   >
   > ```go
   > str := "é"
@@ -73,9 +73,9 @@ Extra:
   >
   > > `len()` returns the byte count, not the character count.
   >
-  > In Go, strings are encoded using UTF-8. In other words, a string represents a sequence of characters encoded as UTF-8 bytes.
+  > Go strings are encoded using UTF-8. A string is a sequence of UTF-8 encoded bytes.
   >
-  > UTF-8 supports a wide range of characters and symbols, and it uses a variable-length encoding scheme. This means a character can be represented by one or more bytes (up to 4), depending on its Unicode code point.
+  > UTF-8 uses a variable length encoding. A character may use 1 to 4 bytes depending on its Unicode code point.
   >
   > | First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
   > | ---------------- | --------------- | -------- | -------- | -------- | -------- |
@@ -97,18 +97,18 @@ Extra:
   > >
   > > Proof (decoding):
   > >
-  > > > `195` is `11000011` in binary, and `169` is `10101001`.
+  > > > `195` is `11000011` and `169` is `10101001`.
   > > >
-  > > > Matching the bytes using the table above:
+  > > > Matching the bytes using the table above (2nd row):
   > > >
-  > > > - First byte: `11000011` (110xxxyy) -> `110` + `00011`.
-  > > > - Second byte: `10101001` (10yyzzzz) -> `10` + `101001`.
+  > > > - First byte: `11000011` (110xxxyy) -> `110` and `00011`.
+  > > > - Second byte: `10101001` (10yyzzzz) -> `10` and `101001`.
   > > >
-  > > > Extracted result: `00011` + `101001` = `0001101001` (binary) = `233` (decimal).
+  > > > Combining `00011` and `101001` gives `00011101001` (binary) = `233` (decimal).
   >
   > Extra:
   >
-  > > When you iterate over a string using `range`, Go automatically decodes each UTF-8 character and returns its Unicode code point:
+  > > When iterating with `range`, Go automatically decodes each UTF-8 character and returns its Unicode code point:
   > >
   > > ```go
   > > str := "Héllo" // [72 195 169 108 108 111]
@@ -122,26 +122,4 @@ Extra:
   > > // 3 108
   > > // 4 108
   > > // 5 111
-  > > ```
-  >
-  > > If you do not care about memory (always uses 4 bytes per character) and want more flexibility (manipulating characters), just convert the string to a slice of runes:
-  > >
-  > > ```go
-  > > str := []rune("Héllo") // [72 233 108 108 111]
-  > >
-  > > fmt.Printf("str[1]: %v, type: %T\n", str[1], str[1]) // str[1]: 233, type: int32
-  > > fmt.Println(unsafe.Sizeof(str[0])) // 4 (total str size: 4x5=20 bytes)
-  > >
-  > > for i, v := range str {
-  > > 	fmt.Println(i, v)
-  > > }
-  > >
-  > > // 0 72
-  > > // 1 233
-  > > // 2 108
-  > > // 3 108
-  > > // 4 111
-  > >
-  > > str[1] = 'e'
-  > > fmt.Println(string(str)) // Hello
   > > ```
