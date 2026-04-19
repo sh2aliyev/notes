@@ -2,7 +2,7 @@ import { getPageImage, source } from '@/lib/source';
 import { notFound } from 'next/navigation';
 import { ImageResponse } from '@takumi-rs/image-response';
 import { generate as DefaultImage } from 'fumadocs-ui/og/takumi';
-import { APP_NAME, indexMetaMap } from '@/consts';
+import { appName, indexMetaMap } from '@/lib/shared';
 import { BookmarkIcon } from '@/components/icons/bookmark';
 import { getDirname, getFallbackDirname, isIndexPage } from '@/lib/utils';
 
@@ -27,11 +27,11 @@ export async function GET(_req: Request, { params }: RouteContext<'/og/docs/[...
   return new ImageResponse(
     <DefaultImage
       title={page.data.title}
+      description={desc}
+      icon={<BookmarkIcon width={96} height={96} />}
       primaryColor="#450a0a"
       primaryTextColor="#b91c1c"
-      description={desc}
-      site={APP_NAME}
-      icon={<BookmarkIcon width={96} />}
+      site={appName}
     />,
     {
       width: 1200,

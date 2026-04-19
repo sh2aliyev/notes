@@ -1,4 +1,4 @@
-import { getPageImage, source } from '@/lib/source';
+import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
 import {
   DocsBody,
   DocsDescription,
@@ -12,7 +12,7 @@ import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { getDirname, isIndexPage } from '@/lib/utils';
-import { indexMetaMap, REPO_INFO } from '@/consts';
+import { gitConfig, indexMetaMap } from '@/lib/shared';
 import { createElement } from 'react';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
@@ -21,7 +21,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   if (!page) notFound();
 
   const MDX = page.data.body;
-  const markdownUrl = `/llms.mdx/docs/${[...page.slugs, 'index.mdx'].join('/')}`;
+  const markdownUrl = getPageMarkdownUrl(page).url;
 
   const isIndex = isIndexPage(page.path);
   const dirName = getDirname(page.slugs, isIndex);
@@ -50,7 +50,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
             <MarkdownCopyButton markdownUrl={markdownUrl} />
             <ViewOptionsPopover
               markdownUrl={markdownUrl}
-              githubUrl={`https://github.com/${REPO_INFO.user}/${REPO_INFO.repo}/blob/${REPO_INFO.branch}/content/docs/${page.path}`}
+              githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/content/docs/${page.path}`}
             />
           </div>
         </>

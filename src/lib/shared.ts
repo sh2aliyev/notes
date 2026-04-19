@@ -2,10 +2,15 @@ import { DsaIcon } from '@/components/icons/dsa';
 import { GitIcon } from '@/components/icons/git';
 import { GoIcon } from '@/components/icons/go';
 
-export const APP_NAME = 'sh2a | Notes';
-export const APP_DESC = 'My Beloved Tech Notes';
-export const WEB_URL = 'https://notes.sh2a.org';
-export const REPO_INFO = {
+export const docsRoute = '/docs';
+export const docsImageRoute = '/og/docs';
+export const docsContentRoute = '/llms.mdx/docs';
+
+export const appName = 'sh2a | Notes';
+export const appDesc = 'My Beloved Tech Notes';
+export const webUrl = 'https://notes.sh2a.org';
+
+export const gitConfig = {
   user: 'sh2aliyev',
   repo: 'notes',
   branch: 'main',

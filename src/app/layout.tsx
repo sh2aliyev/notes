@@ -2,27 +2,27 @@ import { Provider } from '@/components/provider';
 import './global.css';
 import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
-import { APP_DESC, APP_NAME, WEB_URL } from '@/consts';
+import { appDesc, appName, webUrl } from '@/lib/shared';
 
 const inter = Inter({
   subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(WEB_URL),
-  title: APP_NAME,
-  description: APP_DESC,
+  metadataBase: new URL(webUrl),
+  title: appName,
+  description: appDesc,
   keywords: ['notes', 'handbook', 'docs', 'tech', 'sh2a'],
   openGraph: {
     type: 'website',
-    url: WEB_URL,
-    title: APP_NAME,
-    description: APP_DESC,
-    siteName: APP_NAME,
+    url: webUrl,
+    title: appName,
+    description: appDesc,
+    siteName: appName,
     images: [
       {
-        url: `${WEB_URL}/icon-96x96.png`,
-        alt: APP_NAME,
+        url: `${webUrl}/icon-96x96.png`,
+        alt: appName,
       },
     ],
   },
