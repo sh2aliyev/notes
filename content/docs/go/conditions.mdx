@@ -4,19 +4,19 @@ title: Conditions
 
 ## If-else Statement
 
-Executes a block of code when a condition is true.
+Executes a block when a condition evaluates to `true`.
 
 ```go
 if condition {
-    // code runs if condition is true
+    // runs if condition is true
 } else if anotherCondition {
-    // code runs if it gets here and anotherCondition is true
+    // runs if it gets here and this condition is true
 } else {
-    // code runs if none of the above are true
+    // runs if none of the above are true
 }
 ```
 
-- Go lets you declare a variable that only exists in the `if` and `else` blocks:
+- Variable declaration is allowed inside the `if` statement, with scope limited to the `if-else` block:
 
   ```go
   s := "Hello"
@@ -36,24 +36,24 @@ if condition {
 
 ## Switch Statement
 
-Executes the block for the matching case.
+Executes the block for the first matching case.
 
 ```go
 switch expression {
 case value1:
-    // code runs if expression == value1
+    // runs if expression == value1
 case value2:
-    // code runs if expression == value2
+    // runs if expression == value2
 case value3, value4:
-    // code runs if expression == value3 or value4
+    // runs if expression == value3 or value4
 default:
-    // code runs if expression does not match any case
+    // runs if no case matches
 }
 ```
 
-> Go auto `break` after each case implicitly, but the keyword can still be used.
+> Each case ends with an implicit `break` (the keyword itself can still be used).
 
-- Using the `fallthrough` keyword overrides the implicit `break` behavior and continues execution into the next case:
+- `fallthrough` overrides the implicit `break` and continues into the next case:
 
   ```go
   a := 2
@@ -76,7 +76,7 @@ default:
   // Three
   ```
 
-- You can also declare a variable for case matching that only exists within the `switch` block:
+- Variable declaration is allowed inside the `switch` statement, with scope limited to the `switch` block:
 
   ```go
   s := "hi"
@@ -95,7 +95,7 @@ default:
   fmt.Println("n is:", n) // <-- compiler: undefined: n
   ```
 
-- Omitting the expression makes the `switch` statement act like an `if-else` statement:
+- Omitting the expression makes `switch` behave like an `if-else` chain.
 
   ```go
   a := 3

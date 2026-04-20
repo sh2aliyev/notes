@@ -50,7 +50,7 @@ title: Loops
 
 - Range loop:
 
-  > Used to loop over integers, strings (runes), arrays, slices, maps, and channels.
+  > Used with integers, strings, arrays, slices, maps, and channels.
 
   ```go
   for i := range 3 {
@@ -76,7 +76,7 @@ title: Loops
 
 ## Control Keywords
 
-- `break`: Stops the loop completely.
+- `break`: Stops (quits) the loop.
 
   ```go
   for i := 0; i < 5; i++ {
@@ -110,7 +110,7 @@ title: Loops
 
 ### Labeled Loops
 
-A labeled loop is a loop with a name that lets `break` or `continue` target a specific loop when loops are nested.
+A labeled loop allows `break` or `continue` to target a specific loop in nested structures.
 
 ```go
 outerLoop:

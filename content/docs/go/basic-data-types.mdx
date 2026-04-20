@@ -2,7 +2,7 @@
 title: Basic Data Types
 ---
 
-Go has three basic data types: `boolean`, `numeric` and `string`. Each data type has a zero value that is automatically assigned when a variable is declared without an initial value.
+Go has three basic data types: `boolean`, `numeric`, and `string`. Each type has a zero value that is assigned when a variable is declared without initialization.
 
 ## Boolean
 
@@ -36,16 +36,16 @@ Go has three basic data types: `boolean`, `numeric` and `string`. Each data type
 
 ## String
 
-| Keyword  | Values                                                  |
-| -------- | ------------------------------------------------------- |
-| `string` | "anything surrounded by double quotes" or \`backticks\` |
+| Keyword  | Values                                   |
+| -------- | ---------------------------------------- |
+| `string` | "text in double quotes" or \`backticks\` |
 
 > Zero value: `""`.
 
 Extra:
 
-- > - A string written with double quotes is an interpreted string literal. The compiler processes escape sequences such as `\n`, `\t`, `\uXXXX` and `\xNN`, converting them into their corresponding byte values. It cannot span multiple lines directly in source code.
-  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written, with no escape processing. Backslashes have no special meaning and sequences like `\n` remain literal text. It may span multiple lines and retains all whitespace.
+- > - A string written with double quotes is an interpreted string literal. Escape sequences such as `\n`, `\t`, `\uXXXX` and `\xNN` are processed into their byte values. It cannot span multiple lines in source code.
+  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written with no escape processing. It may span multiple lines.
 
 - > Technically, a string is a read-only slice of bytes:
   >
@@ -64,7 +64,7 @@ Extra:
   > // 3 100
   > ```
   >
-  > But some characters cannot be represented by a single byte:
+  > Some characters require more than one byte:
   >
   > ```go
   > str := "é"
@@ -73,9 +73,9 @@ Extra:
   >
   > > `len()` returns the byte count, not the character count.
   >
-  > Go strings are encoded using UTF-8. A string is a sequence of UTF-8 encoded bytes.
+  > Go strings use UTF-8 encoding. A string is a sequence of UTF-8 encoded bytes.
   >
-  > UTF-8 uses a variable length encoding. A character may use 1 to 4 bytes depending on its Unicode code point.
+  > UTF-8 uses variable length encoding. A character may use 1 to 4 bytes depending on its Unicode code point.
   >
   > | First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
   > | ---------------- | --------------- | -------- | -------- | -------- | -------- |
@@ -86,7 +86,7 @@ Extra:
   >
   > Explanation:
   >
-  > > For example, the character "`é`" has a Unicode code point of `U+00E9` (233 in decimal). Since `233` is in the range `128` to `2047`, it is represented in UTF-8 using two bytes:
+  > > The character "`é`" has Unicode code point `U+00E9` (233). Since `233` is in the range `128` to `2047`, it uses two bytes in UTF-8:
   > >
   > > ```go
   > > str := "é" // [195 169]
@@ -108,7 +108,7 @@ Extra:
   >
   > Extra:
   >
-  > > When iterating with `range`, Go automatically decodes each UTF-8 character and returns its Unicode code point:
+  > > When iterating with `range`, Go decodes each UTF-8 character and returns its Unicode code point:
   > >
   > > ```go
   > > str := "Héllo" // [72 195 169 108 108 111]

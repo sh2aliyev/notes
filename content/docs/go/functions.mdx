@@ -20,7 +20,7 @@ title: Functions
 
 Extra:
 
-- Functions can have multiple return values:
+- Multiple return values:
 
   ```go
   func swap(a, b int) (int, int) {
@@ -39,7 +39,7 @@ Extra:
 
 - Named return values:
 
-  > With named return values, you can use return without specifying values. The function automatically returns the named variables.
+  > The function automatically returns the named variables.
 
   ```go
   func calculate(x int) (result int) {
@@ -50,7 +50,7 @@ Extra:
 
 - Variadic functions:
 
-  > Variadic functions accept zero or more arguments of the same type, which are treated as a slice inside the function.
+  > Accept zero or more arguments of the same type, which are treated as a slice inside the function.
 
   ```go
   func sum(numbers ...int) int {
@@ -68,7 +68,7 @@ Extra:
 
 - First-class functions:
 
-  > In Go, functions are first-class values. They can be assigned to variables, passed as arguments, and returned from functions.
+  > Functions can be assigned, passed, and returned.
 
   ```go
   func main() {
@@ -103,23 +103,23 @@ Extra:
   }
   ```
 
-  - Assigning an anonymous function to a variable:
-
-    ```go
-    myVar := func(a, b int) {
-        fmt.Println(a + b)
-    }
-
-    myVar(1, 2) // 3
-    ```
+  > Assigning an anonymous function to a variable:
+  >
+  > ```go
+  > myVar := func(a, b int) {
+  >    fmt.Println(a + b)
+  > }
+  >
+  > myVar(1, 2) // 3
+  > ```
 
 ## Pass-by Value & Reference
 
-In Go, all function arguments are passed by value. The difference is in what gets copied.
+All arguments in Go are passed by value. The difference is what gets copied.
 
 - Pass-by Value:
 
-  > With pure value types, Go copies the actual data. The function works with its own copy, so any change made inside the function stays local and does not affect the original.
+  > Pure value types copy the actual data. The function works with its own copy. Changes made inside the function stay local and do not affect the original.
 
   ```go
   func increment(num int) {
@@ -136,7 +136,7 @@ In Go, all function arguments are passed by value. The difference is in what get
 
   <Callout>
 
-  Pure Value Types (`pass-by-value`): Booleans, Numerics, Arrays, Structs.
+  Pure Value Types (`pass-by-value`): **Booleans**, **Numerics**, **Arrays**, **Structs**.
 
   ```go
   a := [3]int{2, 4, 6} // array
@@ -150,7 +150,7 @@ In Go, all function arguments are passed by value. The difference is in what get
 
 - Pass-by Reference:
 
-  > With reference-containing types, Go copies the value, but that value contains a reference to shared underlying data. So changes inside the function affect that shared data.
+  > Reference-containing types copy a value that references shared underlying data. Changes to that data are visible outside.
 
   ```go
   func change(s []int) {
@@ -168,7 +168,7 @@ In Go, all function arguments are passed by value. The difference is in what get
 
   <Callout>
 
-  Reference-Containing Types (`pass-by-reference`): Strings (immutable), Slices, Maps, Channels, Pointers (&x).
+  Reference-Containing Types (`pass-by-reference`): **Strings** (immutable), **Slices**, **Maps**, **Channels**, **Pointers** (&x).
 
   ```go
   a := []int{2, 4, 6} // slice
@@ -182,7 +182,7 @@ In Go, all function arguments are passed by value. The difference is in what get
 
   <Callout type="warn">
 
-  Even when a value allows modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside a function only changes the local copy and does not affect the original variable in the caller.
+  Even though a value may allow modification of shared underlying data, the variable itself is still passed by value. Reassigning the parameter inside the function changes only the local copy and does not affect the original variable in the caller.
 
   ```go
   func reassignSlice(s []int) {
@@ -217,7 +217,7 @@ In Go, all function arguments are passed by value. The difference is in what get
 
 ## Closures
 
-Closures are functions that capture and use variables from their surrounding scope, even after that scope has finished executing.
+Closures are functions that capture and use variables from their surrounding scope, even after that scope ends.
 
 Examples:
 
@@ -279,7 +279,7 @@ Examples:
 
 ## The `defer` Keyword
 
-The `defer` keyword allows us to execute a function or line of code at the end of the current function's execution.
+The `defer` keyword allows a function call or line of code to execute at the end of the current function's execution.
 
 ```go
 func main() {
@@ -295,7 +295,7 @@ Extra:
 
 - `defer` depends only on the surrounding function scope:
 
-  > `defer` is registered when execution reaches that line, but it runs when the surrounding function ends. It does not run when a block such as `if` or `for` ends, even if it is inside them.
+  > `defer` is registered when execution reaches that line. but it runs when the surrounding function ends. It does not run when a block such as `if` or `for` ends, even if it appears inside them.
 
   ```go
   func main() {
@@ -317,7 +317,7 @@ Extra:
 
 - Multiple defers:
 
-  > Multiple deferred statements are executed in last-in-first-out (LIFO) order. This means that the most recently deferred function is executed first.
+  > Multiple deferred statements are executed in last-in-first-out (LIFO) order. The most recently deferred function runs first.
 
   ```go
   func main() {

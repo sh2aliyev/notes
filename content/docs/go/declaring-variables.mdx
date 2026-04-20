@@ -20,11 +20,11 @@ var varName type = value
   var age int16             // explicit type, zero value (0)
   ```
 
-- Declaring multiple variables on single line, same or different types:
+- Multiple variables in a single line, same or different types:
 
   ```go
-  var name, age = "John", 30  // mixed types, types inferred
-  var a, b, c int = 1, 2, 3   // all must be of the declared type
+  var name, age = "John", 30  // mixed types, inferred
+  var a, b, c int = 1, 2, 3   // all must match the declared type
   var x, y int                // both zero value (0)
   ```
 
@@ -33,7 +33,7 @@ var varName type = value
   ```go
   var (
   	name    string = "John"
-  	surname        = "Doe"  // type inferred as string
+  	surname        = "Doe"  // inferred as string
   	age     int             // zero value (0)
   )
   ```
@@ -44,9 +44,9 @@ var varName type = value
 varName := value
 ```
 
-<Callout type="warn">Only valid inside functions, not at package level.</Callout>
+<Callout type="warn">Valid only inside functions, not at package level.</Callout>
 
-- Multiple variables on single line:
+- Multiple variables in a single line:
 
   ```go
   name, age := "John", 30
@@ -76,7 +76,7 @@ varName := value
 
 ## Using the `const` keyword
 
-Constants are fixed values and cannot change after declaration.
+Constants are fixed values that cannot change after declaration.
 
 ```go
 const varName type = value
@@ -88,7 +88,7 @@ const varName type = value
   and strings.
 </Callout>
 
-- Constants may omit the type but must have a value:
+- Constants declaration may omit the type but must include a value:
 
   ```go
   const daysInWeek int = 7  // explicit type and value
