@@ -4,7 +4,7 @@ title: Generics
 
 ## Generic Functions
 
-Generic functions let you use one function with different types while keeping compile-time type safety.
+Allow a single function to operate on multiple types while keeping compile-time type safety.
 
 > Syntax:
 >
@@ -16,13 +16,13 @@ Generic functions let you use one function with different types while keeping co
 
 Extra:
 
-- > Go does not support union types. You cannot write something like:
+- > Go does not support union types directly.
   >
   > ```go
-  > type number int | float64
+  > type number int | float64 // <-- syntax error
   > ```
   >
-  > Instead, you can use an interface to define a type set for use as a generic constraint:
+  > Instead, define a type set using an interface for use as a constraint:
   >
   > ```go
   > type number interface {
@@ -30,9 +30,9 @@ Extra:
   > }
   > ```
   >
-  > > The `|` operator is only valid in type constraints. It specifies that a type parameter may be one of several types.
+  > > The `|` operator is only valid in type constraints. It defines a set of allowed types for a type parameter.
   >
-  > then use it like:
+  > Usage:
   >
   > ```go
   > func add[T number](a T, b T) T {
@@ -40,7 +40,7 @@ Extra:
   > }
   > ```
   >
-  > > You can also use `|` directly without declaring a named interface:
+  > > The `|` operator can also be used inline without declaring a named constraint:
   > >
   > > ```go
   > > func add[T int | float64](a T, b T) T {
@@ -48,7 +48,7 @@ Extra:
   > > }
   > > ```
 
-- > If you want the constraint to also accept named types whose underlying type matches one of those types, use `~`:
+- > To include named types whose underlying type matches a constraint, use `~`:
   >
   > ```go
   > type number interface {
@@ -56,7 +56,7 @@ Extra:
   > }
   > ```
   >
-  > > Here, `~int` means `int` and any named type whose underlying type is `int`, and `~float64` means `float64` and any named type whose underlying type is `float64`.
+  > > `~int` means `int` and any named type with underlying type `int`. The same applies to `~float64`.
   >
   > ```go
   > type myInt int
@@ -75,7 +75,7 @@ Extra:
   >
   > > Why?
   > >
-  > > Because in Go, a named type is distinct from its underlying type, even if it uses the same representation.
+  > > Because in Go, named types are distinct from their underlying types, even if they share the same representation. The `~` operator allows constraints to match based on the underlying type instead of only the exact type.
   > >
   > > ```go
   > > type myInt int
@@ -171,7 +171,7 @@ Examples:
 
 ## Generic Types
 
-Generic types let you define a reusable type that works with different data types.
+Generic types define reusable structures that works with different data types.
 
 > Syntax:
 >

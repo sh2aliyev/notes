@@ -4,9 +4,9 @@ title: Interfaces
 
 ## Overview
 
-In Go, an interface is a type that defines a set of method signatures. A type satisfies an interface when it implements all of the methods declared by that interface.
+In Go, an interface is a type that defines a set of method signatures. A type satisfies an interface by implementing all of its methods.
 
-> Interfaces help you write flexible code by allowing functions to work with any type that provides the required methods. A type can satisfy multiple interfaces, and a single interface can be satisfied by many different types.
+> Interfaces enable flexible code. Functions can operate on any type that satisfies the required methods. A type may satisfy multiple interfaces, and an interface may be satisfied by many types.
 
 - Define:
 
@@ -17,7 +17,7 @@ In Go, an interface is a type that defines a set of method signatures. A type sa
   }
   ```
 
-  > Here, the `shape` interface defines two method signatures, `area()` and `perimeter()`. Any type that implements both methods satisfies `shape`.
+  > Here, the `shape` interface defines two method signatures: `area()` and `perimeter()`. Any type that implements both methods satisfies `shape`.
 
 - Implement:
 
@@ -50,11 +50,11 @@ In Go, an interface is a type that defines a set of method signatures. A type sa
   }
   ```
 
-  > Both `circle` and `rect` satisfy the `shape` interface because they implement all required methods. This happens automatically, with no explicit declaration.
+  > Both `circle` and `rect` satisfy `shape` by implementing all required methods. This happens automatically, no explicit declaration is needed.
 
   <Callout>
 
-  Interface satisfaction also depends on method receivers. Methods defined on a value receiver are part of both `T` and `*T`, while methods defined on a pointer receiver are part of only `*T`.
+  Interface satisfaction also depends on method receivers. Methods with value receivers belong to both `T` and `*T`. Methods with pointer receivers belong only to `*T`.
 
   ```go
   type speaker interface {
@@ -107,7 +107,7 @@ In Go, an interface is a type that defines a set of method signatures. A type sa
 
 Examples:
 
-1.  > Let's say you have a slice and want to sort it using the [`Sort` function ↗](https://pkg.go.dev/sort#Sort) from the `sort` package.
+1.  > Sorting a slice using [`Sort` function ↗](https://pkg.go.dev/sort#Sort) from the `sort` package.
     >
     > The `Sort` function accepts data that implements an interface. To pass the slice to it, we need to satisfy [that interface ↗](https://pkg.go.dev/sort#Interface). It requires us to have `Len() int`, `Less(i, j int) bool`, and `Swap(i, j int)` methods.
     >
@@ -211,7 +211,7 @@ Examples:
 
 ## Empty Interface
 
-An empty interface (`interface{}`) requires zero methods, so every type satisfies it. You can also use the alias `any` instead of `interface{}`.
+An empty interface (`interface{}`) defines zero methods, so all types satisfy it. The alias `any` can also be used instead of `interface{}`.
 
 ```go
 func main() {
@@ -227,7 +227,7 @@ func main() {
 
 ### Type Assertion
 
-A type assertion is an operation that compares an interface value against a specific type and returns the underlying value if it matches.
+A type assertion compares an interface value with a specific type and returns the underlying value if it matches.
 
 > Syntax:
 >
@@ -257,7 +257,7 @@ func main() {
 
 <Callout>
 
-You can also omit `ok`, but if the assertion fails, it causes a panic:
+Omitting `ok` causes a panic on failure:
 
 ```go
 func main() {
@@ -303,7 +303,7 @@ func main() {
 
 ### Type Switches
 
-A type switch is a `switch` statement that compares an interface value against multiple possible types.
+A type switch compares an interface value against multiple types.
 
 ```go
 func describe(i interface{}) {
@@ -325,7 +325,7 @@ func main() {
 
 ## Interface Composition
 
-Interface composition allows you to create new interfaces by combining existing ones.
+Interface composition combines existing interfaces into a new one.
 
 ```go
 type Reader interface {

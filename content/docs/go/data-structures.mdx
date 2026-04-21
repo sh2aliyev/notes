@@ -9,7 +9,7 @@ In Go, an array is a fixed-size, ordered collection of elements of the same type
 - Declare:
 
   ```go
-  var arr [5]int // [0 0 0 0 0] (zero valued)
+  var arr [5]int // [0 0 0 0 0] (zero-valued)
   ```
 
   > Or initialize at declaration:
@@ -33,7 +33,7 @@ In Go, an array is a fixed-size, ordered collection of elements of the same type
 
 <Callout>
 
-Array elements are stored in contiguous memory locations, meaning they are placed directly next to each other in memory.
+Array elements are stored in contiguous memory locations, placed directly next to each other in memory.
 
 ```go
 func main() {
@@ -45,7 +45,7 @@ func main() {
 }
 ```
 
-> Here, the type `int` is `int64` (because I'm on a 64-bit system), so each element takes up 8 bytes of memory. The addresses of the elements are spaced 8 bytes apart (`0` -> `8` -> `16`).
+> Here, `int` is `int64` (on a 64-bit system), so each element occupies 8 bytes. Element addresses are spaced 8 bytes apart (`0` -> `8` -> `16`).
 
 </Callout>
 
@@ -79,14 +79,14 @@ Extra:
   fmt.Println(arr2d) // [[1 2] [3 9] [5 6]]
   ```
 
-- Slicing an array:
+- Slicing an array (slice expression):
 
   > Slicing creates a slice from a selected range of elements in an array.
   >
   > `arr[low:high]`
   >
-  > - `low`: the starting index, inclusive.
-  > - `high`: the ending index, exclusive.
+  > - `low`: Starting index (inclusive).
+  > - `high`: Ending index (exclusive).
 
   ```go
   arr := [5]int{0, 10, 20, 30, 40}
@@ -97,15 +97,15 @@ Extra:
   > Variants:
   >
   > ```go
-  > slice1 := arr[2:4] // [20 30] (elements at index 2 and 3)
-  > slice2 := arr[:4]  // [0 10 20 30] (from the start to index 3)
-  > slice3 := arr[4:]  // [40] (from index 4 to the end)
-  > slice4 := arr[:]   // [0 10 20 30 40] (the entire array)
+  > slice1 := arr[2:4] // [20 30]
+  > slice2 := arr[:4]  // [0 10 20 30]
+  > slice3 := arr[4:]  // [40]
+  > slice4 := arr[:]   // [0 10 20 30 40]
   > ```
 
   <Callout>
 
-  Slicing does not copy the elements. It creates a slice that refers to the same underlying array.
+  Slicing does not copy elements. The new slice references the same underlying array.
 
   ```go
   slice[0] = 99
@@ -139,17 +139,17 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
   > slice := []int{1, 2, 3, 4, 5} // []int{1, 2, 3, 4, 5}
   > ```
 
-  > Or using the `make` function:
+  > Or using `make`:
   >
   > ```go
-  > slice := make([]int, 5) // []int{0, 0, 0, 0, 0} (non-zero length but zero valued)
+  > slice := make([]int, 5) // []int{0, 0, 0, 0, 0} (non-zero length but zero-valued)
   > ```
 
   <Callout>
 
-  Slices have a length, which is the number of elements they contain, and a capacity, which is the size of the underlying array they reference. The initial capacity is automatically set to match the initial length.
+  Slices have a length (number of elements) and a capacity (size of the underlying array). The initial capacity defaults to the initial length.
 
-  If you append elements to a slice beyond its current capacity, Go automatically handles this by allocating a larger (2x) array and copying the existing elements into it at a new memory address. This can be an expensive operation in terms of performance.
+  Appending beyond the current capacity allocates a larger (2x) array and copies elements to a new memory location. This is a performance-heavy operation.
 
   ```go
   var slice []int // slice is initially nil (has no underlying array).
@@ -172,7 +172,7 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
   fmt.Println(cap(slice)) // cap: 16
   ```
 
-  To improve performance, we can predefine the capacity of a slice. Predefining the capacity helps avoid unnecessary reallocations when appending elements.
+  Predefining capacity improves performance by avoiding unnecessary reallocations.
 
   ```go
   slice := make([]int, 0, 20) // the third argument specifies capacity.
@@ -182,7 +182,7 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
   fmt.Println(cap(slice)) // cap: 20
   ```
 
-  Predefining the capacity manually only makes sense when you have a reasonable knowledge of how the data will grow or change over time.
+  Predefining capacity only makes sense when you have reasonable knowledge of how the data will grow or change over time.
 
   </Callout>
 
@@ -214,9 +214,9 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
   }
   ```
 
-  Here, when creating the `b` slice, the `a` slice has a capacity of `7` and a length of `5`, which means it can add a new element without allocating a new array. So, `b` now references the same underlying array as `a`. The same thing happens when creating `c`. It also references the same array as `a`. At this point, because both `b` and `c` share the same underlying array, appending `2` through `c` updates the `1` that was appended through `b`.
+  Here, `a` has remaining capacity, `b` and `c` share the same backing array. Appending through one affects the other.
 
-  This unexpected behavior would not occur if there were not enough capacity for the new element. In that case, Go would allocate a new array and copy the existing elements to it, resulting in new addresses. But still, it is prone to go unexpected.
+  This unexpected behavior would not occur if there was not enough capacity for the new element. In that case, Go would allocate a new array and copy the existing elements to it, resulting in new addresses. But still, it is prone to go unexpected.
 
   </Callout>
 
@@ -230,7 +230,7 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
 
   <Callout>
 
-  The `...` is called the variadic expansion (or ellipsis) operator, and it expands a slice into individual elements.
+  The `...` (ellipsis/expansion) operator expands a slice into individual elements.
 
   ```go
   slice := []int{2, 4, 6}
@@ -245,7 +245,7 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
 
 - Remove:
 
-  > Remove all elements except the first two:
+  > Keep only the first two:
   >
   > ```go
   > slice = slice[:2]
@@ -257,15 +257,15 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
   > slice = slice[:len(slice)-1]
   > ```
 
-  > Remove a specific indexed element:
+  > Remove a specific index:
   >
   > ```go
-  > slice = append(slice[:2], slice[3:]...) // removes the element at index 2
+  > slice = append(slice[:2], slice[3:]...) // removes index 2
   > ```
 
 Extra:
 
-- Multi-dimensional slices:
+- Multi dimensional slices:
 
   ```go
   slice2d := [][]string{
@@ -291,7 +291,7 @@ Extra:
   > fmt.Printf("b:%v, len:%v, cap:%v", b, len(b), cap(b)) // b:[2], len:1, cap:4
   > ```
 
-  > With a full slice expression (`x[low:high:max]`), you can control that capacity explicitly (`max-low`).
+  > Full slice expression (`x[low:high:max]`) allows explicit capacity control (`max-low`).
   >
   > ```go
   > c := a[1:2:3]
@@ -315,13 +315,13 @@ Maps in Go are unordered collections of key-value pairs.
   m := make(map[string]int)
   ```
 
-  > or
+  > Or
 
   ```go
   m := map[string]int{}
   ```
 
-  > or with values:
+  > Or with values:
 
   ```go
   m := map[string]int{
@@ -333,7 +333,7 @@ Maps in Go are unordered collections of key-value pairs.
 
   <Callout type="warn">
 
-  You cannot just declare a map with `var m map[string]int` and then assign values to it. If you try, you will get a `panic: assignment to entry in nil map`. That is why you need to initialize the map first, either empty or with values as shown above before using it.
+  Declaring a map with `var m map[string]int` and then assigning values causes a `panic: assignment to entry in nil map`. Initialize the map first (empty or with values) before use.
 
   </Callout>
 
@@ -343,7 +343,7 @@ Maps in Go are unordered collections of key-value pairs.
   fmt.Println(m["one"]) // 1
   ```
 
-- Insert/Modify:
+- Insert or modify:
 
   ```go
   m["four"] = 4
@@ -361,14 +361,14 @@ Maps in Go are unordered collections of key-value pairs.
 
 Extra:
 
-- Clear all elements from a map:
+- Clear all elements:
 
   ```go
   clear(m)
   fmt.Println(m) // map[]
   ```
 
-- Check if a key exists in a map:
+- Check if a key exists:
 
   > The optional second return value is a boolean indicating whether the key was found.
 
@@ -379,7 +379,7 @@ Extra:
 
   <Callout>
 
-  Maps always return a value for a key, even if the key does not exist. If you access a missing key, Go returns the zero value for the map's value type.
+  Maps always return a value for a key. Accessing a missing key returns the zero value of the map value type.
 
   ```go
   m := map[string]int{
@@ -411,7 +411,7 @@ Extra:
 
   <Callout type="warn">
 
-  Maps must be initialized before use.
+  Inner maps must also be initialized before use.
 
   ```go
   func main() {
@@ -431,7 +431,7 @@ Extra:
 
 ## Structs
 
-A struct is a collection of uniquely named elements called fields, each of which has a name and a type.
+A struct is a collection of uniquely named fields, each with a name and a type.
 
 - Define:
 
@@ -448,7 +448,7 @@ A struct is a collection of uniquely named elements called fields, each of which
   user := person{name: "John", age: 35}
   ```
 
-  <Callout>Any field that is not explicitly specified is automatically assigned the zero value of its type.</Callout>
+  <Callout>Any field that is not explicitly specified receives the zero value of its type.</Callout>
 
   > Or without field names:
   >
@@ -456,9 +456,9 @@ A struct is a collection of uniquely named elements called fields, each of which
   > user := person{"John", 35}
   > ```
   >
-  > > When field names are omitted, values must be given in the exact declaration order, and every field must be provided.
+  > > Values must follow declaration order and include every field.
 
-  > Or zero valued:
+  > Or zero-valued:
   >
   > ```go
   > var user person // { 0}
@@ -483,7 +483,7 @@ Extra:
 - Embedded and nested structs:
 
   > - The embedded struct's fields are promoted to the outer struct and can be accessed directly as if they belong to it.
-  > - The nested struct remains a separate field and its fields must be accessed through that field name.
+  > - The nested struct remains a separate field and must be accessed through its field name.
 
   ```go
   type address struct {
@@ -528,9 +528,9 @@ Extra:
 
 ### Struct Tags
 
-Struct tags are metadata attached to struct fields. They are typically used by packages like `encoding/json` to control how fields are encoded or decoded.
+Struct tags are metadata attached to struct fields. They are typically used by packages like `encoding/json` to control encoding and decoding behavior.
 
-> By default, Go encodes fields using their names. In cases where fields must be capitalized but a different naming format is required in the output, struct tags allow you to define how fields appear in external formats, such as custom JSON names.
+> By default, Go encodes fields using their names. When fields must be capitalized but require different names in output formats, struct tags define the external representation.
 
 ```go
 type User struct {

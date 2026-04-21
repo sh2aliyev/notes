@@ -2,14 +2,13 @@
 title: Methods
 ---
 
-In Go, a method is a function with a special receiver argument that is associated with a specific type. It allows you to define behavior that operates on instances of that type.
+In Go, a method is a function with a receiver argument associated with a specific type. It defines behavior for instances of that type.
 
 <Callout>
 
-Methods can only be defined on named types. They cannot be defined on unnamed types such as `[]int` or
-`map[string]int`.
+Methods can only be defined on named types. They cannot be defined on unnamed types such as `[]int` or `map[string]int`.
 
-A named type is any type that is declared using the `type` keyword and given its own name.
+A named type is declared using the `type` keyword.
 
 ```go
 type myInt int
@@ -51,7 +50,7 @@ type person struct {
   }
   ```
 
-  <Callout type="warn">You can only declare a method on a receiver type defined in the same package.</Callout>
+  <Callout type="warn">A method can only be declared on a receiver type defined in the same package.</Callout>
 
 - Call:
 
@@ -64,7 +63,7 @@ Extra:
 
 - Pointer receivers.
 
-  > To allow a method to modify the original data in types that use `pass-by-value` (Pure Value Types) semantics, the method must use a pointer receiver.
+  > To modify original data for types with `pass-by-value` semantics, the method must use a pointer receiver.
   >
   > ```go
   > type myCounter int
@@ -101,13 +100,13 @@ Extra:
   > }
   > ```
   >
-  > > Go automatically dereferences struct pointers (`T` to `*T`) when accessing fields. That is why we write `p.name = name` instead of `(*p).name = name`.
+  > > Go automatically dereferences struct pointers (`T` to `*T`) when accessing fields. This is why `p.name = name` can be used instead of `(*p).name = name`.
 
   <Callout type="warn">
 
   The automatic `T` to `*T` conversion only happens when the value is addressable.
 
-  A value is addressable when it has a stable memory location.
+  A value is addressable if it has a stable memory location.
 
   ```go
   type person struct {
@@ -127,11 +126,11 @@ Extra:
   }
   ```
 
-  > `user` is a variable, so it has a stable address and Go can take `&user` implicitly when calling the pointer receiver method.
+  > `user` is a variable with a stable address. The compiler can take `&user` implicitly.
 
-  > `person{name: "John"}` is a temporary value with no stable address, so the compiler cannot take its address, which is why the call does not compile.
+  > `person{name: "John"}` is a temporary value without a stable address. The compiler cannot take its address, so the call does not compile.
   >
-  > > To make it work, the address must be taken explicitly:
+  > > To make it work, take the address explicitly:
   > >
   > > ```go
   > > (&person{name: "John"}).sayHello() // Hello, my name is John
@@ -141,7 +140,7 @@ Extra:
 
 - Embedded structs with methods.
 
-  > Methods from an embedded struct are aslo promoted to the outer struct and can be called directly.
+  > Methods from an embedded struct are also promoted to the outer struct and can be called directly.
   >
   > ```go
   > type person struct {
