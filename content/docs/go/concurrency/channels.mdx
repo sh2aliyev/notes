@@ -4,13 +4,13 @@ title: Channels
 
 ## Overview
 
-Channels in Go are a mechanism for communicating between goroutines by sending and receiving values.
+Channels in Go provide a way for goroutines to communicate by sending and receiving values.
 
 - Declare:
   ```go
   ch := make(chan int)
   ```
-  > The type of a channel specifies what kind of data it can carry.
+  > The channel type defines what kind of data it can carry.
 - Send:
   ```go
   ch <- 10
@@ -23,14 +23,14 @@ Channels in Go are a mechanism for communicating between goroutines by sending a
   ```go
   close(ch)
   ```
-  > Closing a channel signals to the receiving goroutine that no more values will be sent. It is important to close a channel when you are done sending values to help avoid deadlocks.
+  > Closing a channel signals to the receiving goroutine that no more values will be sent to it. Close the channel after sending is complete to help avoid deadlocks.
 
 <Callout>
 
-Channel synchronization ensures that communication between goroutines is properly coordinated, guaranteeing that data is not lost and that goroutines wait for each other when necessary to maintain the correct order and timing of operations.
+Channel synchronization coordinates communication between goroutines. It ensures data is not lost and preserves the correct order.
 
-- Send Operation: When a goroutine sends a value to a channel, it blocks until another goroutine is ready to receive that value.
-- Receive Operation: When a goroutine attempts to receive a value from a channel, it blocks until a value becomes available.
+- Send Operation: Blocks the current goroutine until another goroutine is ready to receive.
+- Receive Operation: Blocks the current goroutine until a value is available.
 
 </Callout>
 
@@ -66,9 +66,9 @@ Channel synchronization ensures that communication between goroutines is properl
 > // End
 > ```
 >
-> Here, we do not need any additional mechanism in the `main` function to wait for the goroutine to finish. The `<-ch` operation in `main` blocks until a value is available to receive from the channel. This blocking behavior synchronizes the `main` function with the `expensiveFunc` goroutine. Each iteration of the loop in `main` waits for a corresponding send operation from `expensiveFunc`. Also, we are not required to use a loop here. We could call `fmt.Println(<-ch)` directly 4 times in sequence, and it would produce the same result.
+> No extra mechanism is required in `main` to wait for the goroutine. The `<-ch` operation blocks until a value is available. This behavior synchronizes `main` with `expensiveFunc`. Each loop iteration in `main` waits for a send from `expensiveFunc`. The loop is used only as an example, calling `fmt.Println(<-ch)` 4 times back to back would do the same.
 
-> In the example above, we did not strictly need to close the channel because `main` only catches a fixed number of messages (4) before exiting. However, here is a modified version that requires the channel to be closed explicitly:
+> In the example above, closing the channel is not required because `main` receives a fixed number of messages (4) before exiting. However, here is a modified version that requires the channel to be closed explicitly:
 >
 > ```go
 > func main() {
@@ -102,17 +102,17 @@ Channel synchronization ensures that communication between goroutines is properl
 > // Done.
 > ```
 >
-> The `for msg := range ch { ... }` syntax essentially performs a `msg := <-ch` operation under the hood, which is where the blocking occurs.
+> The `for msg := range ch { ... }` syntax performs `msg := <-ch` internally, where blocking occurs.
 >
-> `range` doesn't know how many values a channel will receive, it can be infinite. To stop the loop, we must explicitly close the channel to indicate that no more values are coming.
+> `range` does not know how many values a channel will receive. It may be infinite. To stop the loop, close the channel to signal that no more values will be sent.
 
 ## Buffered Channels
 
-Buffered channels in Go are channels with a specific capacity, allowing them to hold a certain number of values before blocking.
+Buffered channels in Go have a defined capacity. They can hold a certain number of values before blocking.
 
-> - A buffered channel only blocks sending when the buffer is full.
-> - Receiving removes a value from the buffer. If the buffer is empty, it blocks until a value becomes available.
-> - You can still receive remaining values from a closed buffered channel until it is empty.
+> - A buffered channel blocks on send only when the buffer is full.
+> - Receiving removes a value from the buffer. If the buffer is empty, it blocks until a value is available.
+> - After closing, remaining buffered values can still be received.
 
 - Declare:
   ```go
@@ -171,16 +171,16 @@ Buffered channels in Go are channels with a specific capacity, allowing them to 
 
 ## Channel Status
 
-The receiver of a channel can check its status using the second return value of the receive operation.
+A receiver can check a channel's status using the second return value of a receive operation.
 
 ```go
 val, ok := <-ch
 ```
 
-> The second return value (`ok`) is a boolean that indicates whether the channel is open or closed.
+> The second return value (`ok`) is a boolean and indicates whether the channel is open.
 >
-> - `true`: The channel is open, and values can still be received from it.
-> - `false`: The channel is closed, and no more values can be received.
+> - `true`: The channel is open, and values may still be received.
+> - `false`: The channel is closed, and no more values will be received.
 
 ```go
 func main() {
@@ -209,13 +209,13 @@ func main() {
 
 ## The `select` Statement
 
-The `select` statement in Go is a control structure that allows you to work with multiple channels simultaneously. It is similar to a `switch` statement but is specifically designed for channel operations.
+The `select` statement is a control structure for working with multiple channels simultaneously. It is similar to `switch` statement, but designed for channel operations.
 
-> - The `select` statement listens to multiple channels.
-> - It executes the first case that is ready to proceed.
-> - If multiple cases are ready, Go randomly selects one to execute.
-> - If there is no `default` case, it blocks until a case becomes ready.
-> - If a `default` case is present and no other cases are ready, it executes the `default` case immediately without blocking.
+> - `select` listens on multiple channels.
+> - It executes the first ready case.
+> - If multiple cases are ready, one is chosen randomly.
+> - Without a `default`, it blocks until a case is ready.
+> - With a `default`, it executes the `default` itself immediately if no cases are ready.
 
 ```go
 func main() {
@@ -261,16 +261,15 @@ func main() {
 ```
 
 <Callout>
-  The `select` statement is not a loop, it executes only one case even if multiple are ready, and then breaks the
-  `select` statement.
+  The `select` statement is not a loop. It executes one case, even if multiple are ready, and then exits.
 </Callout>
 
 ## Read-Only & Write-Only Channels
 
-In Go, channels can be restricted to Read-Only or Write-Only. This helps define clear communication patterns between goroutines and improves code safety and clarity.
+Channels can be restricted to `read-only` or `write-only`. This defines communication direction and improves safety and clarity.
 
-> - Read-Only (`<-chan type`): A read-only channel can only be used to receive values. You cannot send values into a read-only channel.
-> - Write-Only (`chan<- type`): A write-only channel can only be used to send values. You cannot receive values from a write-only channel.
+> - Read-Only (`<-chan type`): Can only receive values. Sending is not allowed.
+> - Write-Only (`chan<- type`): Can only send values. Receiving is not allowed.
 
 ```go
 func sendData(ch chan<- int) { // ch is write-only
@@ -294,7 +293,7 @@ func main() {
 
 ## The "Done Channel" Pattern
 
-The "Done Channel" pattern is a technique used to signal the completion or termination of a goroutine. It involves using a separate helper channel to indicate when a goroutine should stop its execution.
+The "Done Channel" pattern signals when a goroutine should stop. It uses a separate channel for control.
 
 - Without a Done Channel:
 
@@ -312,7 +311,7 @@ The "Done Channel" pattern is a technique used to signal the completion or termi
   }
   ```
 
-  > The `myFunc` goroutine will print "MyFunc" continuously until the main program exits.
+  > The `myFunc` goroutine prints "MyFunc" continuously until the program exits.
 
 - With a Done Channel:
 
@@ -340,7 +339,7 @@ The "Done Channel" pattern is a technique used to signal the completion or termi
   }
   ```
 
-  > The `myFunc` goroutine will print "MyFunc" for 5 seconds and then return, even though the main program continues to run for an hour.
+  > The `myFunc` goroutine prints "MyFunc" for 5 seconds and then return, even though the main program continues to run for an hour.
 
   <Callout>
     The `struct{}` type represents an empty struct in Go. It consumes zero bytes of memory, making it ideal for
