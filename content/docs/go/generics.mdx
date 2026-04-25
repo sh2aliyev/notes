@@ -22,7 +22,7 @@ Extra:
   > type number int | float64 // <-- syntax error
   > ```
   >
-  > Instead, define a type set using an interface for use as a constraint:
+  > Instead, define a type-set using an interface for use as a constraint:
   >
   > ```go
   > type number interface {
@@ -30,7 +30,7 @@ Extra:
   > }
   > ```
   >
-  > > The `|` operator is only valid in type constraints. It defines a set of allowed types for a type parameter.
+  > > The `|` operator is only available in type constraints. It defines a set of allowed types for a type parameter.
   >
   > Usage:
   >
@@ -56,7 +56,7 @@ Extra:
   > }
   > ```
   >
-  > > `~int` means `int` and any named type with underlying type `int`. The same applies to `~float64`.
+  > > `~int` means `int` and any named type with underlying type `int`.
   >
   > ```go
   > type myInt int
@@ -75,7 +75,9 @@ Extra:
   >
   > > Why?
   > >
-  > > Because in Go, named types are distinct from their underlying types, even if they share the same representation. The `~` operator allows constraints to match based on the underlying type instead of only the exact type.
+  > > Because in Go, named types are distinct from their underlying types, even if they share the same representation.
+  > >
+  > > The `~` operator allows constraints to match based on the underlying type instead of only the exact type.
   > >
   > > ```go
   > > type myInt int

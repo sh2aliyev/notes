@@ -265,7 +265,7 @@ In Go, a slice is a dynamic-sized, flexible view into the elements of an array.
 
 Extra:
 
-- Multi dimensional slices:
+- Multi-dimensional slices:
 
   ```go
   slice2d := [][]string{
@@ -333,7 +333,7 @@ Maps in Go are unordered collections of key-value pairs.
 
   <Callout type="warn">
 
-  Declaring a map with `var m map[string]int` and then assigning values causes a `panic: assignment to entry in nil map`. Initialize the map first (empty or with values) before use.
+  Maps must be initialized first (empty or with values) to make them ready to use. Declaring a map with `var m map[string]int` and then assigning values causes a `panic: assignment to entry in nil map`.
 
   </Callout>
 

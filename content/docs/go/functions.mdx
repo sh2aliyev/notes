@@ -279,7 +279,7 @@ Examples:
 
 ## The `defer` Keyword
 
-The `defer` keyword allows a function call or line of code to execute at the end of the current function's execution.
+The `defer` keyword schedules a function call or statement to execute at the end of the current function's execution.
 
 ```go
 func main() {
@@ -295,7 +295,7 @@ Extra:
 
 - `defer` depends only on the surrounding function scope:
 
-  > `defer` is registered when execution reaches that line. but it runs when the surrounding function ends. It does not run when a block such as `if` or `for` ends, even if it appears inside them.
+  > `defer` is registered when execution reaches that line but runs when the surrounding function ends. It does not run when a block such as `if` or `for` ends, even if it appears inside them.
 
   ```go
   func main() {

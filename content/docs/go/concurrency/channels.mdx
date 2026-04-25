@@ -23,7 +23,7 @@ Channels in Go provide a way for goroutines to communicate by sending and receiv
   ```go
   close(ch)
   ```
-  > Closing a channel signals to the receiving goroutine that no more values will be sent to it. Close the channel after sending is complete to help avoid deadlocks.
+  > Closing a channel signals to the receiving goroutine that no more values will be sent to it. Close the channel after all sends are complete to prevent deadlocks.
 
 <Callout>
 
@@ -104,7 +104,7 @@ Channel synchronization coordinates communication between goroutines. It ensures
 >
 > The `for msg := range ch { ... }` syntax performs `msg := <-ch` internally, where blocking occurs.
 >
-> `range` does not know how many values a channel will receive. It may be infinite. To stop the loop, close the channel to signal that no more values will be sent.
+> `range` does not know how many values a channel will receive, it may be infinite. To stop the loop, close the channel to signal that no more values will be sent.
 
 ## Buffered Channels
 
@@ -260,9 +260,7 @@ func main() {
 // Done.
 ```
 
-<Callout>
-  The `select` statement is not a loop. It executes one case, even if multiple are ready, and then exits.
-</Callout>
+<Callout>The `select` statement is not a loop, it executes one case even if multiple are ready and then exits.</Callout>
 
 ## Read-Only & Write-Only Channels
 
@@ -293,7 +291,7 @@ func main() {
 
 ## The "Done Channel" Pattern
 
-The "Done Channel" pattern signals when a goroutine should stop. It uses a separate channel for control.
+The "Done Channel" pattern signals the completion or termination of a goroutine. It uses a separate helper channel to indicate when the goroutine should stop execution.
 
 - Without a Done Channel:
 
