@@ -323,6 +323,31 @@ func main() {
 }
 ```
 
+> Type switches also work with named types and pointer types, not just basic types.
+>
+> ```go
+> type user struct {
+> 	name string
+> }
+>
+> func describe(i interface{}) {
+> 	switch v := i.(type) {
+> 	case *user:
+> 		fmt.Println("Pointer to User", v.name)
+> 	case user:
+> 		fmt.Println("User value", v.name)
+> 	default:
+> 		fmt.Println("Unknown type", v)
+> 	}
+> }
+>
+> func main() {
+> 	u := user{name: "John"}
+> 	describe(u)  // User value John
+> 	describe(&u) // Pointer to user John
+> }
+> ```
+
 ## Interface Composition
 
 Interface composition combines existing interfaces into a new one.
@@ -344,7 +369,7 @@ type ReadWriter interface {
 
 > The `ReadWriter` interface requires both `Read` and `Write` methods. Any type that implements both methods automatically satisfies the `ReadWriter` interface.
 
-<Callout>
+<Callout type="warn">
   If multiple interfaces are composed and they contain methods with the same name, those methods must have identical
   signatures in all interfaces.
 </Callout>
