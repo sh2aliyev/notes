@@ -23,14 +23,14 @@ Channels in Go provide a way for goroutines to communicate by sending and receiv
   ```go
   close(ch)
   ```
-  > Closing a channel signals to the receiving goroutine that no more values will be sent to it. Close the channel after all sends are complete to prevent deadlocks.
+  > Channels usually do not need to be closed manually. Closing is only necessary when the receiver must be told there are no more values coming, such as to terminate a `range` loop.
 
 <Callout>
 
 Channel synchronization coordinates communication between goroutines. It ensures data is not lost and preserves the correct order.
 
-- Send Operation: Blocks the current goroutine until another goroutine is ready to receive.
-- Receive Operation: Blocks the current goroutine until a value is available.
+- Send operation: Blocks the current goroutine until another goroutine (the other side) is ready to receive.
+- Receive operation: Blocks the current goroutine until a value is available (from the other side).
 
 </Callout>
 
@@ -206,6 +206,8 @@ func main() {
 // Received: 2
 // Channel is closed.
 ```
+
+<Callout type="warn">Sending on a closed channel causes a panic.</Callout>
 
 ## The `select` Statement
 

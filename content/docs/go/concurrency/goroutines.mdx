@@ -4,16 +4,16 @@ title: Goroutines
 
 ## Overview
 
-Goroutines are lightweight concurrent functions in Go that run independently and are managed by the Go runtime scheduler rather than the operating system.
+Goroutines are lightweight units of execution managed by the Go runtime scheduler to run functions concurrently.
 
 > In general, program execution can be divided into two types of routines:
 >
-> - Main Routine: The first goroutine started by a Go program. It executes the `main()` function in the main package and defines the lifetime of the program. When the main routine finishes, the program exits immediately, even if other goroutines are still running.
+> - Main Routine: The first goroutine started by a Go program. It executes the `main()` function in the `main` package and defines the lifetime of the program. When the main routine finishes, the program exits immediately, even if other goroutines are still running.
 > - Child Routine: Any goroutine started from another routine using the `go` keyword. It runs concurrently with the parent routine and performs work independently. It does not block the parent unless synchronization is explicitly implemented. It completes when its function returns or when the program terminates.
 
 ```go
 func main() {
-	go expensiveFunc("Hello")
+	go expensiveFunc("Hello") // Run expensiveFunc concurrently (don't wait for it)
 
 	fmt.Println("Main")
 
@@ -106,3 +106,18 @@ func expensiveFunc(text string, wg *sync.WaitGroup) {
 > ```
 >
 > This approach keeps `expensiveFunc` function clean and focused on its logic, while goroutine management remains separate.
+
+## Mutexes
+
+In Go, a Mutex (Mutual Exclusion) from the `sync` is a locking mechanism that allows only one goroutine at a time to read or modify shared data, forcing others to wait until it is free. This prevents race conditions and keeps the data consistent.
+
+> How it works:
+>
+> - `Lock()` attempts to acquire the mutex.
+>   - If the mutex is free, the goroutine acquires it and continues.
+>   - If the mutex is locked, the goroutine is blocked until it becomes available.
+> - `Unlock()` releases the mutex and allows one waiting goroutine to acquire it.
+>
+> Only one goroutine can hold the lock at a time. The mutex is not tied to any specific goroutine. Any goroutine can compete to acquire it when it becomes available.
+
+<Callout type="warn">Calling `Unlock()` on an **unlocked** mutex causes a panic.</Callout>
