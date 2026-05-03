@@ -534,22 +534,31 @@ Struct tags are metadata attached to struct fields. They are typically used by p
 
 ```go
 type User struct {
-	Id    int    `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Id       int    `json:"id"`                   // same but lowercase
+	Name     string `json:"full_name"`            // renamed field
+	Email    string `json:"email,omitempty"`      // omitted if empty ("")
+	Password string `json:"-"`                    // ignored completely
+	Age      int    `json:"age,string,omitempty"` // encoded as string
+	Salary   int    `json:"salary,omitempty"`     // omitted if 0
+	Score    *int   `json:"score,omitempty"`      // nil omitted, 0 still included
 }
 
 func main() {
+	score := 0
+
 	myUser := User{
-		Id: 1, Name: "John", Email: "hello@example.com",
+		Id: 1, Name: "John", Email: "hello@example.com", Password: "12345", Age: 26, Salary: 0, Score: &score,
 	}
 
-	fmt.Printf("myUser: %+v\n", myUser) // myUser: {Id:1 Name:John Email:hello@example.com}
+	fmt.Printf("myUser: %+v\n", myUser) // myUser: {Id:1 Name:John Email:hello@example.com Password:12345 Age:26 Salary:0 Score:0x255956d3e048}
 
 	jUser, _ := json.Marshal(myUser) // Converting struct to JSON
 
-	fmt.Printf("jUser: %+v\n", string(jUser)) // jUser: {"id":1,"name":"John","email":"hello@example.com"}
+	fmt.Printf("jUser: %+v\n", string(jUser)) // jUser: {"id":1,"full_name":"John","email":"hello@example.com","age":"26","score":0}
 }
 ```
 
-> Tags use backticks and the format: `key:"value"`, and are not limited to `json`.
+<Callout>
+  `omitempty` can hide valid values like `0` or `false`. Using a pointer with `omitempty` omits only `nil` while keeping
+  other values.
+</Callout>
