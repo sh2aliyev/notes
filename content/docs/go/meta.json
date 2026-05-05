@@ -19,6 +19,8 @@
     "methods",
     "interfaces",
     "generics",
-    "concurrency"
+    "concurrency",
+    "--- ---",
+    "references"
   ]
 }
