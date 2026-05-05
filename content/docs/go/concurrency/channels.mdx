@@ -291,16 +291,18 @@ func main() {
 }
 ```
 
-## The "Done Channel" Pattern
+## Concurrency Patterns
 
-The "Done Channel" pattern signals the completion or termination of a goroutine. It uses a separate helper channel to indicate when the goroutine should stop execution.
+### Done Channel
+
+The Done Channel pattern signals cancellation or completion in goroutines. It uses a separate shared channel, which is closed to notify them to stop execution.
 
 - Without a Done Channel:
 
   ```go
   func myFunc() {
   	for {
-  		fmt.Println("MyFunc")
+  		fmt.Println("Working...")
   	}
   }
 
@@ -311,7 +313,7 @@ The "Done Channel" pattern signals the completion or termination of a goroutine.
   }
   ```
 
-  > The `myFunc` goroutine prints "MyFunc" continuously until the program exits.
+  > The `myFunc` goroutine prints "Working..." continuously until the program exits.
 
 - With a Done Channel:
 
@@ -322,7 +324,7 @@ The "Done Channel" pattern signals the completion or termination of a goroutine.
           case <-doneCh:
               return
           default:
-              fmt.Println("MyFunc")
+              fmt.Println("Working...")
           }
       }
   }
@@ -333,15 +335,72 @@ The "Done Channel" pattern signals the completion or termination of a goroutine.
       go myFunc(doneCh)
 
       time.Sleep(5 * time.Second)
+
       close(doneCh)
 
       time.Sleep(1 * time.Hour)
   }
   ```
 
-  > The `myFunc` goroutine prints "MyFunc" for 5 seconds and then return, even though the main program continues to run for an hour.
+  > The `myFunc` goroutine prints "Working..." for 5 seconds and then return, even though the main program continues to run for an hour.
 
   <Callout>
     The `struct{}` type represents an empty struct in Go. It consumes zero bytes of memory, making it ideal for
     signaling and control purposes without causing any memory overhead.
   </Callout>
+
+### Fan-In
+
+The Fan-In pattern combines multiple input channels into a single output channel so one consumer can read from all sources.
+
+```go
+func merge(ch1, ch2 <-chan int) <-chan int {
+	out := make(chan int)
+
+	go func() {
+		for {
+			select {
+			case v := <-ch1:
+				out <- v
+			case v := <-ch2:
+				out <- v
+			}
+		}
+	}()
+
+	return out
+}
+
+func myFunc(nums ...int) <-chan int {
+	ch := make(chan int)
+
+	// Business logic:
+	go func() {
+		for _, n := range nums {
+			ch <- n
+		}
+	}()
+
+	return ch
+}
+
+func main() {
+	a := myFunc(1, 3, 5)
+	b := myFunc(2, 4, 6)
+
+	result := merge(a, b)
+
+	for i := 0; i < 6; i++ {
+		fmt.Println(<-result)
+	}
+}
+
+// 1
+// 3
+// 2
+// 5
+// 4
+// 6
+```
+
+> Output order is not guaranteed because values are received as soon as they arrive from either channel.
