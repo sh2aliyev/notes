@@ -10,7 +10,7 @@ Channels in Go provide a way for goroutines to communicate by sending and receiv
   ```go
   ch := make(chan int)
   ```
-  > The channel type defines what kind of data it can carry.
+  > The channel type defines what kind of data it can carry. It can be any type, including named types.
 - Send:
   ```go
   ch <- 10
