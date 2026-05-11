@@ -572,6 +572,10 @@ func main() {
 ```
 
 <Callout>
+  The `json` package only accesses the exported fields of struct types (those that begin with an uppercase letter).
+</Callout>
+
+<Callout type="warn">
   `omitempty` can hide valid values like `0` or `false`. Using a pointer with `omitempty` omits only `nil` while keeping
   other values.
 </Callout>
