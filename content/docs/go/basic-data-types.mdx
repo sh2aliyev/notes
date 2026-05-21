@@ -64,7 +64,7 @@ Extra:
   > // 3 100
   > ```
   >
-  > Some characters require more than one byte:
+  > But it's not always one byte per character. Some characters require more than one byte:
   >
   > ```go
   > str := "é"
@@ -74,6 +74,22 @@ Extra:
   > > `len()` returns the byte count, not the character count.
   >
   > Go strings use UTF-8 encoding. A string is a sequence of UTF-8 encoded bytes.
+  >
+  > > Strings can contain arbitrary bytes, but when constructed from string literals, those bytes are (almost always) UTF-8.
+  > >
+  > > ```go
+  > > // Constructing a string directly from raw bytes (not UTF-8):
+  > > var1 := string([]byte{0, 1, 2, 255, 0xff, 0xfd})
+  > > fmt.Printf("var1: %v, len: %v, bytes: %v", var1, len(var1), []byte(var1)) // var1: ���, len: 6, bytes: [0 1 2 255 255 253]
+  > >
+  > > // String literal containing byte-level escape sequences (may not be UTF-8):
+  > > var2 := "\xbd\x20\xb2\x3d\xbc\x48"
+  > > fmt.Printf("var2: %v, len: %v, bytes: %v", var2, len(var2), []byte(var2)) // var2: � �=�H, len: 6, bytes: [189 32 178 61 188 72]
+  > >
+  > > // String constructed from a regular string literal (UTF-8):
+  > > var3 := "Hello"
+  > > fmt.Printf("var3: %v, len: %v, bytes: %v", var3, len(var3), []byte(var3)) // var3: Hello, len: 5, bytes: [72 101 108 108 111]
+  > > ```
   >
   > UTF-8 uses variable length encoding. A character may use 1 to 4 bytes depending on its Unicode code point.
   >
