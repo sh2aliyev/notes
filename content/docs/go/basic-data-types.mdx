@@ -68,12 +68,13 @@ Extra:
   >
   > ```go
   > str := "é"
-  > fmt.Printf("str: %v, len: %v, bytes: %v", str, len(str), []byte(str)) // str: é, len: 2, bytes: [195 169]
+  > fmt.Printf("str: %v, len: %v, bytes: %v", str, len(str), []byte(str))
+  > // str: é, len: 2, bytes: [195 169]
   > ```
   >
   > > `len()` returns the byte count, not the character count.
   >
-  > This is because Go strings use UTF-8 encoding.
+  > This is because Go strings are UTF-8 encoded.
   >
   > UTF-8 uses variable length encoding. A character may use 1 to 4 bytes depending on its Unicode code point.
   >
