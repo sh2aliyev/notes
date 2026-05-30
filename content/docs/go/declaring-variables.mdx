@@ -54,18 +54,14 @@ varName := value
 
   <Callout>
 
-  Re-declaration of a variable in the same scope is not allowed.
-
-  BUT
-
-  If at least one identifier on the left side is new, this syntax is allowed.
+  Re-declaration of a variable in the same scope is not allowed. However, if at least one identifier on the left side is new, the syntax is allowed.
 
   ```go
   x := 10
 
   x := 20 // <-- compiler: no new variables on left side of :=
 
-  x, y := 20, 30 // y is new, so this is allowed
+  x, y := 20, 30 // allowed because y is new
 
   fmt.Println(x, y) // 20 30
   ```
@@ -84,15 +80,15 @@ const varName type = value
 
 <Callout type="warn">
   Constants must be known at compile time. They cannot depend on variables, function calls, or any other runtime values.
-  Expressions that the compiler can evaluate during compilation are allowed. Constants are limited to booleans, numbers,
-  and strings.
+  Expressions the compiler can evaluate at compile time are allowed. Constants are limited to booleans, numbers, and
+  strings.
 </Callout>
 
-- Constants declaration may omit the type but must include a value:
+- A constant declaration may omit the type but must include a value:
 
   ```go
   const daysInWeek int = 7  // explicit type and value
-  const hoursInDay = 24     // type is inferred as int
+  const hoursInDay = 24     // type inferred as int
   ```
 
 - Grouped declaration:
