@@ -2,7 +2,7 @@
 title: Basic Data Types
 ---
 
-Go has three basic data types: `boolean`, `numeric`, and `string`. Each type has a zero value that is assigned when a variable is declared without initialization.
+Go has three basic data types: `boolean`, `numeric`, and `string`. Each type has a zero value assigned when a variable is declared without initialization.
 
 ## Boolean
 
@@ -44,8 +44,8 @@ Go has three basic data types: `boolean`, `numeric`, and `string`. Each type has
 
 Extra:
 
-- > - A string written with double quotes is an interpreted string literal. Escape sequences such as `\n`, `\t`, `\uXXXX` and `\xNN` are processed into their byte values. It cannot span multiple lines in source code.
-  > - A string written with backticks is a raw string literal. Its content is preserved exactly as written with no escape processing. It may span multiple lines.
+- > - Double-quoted strings are interpreted string literals. Escape sequences like `\n`, `\t`, `\uXXXX`, and `\xNN` are processed into their byte values. They cannot span multiple lines in source code.
+  > - Backtick strings are raw string literals. Content is preserved exactly as written, with no escape processing. They can span multiple lines in source code.
 
 - > Technically, a string is a read-only slice of bytes:
   >
@@ -64,7 +64,7 @@ Extra:
   > // 3 100
   > ```
   >
-  > But it's not always one byte per character. Some characters require more than one byte:
+  > However, not every character is a single byte. Some characters require more than one byte:
   >
   > ```go
   > str := "é"
@@ -74,9 +74,7 @@ Extra:
   >
   > > `len()` returns the byte count, not the character count.
   >
-  > This is because Go strings are UTF-8 encoded.
-  >
-  > UTF-8 uses variable length encoding. A character may use 1 to 4 bytes depending on its Unicode code point.
+  > This is because Go strings are UTF-8 encoded, and UTF-8 uses variable-length encoding. A character can use 1 to 4 bytes depending on its Unicode code point:
   >
   > | First code point | Last code point | Byte 1   | Byte 2   | Byte 3   | Byte 4   |
   > | ---------------- | --------------- | -------- | -------- | -------- | -------- |
@@ -87,7 +85,7 @@ Extra:
   >
   > Explanation:
   >
-  > > The character "`é`" has Unicode code point `U+00E9` (233). Since `233` is in the range `128` to `2047`, it uses two bytes in UTF-8:
+  > > The character `é` has Unicode code point `U+00E9` (233). Since `233` falls in the range `128-2047`, it uses two bytes in UTF-8:
   > >
   > > ```go
   > > str := "é" // [195 169]
@@ -100,16 +98,45 @@ Extra:
   > >
   > > > `195` is `11000011` and `169` is `10101001`.
   > > >
-  > > > Matching the bytes using the table above (2nd row):
+  > > > Matching against the second row of the table above:
   > > >
-  > > > - First byte: `11000011` (110xxxyy) -> `110` and `00011`.
-  > > > - Second byte: `10101001` (10yyzzzz) -> `10` and `101001`.
+  > > > - First byte: `11000011` (110xxxyy) -> prefix `110`, data bits `00011`.
+  > > > - Second byte: `10101001` (10yyzzzz)-> prefix `10`, data bits `101001`.
   > > >
-  > > > Combining `00011` and `101001` gives `00011101001` (binary) = `233` (decimal).
+  > > > Combining `00011` and `101001` gives `00011101001` in binary, which equals `233` in decimal.
+
+  <Callout>
+
+  A string does not always hold UTF-8 encoded bytes. Strings can contain arbitrary bytes, but when created from string literals, those bytes are (almost always) UTF-8.
+
+  ```go
+  // From raw bytes:
+  var1 := string([]byte{0, 1, 2, 65, 195, 255, 195, 169, 0xff, 0xfd})
+  fmt.Printf("var1: %v, len: %v, bytes: %v", var1, len(var1), []byte(var1))
+  // var1: A��é��, len: 10, bytes: [0 1 2 65 195 255 195 169 255 253]
+
+  // From byte-level escape sequences:
+  var2 := "\xbd\x20\xb2\x3d\xbc\x48"
+  fmt.Printf("var2: %v, len: %v, bytes: %v", var2, len(var2), []byte(var2))
+  // var2: � �=�H, len: 6, bytes: [189 32 178 61 188 72]
+
+  // From a regular string literal:
+  var3 := "Hello"
+  fmt.Printf("var3: %v, len: %v, bytes: %v", var3, len(var3), []byte(var3))
+  // var3: Hello, len: 5, bytes: [72 101 108 108 111]
+  ```
+
+  For example, in `var1` (`[0 1 2 65 195 255 195 169 255 253]`), some bytes form valid UTF-8 sequences and render as readable characters, such as `A` and `é`:
+  - `A` has Unicode code point `65`, which is in the `0` to `127` range. In UTF-8, this range uses one byte, so `65` maps directly to `A`.
+  - `é` has Unicode code point `233`, which is in the `128` to `2047` range. In UTF-8, this uses two bytes. In `var1`, these are `195` and `169`, which together decode to `233`.
+
+  > The remaining bytes do not form valid UTF-8 sequences and are shown as replacement characters (`�`).
+
+  </Callout>
+
+- > Iterating with `range`:
   >
-  > Extra:
-  >
-  > > When iterating with `range`, Go decodes each UTF-8 character and returns its Unicode code point:
+  > > When iterating with `range`, Go decodes each UTF-8 character and returns its Unicode code point (not the raw byte value):
   > >
   > > ```go
   > > str := "Héllo" // [72 195 169 108 108 111]
@@ -124,32 +151,3 @@ Extra:
   > > // 4 108
   > > // 5 111
   > > ```
-
-  <Callout>
-
-  A string does not always hold UTF-8 encoded bytes. Strings can contain arbitrary bytes, but when created from string literals, those bytes are (almost always) UTF-8.
-
-  ```go
-  // Constructing a string directly from raw bytes:
-  var1 := string([]byte{0, 1, 2, 65, 195, 255, 195, 169, 0xff, 0xfd})
-  fmt.Printf("var1: %v, len: %v, bytes: %v", var1, len(var1), []byte(var1))
-  // var1: A��é��, len: 10, bytes: [0 1 2 65 195 255 195 169 255 253]
-
-  // String literal containing byte-level escape sequences:
-  var2 := "\xbd\x20\xb2\x3d\xbc\x48"
-  fmt.Printf("var2: %v, len: %v, bytes: %v", var2, len(var2), []byte(var2))
-  // var2: � �=�H, len: 6, bytes: [189 32 178 61 188 72]
-
-  // String constructed from a regular string literal:
-  var3 := "Hello"
-  fmt.Printf("var3: %v, len: %v, bytes: %v", var3, len(var3), []byte(var3))
-  // var3: Hello, len: 5, bytes: [72 101 108 108 111]
-  ```
-
-  For example, the byte sequence for `var1` is `[0 1 2 65 195 255 195 169 255 253]`, where some readable characters can be spotted, such as `A` and `é`.
-  - `A` has Unicode code point `65`, which is in the `0` to `127` range. In UTF-8, this range uses one byte, so `65` maps directly to `A`.
-  - `é` has Unicode code point `233`, which is in the `128` to `2047` range. In UTF-8, this uses two bytes. In `var1`, these are `195` and `169`, which together decode to `233`.
-
-  > Other bytes do not form valid UTF-8 sequences, so they are shown as replacement characters (`�`).
-
-  </Callout>
