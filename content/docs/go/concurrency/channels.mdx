@@ -182,30 +182,32 @@ val, ok := <-ch
 > - `true`: The channel is open, and values may still be received.
 > - `false`: The channel is closed, and no more values will be received.
 
-```go
-func main() {
-	ch := make(chan int)
-
-	go func(ch chan int) {
-		ch <- 1
-		ch <- 2
-		close(ch)
-	}(ch)
-
-	for {
-		val, ok := <-ch
-		if !ok {
-			fmt.Println("Channel is closed.")
-			break
-		}
-		fmt.Println("Received:", val)
-	}
-}
-
-// Received: 1
-// Received: 2
-// Channel is closed.
-```
+> Example:
+>
+> ```go
+> func main() {
+> 	ch := make(chan int)
+>
+> 	go func(ch chan int) {
+> 		ch <- 1
+> 		ch <- 2
+> 		close(ch)
+> 	}(ch)
+>
+> 	for {
+> 		val, ok := <-ch
+> 		if !ok {
+> 			fmt.Println("Channel is closed.")
+> 			break
+> 		}
+> 		fmt.Println("Received:", val)
+> 	}
+> }
+>
+> // Received: 1
+> // Received: 2
+> // Channel is closed.
+> ```
 
 <Callout type="warn">Sending on a closed channel causes a panic.</Callout>
 
@@ -213,56 +215,71 @@ func main() {
 
 The `select` statement is a control structure for working with multiple channels simultaneously. It is similar to `switch` statement, but designed for channel operations.
 
+> How it works:
+>
 > - `select` listens on multiple channels.
 > - It executes the first ready case.
 > - If multiple cases are ready, one is chosen randomly.
 > - Without a `default`, it blocks until a case is ready.
 > - With a `default`, it executes the `default` itself immediately if no cases are ready.
 
-```go
-func main() {
-	// Preparation:
-	ch1 := make(chan int)
-	ch2 := make(chan int)
-	ch3 := make(chan int)
-
-	go func(ch chan int) {
-		time.Sleep(time.Second)
-		ch <- 1
-	}(ch1)
-
-	go func(ch chan int) {
-		time.Sleep(time.Second * 3)
-		ch <- 2
-	}(ch2)
-
-	go func(ch chan int) {
-		time.Sleep(time.Second * 2)
-		ch <- 3
-	}(ch3)
-
-	time.Sleep(time.Second * 5)
-
-	// Usage:
-	select {
-	case val1 := <-ch1:
-		fmt.Println(val1)
-	case val2 := <-ch2:
-		fmt.Println(val2)
-	case val3 := <-ch3:
-		fmt.Println(val3)
-	default:
-		fmt.Println("No channels are ready.")
-	}
-
-	fmt.Println("Done.")
-}
-
-// 2
-// Done.
-```
+> Example:
+>
+> ```go
+> func main() {
+> 	// Preparation:
+> 	ch1 := make(chan int)
+> 	ch2 := make(chan int)
+> 	ch3 := make(chan int)
+>
+> 	go func(ch chan int) {
+> 		time.Sleep(time.Second)
+> 		ch <- 1
+> 	}(ch1)
+>
+> 	go func(ch chan int) {
+> 		time.Sleep(time.Second * 3)
+> 		ch <- 2
+> 	}(ch2)
+>
+> 	go func(ch chan int) {
+> 		time.Sleep(time.Second * 2)
+> 		ch <- 3
+> 	}(ch3)
+>
+> 	time.Sleep(time.Second * 5)
+>
+> 	// Usage:
+> 	select {
+> 	case val1 := <-ch1:
+> 		fmt.Println(val1)
+> 	case val2 := <-ch2:
+> 		fmt.Println(val2)
+> 	case val3 := <-ch3:
+> 		fmt.Println(val3)
+> 	default:
+> 		fmt.Println("No channels are ready.")
+> 	}
+>
+> 	fmt.Println("Done.")
+> }
+>
+> // 2
+> // Done.
+> ```
 
 <Callout>The `select` statement is not a loop, it executes one case even if multiple are ready and then exits.</Callout>
+
+<Callout type="warn">
+
+In the example above, two goroutines remain blocked after `select` receives from one channel because the other two
+channels are never received. In a short-lived program like this, it is not noticeable because the program exits
+immediately afterward. However, in a long-running program, those blocked goroutines never terminate, causing a
+goroutine leak that also keeps their memory allocated.
+
+This can be avoided using any cancellation mechanism.
+
+</Callout>
 
 ## Read-Only & Write-Only Channels
 
@@ -325,6 +342,7 @@ The Done Channel pattern signals cancellation or completion in goroutines. It us
               return
           default:
               fmt.Println("Working...")
+              time.Sleep(time.Second)
           }
       }
   }
@@ -342,7 +360,7 @@ The Done Channel pattern signals cancellation or completion in goroutines. It us
   }
   ```
 
-  > The `myFunc` goroutine prints "Working..." for 5 seconds and then return, even though the main program continues to run for an hour.
+  > The `myFunc` goroutine prints "Working..." for 5 seconds and then returns, even though the main program continues to run for an hour.
 
   <Callout>
     The `struct{}` type represents an empty struct in Go. It consumes zero bytes of memory, making it ideal for
@@ -353,54 +371,71 @@ The Done Channel pattern signals cancellation or completion in goroutines. It us
 
 The Fan-In pattern combines multiple input channels into a single output channel so one consumer can read from all sources.
 
-```go
-func merge(ch1, ch2 <-chan int) <-chan int {
-	out := make(chan int)
-
-	go func() {
-		for {
-			select {
-			case v := <-ch1:
-				out <- v
-			case v := <-ch2:
-				out <- v
-			}
-		}
-	}()
-
-	return out
-}
-
-func myFunc(nums ...int) <-chan int {
-	ch := make(chan int)
-
-	// Business logic:
-	go func() {
-		for _, n := range nums {
-			ch <- n
-		}
-	}()
-
-	return ch
-}
-
-func main() {
-	a := myFunc(1, 3, 5)
-	b := myFunc(2, 4, 6)
-
-	result := merge(a, b)
-
-	for i := 0; i < 6; i++ {
-		fmt.Println(<-result)
-	}
-}
-
-// 1
-// 3
-// 2
-// 5
-// 4
-// 6
+```
+ch1 ----\
+         \
+          ---> merge ---> out
+         /
+ch2 ----/
 ```
 
-> Output order is not guaranteed because values are received as soon as they arrive from either channel.
+> Example:
+>
+> ```go
+> func merge(chs ...<-chan string) <-chan string {
+> 	out := make(chan string)
+>
+> 	var wg sync.WaitGroup
+> 	wg.Add(len(chs))
+>
+> 	for _, ch := range chs {
+> 		go func(ch <-chan string) {
+> 			defer wg.Done()
+>
+> 			for v := range ch {
+> 				out <- v
+> 			}
+> 		}(ch)
+> 	}
+>
+> 	go func() {
+> 		wg.Wait()
+> 		close(out)
+> 	}()
+>
+> 	return out
+> }
+>
+> func myFunc(nums ...int) <-chan string {
+> 	ch := make(chan string)
+>
+> 	go func() {
+> 		defer close(ch)
+>
+> 		// Example business logic that writes output to the channel:
+> 		for _, n := range nums {
+> 			ch <- fmt.Sprintf("Hi %v!", n)
+> 		}
+> 	}()
+>
+> 	return ch
+> }
+>
+> func main() {
+> 	a := myFunc(1, 3, 5)
+> 	b := myFunc(2, 4, 6)
+>
+> 	for v := range merge(a, b) {
+> 		fmt.Println(v)
+> 	}
+> }
+>
+> // Hi 1!
+> // Hi 2!
+> // Hi 4!
+> // Hi 3!
+> // Hi 6!
+> // Hi 5!
+> ```
+>
+> Output order is not guaranteed because values are forwarded as soon as they arrive from either channel.
