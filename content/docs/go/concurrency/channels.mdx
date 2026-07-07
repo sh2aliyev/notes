@@ -295,8 +295,8 @@ This can be avoided using any cancellation mechanism.
 
 Channels can be restricted to `read-only` or `write-only`. This defines communication direction and improves safety and clarity.
 
-> - Read-Only (`<-chan type`): Can only receive values. Sending is not allowed.
-> - Write-Only (`chan<- type`): Can only send values. Receiving is not allowed.
+> - Read-Only (`<-chan chanType`): Can only receive values. Sending is not allowed.
+> - Write-Only (`chan<- chanType`): Can only send values. Receiving is not allowed.
 
 ```go
 func sendData(ch chan<- int) { // ch is write-only
