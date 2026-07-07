@@ -439,3 +439,97 @@ ch2 ----/
 > ```
 >
 > Output order is not guaranteed because values are forwarded as soon as they arrive from either channel.
+
+## Context
+
+In Go, a context is a mechanism for propagating cancellation signals, deadlines, timeouts, and request-scoped values through function calls and goroutines.
+
+> The hierarchy:
+>
+> - Contexts form an immutable tree structure (we do not modify a context, we add subtrees to a context).
+> - Child contexts inherit cancellation, deadlines, and values from their parent.
+> - Cancelling a parent cancels all of its descendants.
+> - A child cannot cancel its parent or its siblings.
+
+> How it works:
+>
+> - `WithCancel()` (or one of the other variants) creates a child context and returns a cancellation function.
+> - Every context provides a Done channel (`ctx.Done()`).
+> - Calling `cancel()` (or when a timeout expires or a deadline is reached) closes the `ctx.Done()` channel.
+> - Anyone depending on that context is immediately notified through the `ctx.Done()` channel.
+>
+> `ctx.Err()` returns the reason the context ended (`nil` if it hasn't ended yet).
+
+<Callout>
+  Context only signals cancellation by closing the `ctx.Done()` channel. It does not stop your code automatically. Every
+  function or goroutine that accepts a context is responsible for checking `ctx.Done()` and implementing its own
+  cancellation or cleanup logic.
+</Callout>
+
+- Creating Contexts:
+
+  > The root context, the starting point for creating child contexts.
+  >
+  > ```go
+  > ctx := context.Background()
+  > ```
+  - > Cancellation:
+    >
+    > ```go
+    > ctx, cancel := context.WithCancel(ctx)
+    > ```
+
+  - > Timeout:
+    >
+    > ```go
+    > ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+    > ```
+
+  - > Deadline:
+    >
+    > ```go
+    > ctx, cancel := context.WithDeadline(ctx, time.Now().Add(5*time.Second))
+    > ```
+
+  - > Value:
+    >
+    > ```go
+    > ctx := context.WithValue(ctx, key, value)
+    > ```
+
+<Callout>
+  Always call the returned `cancel()` function when a context is no longer needed. Calling `cancel()` multiple times is
+  safe.
+</Callout>
+
+Examples:
+
+1.  > ```go
+    > func myFunc(ctx context.Context) {
+    > 	for {
+    > 		select {
+    > 		case <-ctx.Done():
+    > 			return
+    > 		default:
+    > 			fmt.Println("Working...")
+    > 			time.Sleep(time.Second)
+    > 		}
+    > 	}
+    > }
+    >
+    > func main() {
+    > 	ctx := context.Background()
+    > 	ctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+    > 	defer cancel()
+    >
+    > 	myFunc(ctx)
+    >
+    > 	fmt.Println(ctx.Err())
+    > }
+    >
+    > // Working...
+    > // Working...
+    > // Working...
+    > // Working...
+    > // context deadline exceeded
+    > ```
