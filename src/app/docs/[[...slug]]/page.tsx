@@ -29,13 +29,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const isCustomIndexPage = isIndex && !!indexMeta;
 
   return (
-    <DocsPage
-      toc={isCustomIndexPage ? undefined : page.data.toc}
-      tableOfContent={{
-        style: 'clerk',
-      }}
-      full={page.data.full}
-    >
+    <DocsPage toc={isCustomIndexPage ? undefined : page.data.toc} full={page.data.full}>
       {isCustomIndexPage ? (
         <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
           {createElement(indexMeta.icon, { className: 'size-14 lg:size-16' })}
