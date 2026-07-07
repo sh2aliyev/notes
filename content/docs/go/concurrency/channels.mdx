@@ -112,7 +112,7 @@ Whoever comes first has to wait for the other one.
 >
 > `range` does not know how many values a channel will receive, it may be infinite. To stop the loop, close the channel to signal that no more values will be sent.
 
-<Callout>Receiving from a closed unbuffered channel returns the zero value immediately.</Callout>
+<Callout>Receiving from a closed unbuffered channel returns the zero-value immediately.</Callout>
 
 ## Buffered Channels
 
@@ -206,7 +206,7 @@ val, ok := <-ch
 > 	for {
 > 		val, ok := <-ch
 > 		if !ok {
-> 			fmt.Println("Channel is closed. Received (zero value):", val)
+> 			fmt.Println("Channel is closed. Received (zero-value):", val)
 > 			break
 > 		}
 > 		fmt.Println("Received:", val)
@@ -216,7 +216,7 @@ val, ok := <-ch
 > // Received: 1
 > // Received: 2
 > // Closed.
-> // Channel is closed. Received (zero value): 0
+> // Channel is closed. Received (zero-value): 0
 > ```
 
 <Callout type="warn">Sending on a closed channel causes a panic.</Callout>
