@@ -1,4 +1,4 @@
-import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
+import { source } from '@/lib/source';
 import {
   DocsBody,
   DocsDescription,
@@ -11,8 +11,8 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
-import { getDirname, isIndexPage } from '@/lib/utils';
-import { gitConfig, indexMetaMap } from '@/lib/shared';
+import { getIndexMeta, getPageImageUrl, getPageMarkdownUrl, gitConfig } from '@/lib/shared';
+import { Image } from 'fumadocs-core/framework';
 import { createElement } from 'react';
 
 export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
@@ -23,14 +23,11 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
 
-  const isIndex = isIndexPage(page.path);
-  const dirName = getDirname(page.slugs, isIndex);
-  const indexMeta = indexMetaMap[dirName as keyof typeof indexMetaMap];
-  const isCustomIndexPage = isIndex && !!indexMeta;
+  const indexMeta = getIndexMeta('page', page.slugs);
 
   return (
-    <DocsPage toc={isCustomIndexPage ? undefined : page.data.toc} full={page.data.full}>
-      {isCustomIndexPage ? (
+    <DocsPage toc={page.data.toc} full={page.data.full}>
+      {indexMeta ? (
         <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
           {createElement(indexMeta.icon, { className: 'size-14 lg:size-16' })}
           <DocsTitle>{indexMeta.title}</DocsTitle>
@@ -52,6 +49,16 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
       <DocsBody>
         <MDX
           components={getMDXComponents({
+            // my custom blockquote styling
+            blockquote: ({ children, ...props }) => (
+              <blockquote
+                className="dark:text-fd-muted-foreground text-fd-foreground/75 text-sm font-normal not-italic *:before:content-none **:before:content-none *:after:content-none **:after:content-none"
+                {...props}
+              >
+                {children}
+              </blockquote>
+            ),
+            img: (props) => <Image className="border-fd-border m-auto border-2" loading="eager" {...(props as any)} />,
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
           })}
@@ -74,7 +81,7 @@ export async function generateMetadata(props: PageProps<'/docs/[[...slug]]'>): P
     title: page.data.title,
     description: page.data.description,
     openGraph: {
-      images: getPageImage(page).url,
+      images: getPageImageUrl(page).url,
     },
   };
 }

@@ -1,7 +1,7 @@
 import { Bookmark } from '@/components/ui/bookmark';
 import { Folder } from '@/components/ui/folder';
 import { MountainIcon } from '@/components/icons/mountain';
-import { appDesc, indexMetaMap } from '@/lib/shared';
+import { appDesc, appName, appSummary, indexMetaMap } from '@/lib/shared';
 
 import Link from 'next/link';
 
@@ -13,15 +13,12 @@ export default function HomePage() {
           <Bookmark className="right-10 -mt-px h-8 lg:right-14 lg:h-14" />
           <div className="flex h-full flex-col items-center justify-between gap-12 px-3 pt-10 pb-5 lg:gap-24 lg:pt-24">
             <div className="text-fd-primary/85 flex flex-col items-center gap-3 lg:gap-4">
-              <h1 className="text-2xl font-semibold lg:text-3xl">Notes</h1>
-              <p className="text-center text-sm lg:text-base">{appDesc}</p>
+              <h1 className="text-2xl font-semibold lg:text-3xl">{appName}</h1>
+              <p className="text-center text-sm lg:text-base">{appSummary}</p>
             </div>
             <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
               <MountainIcon className="text-fd-primary/75 dark:text-fd-primary/55 max-w-56" />
-              <p className="text-fd-primary/75 max-w-2xs text-center text-sm">
-                A collection of knowledge filtered from dozens of hours of watched tutorials, read docs, blogs, and
-                searches.
-              </p>
+              <p className="text-fd-primary/75 max-w-2xs text-center text-sm">{appDesc}</p>
             </div>
             <p suppressHydrationWarning className="text-fd-primary/75 text-xs">
               {`© ${new Date().getFullYear()} `}

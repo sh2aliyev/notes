@@ -1,6 +1,6 @@
+import { Inter } from 'next/font/google';
 import { Provider } from '@/components/provider';
 import './global.css';
-import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
 import { appDesc, appName, webUrl } from '@/lib/shared';
 

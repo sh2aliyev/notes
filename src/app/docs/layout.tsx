@@ -6,8 +6,8 @@ import { Logo } from '@/components/ui/logo';
 export default function Layout({ children }: LayoutProps<'/docs'>) {
   return (
     <DocsLayout
-      {...baseOptions()}
       tree={source.getPageTree()}
+      {...baseOptions()}
       nav={{
         title: <Logo variant="docs" />,
       }}
