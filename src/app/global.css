@@ -14,3 +14,10 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 90rem;
 }
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
